@@ -190,13 +190,13 @@
   <visualProperties x="766" y="2649">
     <element href="assembly.xml#LogCloseFedWSMemo"/>
   </visualProperties>
-  <visualProperties x="454" y="2881">
+  <visualProperties x="465" y="2841">
     <element href="assembly.xml#CloseInsWSMemoRequest"/>
   </visualProperties>
-  <visualProperties x="775" y="2847">
+  <visualProperties x="769" y="2832">
     <element href="assembly.xml#LogCloseInsWSMemo"/>
   </visualProperties>
-  <visualProperties x="782" y="2978">
+  <visualProperties x="787" y="2954">
     <element href="assembly.xml#ErrorCloseInsWSMemo"/>
   </visualProperties>
   <visualProperties x="1055" y="2904">
@@ -252,6 +252,9 @@
   </visualProperties>
   <visualProperties x="1136" y="1682">
     <element href="assembly.xml#ResetWSEffectiveDate"/>
+  </visualProperties>
+  <visualProperties x="530" y="2974">
+    <element href="assembly.xml#AsyncMediation"/>
   </visualProperties>
   <decorations x="4" y="1" width="1395" height="64" font="Arial|18|1" bgColor="12632256" fgColor="1" fontColor="1" text="Vassar Workstudy Award Limits Inbound"/>
   <decorations x="4" y="67" width="1395" height="415" font="Arial|16|0" fontColor="1" type="NOTE" text="Main Execution"/>
@@ -570,5 +573,9 @@
   <connections type="routesTo" sourceAnchorX="0.6875" sourceAnchorY="1.0" targetAnchorX="0.6779661016949152" targetAnchorY="0.5675675675675675">
     <source href="assembly.xml#//@beans/@mixed.1/@route.6/@subRoute.0"/>
     <target href="assembly.xml#CallChangeWSStatus"/>
+  </connections>
+  <connections type="routesTo">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.5/@subRoute.2"/>
+    <target href="assembly.xml#AsyncMediation"/>
   </connections>
 </wdnm:Diagram>
