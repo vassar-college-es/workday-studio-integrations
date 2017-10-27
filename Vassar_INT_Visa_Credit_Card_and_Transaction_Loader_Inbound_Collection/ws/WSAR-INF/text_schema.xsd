@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:ts="http://schemas.capeclear.com/2003/02/TextSchema">
+	<xsd:element name="File" >
+		<xsd:complexType>
+			<xsd:sequence>
+			<xsd:element name="Transaction" ts:endTag="\n" minOccurs="0" maxOccurs="unbounded" >
+			<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="TransactionCode" type="xsd:string" ts:endTag="\t"/>
+				<xsd:element name="Field1" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field2" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field3" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field4" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field5" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field6" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field7" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field8" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field9" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field10" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field11" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field12" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field13" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field14" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field15" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field16" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field17" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field18" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field19" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field20" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field21" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field22" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field23" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field24" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field25" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field26" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field27" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field28" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field29" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field30" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field31" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field32" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field33" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field34" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field35" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field36" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field37" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field38" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field39" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field40" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field41" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field42" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field43" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field44" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field45" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field46" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field47" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field48" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field49" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field50" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field51" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field52" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field53" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field54" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field55" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field56" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field57" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field58" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field59" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field60" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field61" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field62" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field63" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field64" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field65" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field66" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field67" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field68" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field69" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field70" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field71" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field72" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field73" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field74" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field75" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field76" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field77" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field78" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field79" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field80" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field81" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field82" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Field83" type="xsd:string" minOccurs="0" ts:endTag="\t"/>
+				<xsd:element name="Unused" type="xsd:string" minOccurs="0"/>
+				</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+		</xsd:element>
+</xsd:schema>

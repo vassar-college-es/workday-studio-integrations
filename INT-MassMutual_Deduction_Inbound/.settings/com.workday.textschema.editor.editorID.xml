@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ASCII"?>
+<edst:Settings xmlns:edst="http://dublin.workday.com/studio/settings/editor">
+  <editor uri="/INT-ASPCA_Billing_Inbound/ws/WSAR-INF/convertFile2Xml.xsd">
+    <property name="transformation.text.to.xml" value="true"/>
+  </editor>
+  <editor uri="/INT-ASPCA_Billing_Inbound/ws/WSAR-INF/covertFileToXml.xsd">
+    <property name="transformation.text.to.xml" value="true"/>
+  </editor>
+</edst:Settings>

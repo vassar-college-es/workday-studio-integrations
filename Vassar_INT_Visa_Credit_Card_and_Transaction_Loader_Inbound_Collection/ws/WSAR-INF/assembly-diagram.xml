@@ -1,0 +1,838 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wdnm:Diagram xmlns:wdnm="http://workday.com/studio/editors/notation">
+  <element href="assembly.xml#WorkdayAssembly"/>
+  <visualProperties x="398" y="634">
+    <element href="assembly.xml#CallContructXML"/>
+  </visualProperties>
+  <visualProperties x="217" y="634">
+    <element href="assembly.xml#CreateRecords"/>
+  </visualProperties>
+  <visualProperties x="35" y="634">
+    <element href="assembly.xml#CreateXML"/>
+  </visualProperties>
+  <visualProperties x="182" y="778">
+    <element href="assembly.xml#SplitRecords"/>
+  </visualProperties>
+  <visualProperties x="318" y="778">
+    <element href="assembly.xml#RefactorXML"/>
+  </visualProperties>
+  <visualProperties x="877" y="778">
+    <element href="assembly.xml#CallProcessEntries"/>
+  </visualProperties>
+  <visualProperties x="642" y="778">
+    <element href="assembly.xml#Log"/>
+  </visualProperties>
+  <visualProperties x="29" y="782">
+    <element href="assembly.xml#ConstructXML"/>
+  </visualProperties>
+  <visualProperties x="226" y="2904">
+    <element href="assembly.xml#ProcessRecord04"/>
+  </visualProperties>
+  <visualProperties x="220" y="3087">
+    <element href="assembly.xml#HandleError"/>
+  </visualProperties>
+  <visualProperties x="635" y="2332">
+    <element href="assembly.xml#Split_Rec05"/>
+  </visualProperties>
+  <visualProperties x="18" y="2332">
+    <element href="assembly.xml#ProcessEntries"/>
+  </visualProperties>
+  <visualProperties x="1171" y="3426">
+    <element href="assembly.xml#StoreEntryResponse"/>
+  </visualProperties>
+  <visualProperties x="916" y="3454">
+    <element href="assembly.xml#ImportCreditCardTransactions"/>
+  </visualProperties>
+  <visualProperties x="216" y="3606">
+    <element href="assembly.xml#IsError"/>
+  </visualProperties>
+  <visualProperties x="547" y="3634">
+    <element href="assembly.xml#PutErrorLog"/>
+  </visualProperties>
+  <visualProperties x="39" y="3634">
+    <element href="assembly.xml#StoreErrorLog"/>
+  </visualProperties>
+  <visualProperties x="395" y="3731">
+    <element href="assembly.xml#NoErrors"/>
+  </visualProperties>
+  <visualProperties x="336" y="3606">
+    <element href="assembly.xml#ErrorLog"/>
+  </visualProperties>
+  <visualProperties x="732" y="383">
+    <element href="assembly.xml#File_In_Process"/>
+  </visualProperties>
+  <visualProperties x="312" y="554">
+    <element href="assembly.xml#NoFileFoundMessage"/>
+  </visualProperties>
+  <visualProperties x="514" y="387">
+    <element href="assembly.xml#GetFilesNames"/>
+  </visualProperties>
+  <visualProperties x="381" y="383">
+    <element href="assembly.xml#Route"/>
+  </visualProperties>
+  <visualProperties x="1112" y="460">
+    <element href="assembly.xml#FinalDocumentMessage"/>
+  </visualProperties>
+  <visualProperties x="749" y="460">
+    <element href="assembly.xml#CallCreateXML"/>
+  </visualProperties>
+  <visualProperties x="280" y="339">
+    <element href="assembly.xml#FileFound"/>
+  </visualProperties>
+  <visualProperties x="20" y="432">
+    <element href="assembly.xml#InitialStep"/>
+  </visualProperties>
+  <visualProperties x="162" y="330">
+    <element href="assembly.xml#EvalFile"/>
+  </visualProperties>
+  <visualProperties x="541" y="923">
+    <element href="assembly.xml#AggregateXMLMessage"/>
+  </visualProperties>
+  <visualProperties x="878" y="836">
+    <element href="assembly.xml#SuccessExpenseLoad"/>
+  </visualProperties>
+  <visualProperties x="407" y="2332">
+    <element href="assembly.xml#GenerateFileNumber"/>
+  </visualProperties>
+  <visualProperties x="1032" y="2332">
+    <element href="assembly.xml#Get_Detail_Data"/>
+  </visualProperties>
+  <visualProperties x="1229" y="2834">
+    <element href="assembly.xml#AggregateRecords"/>
+  </visualProperties>
+  <visualProperties x="765" y="2332">
+    <element href="assembly.xml#ProcessRec05"/>
+  </visualProperties>
+  <visualProperties x="213" y="3295">
+    <element href="assembly.xml#CreateTransactionRequest"/>
+  </visualProperties>
+  <visualProperties x="1221" y="2404">
+    <element href="assembly.xml#Call_Get_LineItemDetail"/>
+  </visualProperties>
+  <visualProperties x="42" y="2671">
+    <element href="assembly.xml#Get_LineItemDetail"/>
+  </visualProperties>
+  <visualProperties x="43" y="2949">
+    <element href="assembly.xml#Get_Detail_Info"/>
+  </visualProperties>
+  <visualProperties x="1023" y="2582">
+    <element href="assembly.xml#Call_Get_Detail_Info"/>
+  </visualProperties>
+  <visualProperties x="44" y="3320">
+    <element href="assembly.xml#Create_Request"/>
+  </visualProperties>
+  <visualProperties x="1460" y="2845">
+    <element href="assembly.xml#Call_create_Request"/>
+  </visualProperties>
+  <visualProperties x="10" y="339">
+    <element href="assembly.xml#StartPCardInbound"/>
+  </visualProperties>
+  <visualProperties x="375" y="1310">
+    <element href="assembly.xml#DontLoadHierarchyInfo"/>
+  </visualProperties>
+  <visualProperties x="375" y="1091">
+    <element href="assembly.xml#LoadFileCDFInfo"/>
+  </visualProperties>
+  <visualProperties x="226" y="1091">
+    <element href="assembly.xml#InfoLoadOrNot"/>
+  </visualProperties>
+  <visualProperties x="44" y="1091">
+    <element href="assembly.xml#LoadCreditCardInfo"/>
+  </visualProperties>
+  <visualProperties x="407" y="1217">
+    <element href="assembly.xml#ProcessInformation"/>
+  </visualProperties>
+  <visualProperties x="865" y="711">
+    <element href="assembly.xml#CallLoadCreditCardInfo"/>
+  </visualProperties>
+  <visualProperties x="1162" y="1089">
+    <element href="assembly.xml#WriteCreditCardLog"/>
+  </visualProperties>
+  <visualProperties x="543" y="1091">
+    <element href="assembly.xml#InitializeHashmaps"/>
+  </visualProperties>
+  <visualProperties x="715" y="1091">
+    <element href="assembly.xml#CallProcessCardHash"/>
+  </visualProperties>
+  <visualProperties x="940" y="1120">
+    <element href="assembly.xml#CallProcessCardInfo"/>
+  </visualProperties>
+  <visualProperties x="478" y="1380">
+    <element href="assembly.xml#GetCreditCards"/>
+  </visualProperties>
+  <visualProperties x="466" y="1470">
+    <element href="assembly.xml#ErrorGetCreditCardList"/>
+  </visualProperties>
+  <visualProperties x="63" y="1380">
+    <element href="assembly.xml#ProcessCardHash"/>
+  </visualProperties>
+  <visualProperties x="236" y="1595">
+    <element href="assembly.xml#Split_Rec03"/>
+  </visualProperties>
+  <visualProperties x="248" y="1380">
+    <element href="assembly.xml#InitializeCreditCardHash"/>
+  </visualProperties>
+  <visualProperties x="390" y="3448">
+    <element href="assembly.xml#FinalAggregator"/>
+  </visualProperties>
+  <visualProperties x="571" y="3448">
+    <element href="assembly.xml#CreateFileRequest"/>
+  </visualProperties>
+  <visualProperties x="892" y="901">
+    <element href="assembly.xml#AsyncMediation1"/>
+  </visualProperties>
+  <visualProperties x="688" y="3320">
+    <element href="assembly.xml#CallFinalAggregator"/>
+  </visualProperties>
+  <visualProperties x="48" y="3463">
+    <element href="assembly.xml#Final_Aggregator"/>
+  </visualProperties>
+  <visualProperties x="1058" y="902">
+    <element href="assembly.xml#CallFinalAggregate"/>
+  </visualProperties>
+  <visualProperties x="237" y="3454">
+    <element href="assembly.xml#Debugg"/>
+  </visualProperties>
+  <visualProperties x="331" y="929">
+    <element href="assembly.xml#RefactorErrorMess"/>
+  </visualProperties>
+  <visualProperties x="698" y="2824">
+    <element href="assembly.xml#ErrorProcessRec7"/>
+  </visualProperties>
+  <visualProperties x="941" y="3536">
+    <element href="assembly.xml#ErrorCreateRequest"/>
+  </visualProperties>
+  <visualProperties x="573" y="3383">
+    <element href="assembly.xml#TransRequestError"/>
+  </visualProperties>
+  <visualProperties x="1168" y="1396">
+    <element href="assembly.xml#BuildCreditCardHashmaps"/>
+  </visualProperties>
+  <visualProperties x="943" y="1380">
+    <element href="assembly.xml#SplitCreditCards"/>
+  </visualProperties>
+  <visualProperties x="1417" y="1556">
+    <element href="assembly.xml#CheckCreditCard"/>
+  </visualProperties>
+  <visualProperties x="1643" y="1708">
+    <element href="assembly.xml#CallUpdateCreditCard"/>
+  </visualProperties>
+  <visualProperties x="1689" y="1832">
+    <element href="assembly.xml#DoNotLoadCard"/>
+  </visualProperties>
+  <visualProperties x="25" y="1593">
+    <element href="assembly.xml#ProcessCardInfo"/>
+  </visualProperties>
+  <visualProperties x="354" y="1718">
+    <element href="assembly.xml#GetCardInfo"/>
+  </visualProperties>
+  <visualProperties x="1653" y="1767">
+    <element href="assembly.xml#CallCreateCreditCard"/>
+  </visualProperties>
+  <visualProperties x="35" y="1663">
+    <element href="assembly.xml#RetrieveFile"/>
+  </visualProperties>
+  <visualProperties x="712" y="1943">
+    <element href="assembly.xml#LogUpdatedCard"/>
+  </visualProperties>
+  <visualProperties x="34" y="1943">
+    <element href="assembly.xml#UpdateCreditCard"/>
+  </visualProperties>
+  <visualProperties x="216" y="1943">
+    <element href="assembly.xml#UpdateCreditCardRequest"/>
+  </visualProperties>
+  <visualProperties x="449" y="1943">
+    <element href="assembly.xml#PutExpenseCreditCardUpdate"/>
+  </visualProperties>
+  <visualProperties x="449" y="1998">
+    <element href="assembly.xml#ErrorUpdate"/>
+  </visualProperties>
+  <visualProperties x="590" y="2049">
+    <element href="assembly.xml#ErrorUpdateCreditCard"/>
+  </visualProperties>
+  <visualProperties x="700" y="2137">
+    <element href="assembly.xml#LogCreatedCard"/>
+  </visualProperties>
+  <visualProperties x="217" y="2137">
+    <element href="assembly.xml#CreateCreditCardRequest"/>
+  </visualProperties>
+  <visualProperties x="599" y="2235">
+    <element href="assembly.xml#ErrorCreateCreditCard"/>
+  </visualProperties>
+  <visualProperties x="451" y="2181">
+    <element href="assembly.xml#ErrorCreate"/>
+  </visualProperties>
+  <visualProperties x="33" y="2137">
+    <element href="assembly.xml#CreateCreditCard"/>
+  </visualProperties>
+  <visualProperties x="451" y="2137">
+    <element href="assembly.xml#PutExpenseCreditCardCreate"/>
+  </visualProperties>
+  <visualProperties x="518" y="1595">
+    <element href="assembly.xml#GetAdditionalData"/>
+  </visualProperties>
+  <visualProperties x="196" y="2332">
+    <element href="assembly.xml#TransLoadOrNot"/>
+  </visualProperties>
+  <visualProperties x="395" y="2531">
+    <element href="assembly.xml#DontLoadTransactions"/>
+  </visualProperties>
+  <visualProperties x="401" y="2491">
+    <element href="assembly.xml#ProcessInformation0"/>
+  </visualProperties>
+  <visualProperties x="278" y="3196">
+    <element href="assembly.xml#ErrorProcessRec4"/>
+  </visualProperties>
+  <visualProperties x="625" y="1748">
+    <element href="assembly.xml#ErrorGetAdditionaldata"/>
+  </visualProperties>
+  <visualProperties x="792" y="2475">
+    <element href="assembly.xml#MvelError"/>
+  </visualProperties>
+  <visualProperties x="711" y="1310">
+    <element href="assembly.xml#CustomReport"/>
+  </visualProperties>
+  <visualProperties x="891" y="1310">
+    <element href="assembly.xml#WorkdayOutRest0"/>
+  </visualProperties>
+  <visualProperties x="1076" y="1265">
+    <element href="assembly.xml#ProcessReport"/>
+  </visualProperties>
+  <visualProperties x="715" y="1171">
+    <element href="assembly.xml#CallCustomReport"/>
+  </visualProperties>
+  <visualProperties x="1221" y="2455">
+    <element href="assembly.xml#Call_Get_Detail_Info0"/>
+  </visualProperties>
+  <visualProperties x="514" y="3046">
+    <element href="assembly.xml#CheckEmplidExists"/>
+  </visualProperties>
+  <visualProperties x="726" y="3160">
+    <element href="assembly.xml#CheckHashmap2"/>
+  </visualProperties>
+  <visualProperties x="231" y="2671">
+    <element href="assembly.xml#RetreiveFile"/>
+  </visualProperties>
+  <visualProperties x="370" y="2671">
+    <element href="assembly.xml#Split_Rec07"/>
+  </visualProperties>
+  <visualProperties x="515" y="2671">
+    <element href="assembly.xml#Get_Key_07"/>
+  </visualProperties>
+  <visualProperties x="705" y="2671">
+    <element href="assembly.xml#ProcessRecord07"/>
+  </visualProperties>
+  <visualProperties x="871" y="3662">
+    <element href="assembly.xml#//@beans/@mixed.1/@mixed.219"/>
+  </visualProperties>
+  <visualProperties x="871" y="3715">
+    <element href="assembly.xml#CriticalError"/>
+  </visualProperties>
+  <visualProperties x="871" y="3771">
+    <element href="assembly.xml#PutIntegrationEvent"/>
+  </visualProperties>
+  <visualProperties x="15" y="2766">
+    <element href="assembly.xml#ErrorProcessRec70"/>
+  </visualProperties>
+  <visualProperties x="1265" y="1731">
+    <element href="assembly.xml#StudentCard"/>
+  </visualProperties>
+  <visualProperties x="1150" y="1811">
+    <element href="assembly.xml#AsyncMediation0"/>
+  </visualProperties>
+  <visualProperties x="926" y="1780">
+    <element href="assembly.xml#CheckCreditCard0"/>
+  </visualProperties>
+  <visualProperties x="715" y="1398">
+    <element href="assembly.xml#AsyncMediation2"/>
+  </visualProperties>
+  <visualProperties x="1003" y="2949">
+    <element href="assembly.xml#CheckCreditCard00"/>
+  </visualProperties>
+  <visualProperties x="840" y="3046">
+    <element href="assembly.xml#AsyncMediation3"/>
+  </visualProperties>
+  <visualProperties x="1237" y="3182">
+    <element href="assembly.xml#StudentTransactionSkipped"/>
+  </visualProperties>
+  <visualProperties x="57" y="1796">
+    <element href="assembly.xml#ErrorRetrieveFile"/>
+  </visualProperties>
+  <visualProperties x="502" y="2818">
+    <element href="assembly.xml#ErrorProcessRec71"/>
+  </visualProperties>
+  <visualProperties x="1166" y="1967">
+    <element href="assembly.xml#ErrorRoutingStudentAccount"/>
+  </visualProperties>
+  <visualProperties x="911" y="3232">
+    <element href="assembly.xml#ErrorAssigningAccountForTransaction"/>
+  </visualProperties>
+  <visualProperties x="916" y="461">
+    <element href="assembly.xml#CallStoreErrorLog"/>
+  </visualProperties>
+  <visualProperties x="351" y="1868">
+    <element href="assembly.xml#ErrorGetAdditionaldata0"/>
+  </visualProperties>
+  <decorations x="592" y="525" width="274" height="56" font="Arial|10|0" fontColor="1" type="NOTE" text="This section retrieves File(s) from SFTP Server ."/>
+  <decorations x="18" y="600" width="1064" height="8" bgColor="1" fgColor="64" text="Text"/>
+  <decorations x="892" y="3295" width="242" height="89" font="Arial Narrow|10|1" fontColor="1" type="NOTE" text="In this section, we create the WS request for each transaction, then aggregate all the requests in a single message to create the single Import WS request"/>
+  <decorations x="581" y="615" width="496" height="76" font="Arial|10|0" fontColor="1" type="NOTE" text="This section converts the retrieved VCF file to XML --> Parses the XML to select only relevant records and fields per customer requirements  and aggregates results to generate the final XML file which is then copied into a variable File.xml "/>
+  <decorations x="43" y="2292" width="1064" height="8" bgColor="1" fgColor="64" text="Text"/>
+  <decorations x="38" y="3279" width="1064" height="8" bgColor="1" fgColor="64" text="Text"/>
+  <decorations x="39" y="2824" width="610" height="91" font="Arial|10|0" fontColor="1" type="NOTE" text="This section, processes entries and gather data to prepare the Web service request.  If more Level 3 data needs to be added per customer requirements, Update the refactor_XML.xsl to add needed records and add subroutines here to retrieve data "/>
+  <decorations x="38" y="3585" width="1064" height="8" bgColor="1" fgColor="64" text="Text"/>
+  <decorations x="38" y="1060" width="1064" height="8" bgColor="1" fgColor="64" text="Text"/>
+  <decorations x="36" y="1184" width="181" height="133" type="NOTE" text="Main logic for loading credit card information from a VCF file. If integration  attribute Load Credit Card Info is set to Yes, Creditcard data is processed"/>
+  <decorations x="51" y="1515" width="585" height="70" type="NOTE" text="Before Processing Cards data, we verify if the card exists in WD . If yes data will be updated , if not, the card will be created. WD retrieved data is stored in hasmaps for future cross reference"/>
+  <decorations x="29" y="1360" width="1064" height="8" bgColor="1" fgColor="64" text="Text"/>
+  <decorations x="29" y="1570" width="1064" height="8" bgColor="1" fgColor="64" text="Text"/>
+  <decorations x="57" y="1803" width="679" height="126" type="NOTE" text="In this section , the XML is parsed. For each record 03 found,  we look for the cardholder information in the record 04 and verify if credit card already exists by checking the hash map for a credit card reference ID.  If a reference ID is returned from the hashmap, the card already exists and need to be updated. If no reference ID is returned, the card needs to be created. In update or create request,  TOKEN value  will be passed in the Credit Card description field in WD "/>
+  <decorations x="10" y="17" width="1042" height="48" font="Arial|14|1" fontColor="1" type="NOTE" text="VISA  : VCF4 format, Inbound file integration for Expense and Procurement transactions"/>
+  <decorations x="664" y="1207" width="610" height="143" bgColor="16777088" type="NOTE" text="If a large number of cards(more than 999 cards)  needs to be retrieved from WD, a custom report may be used instead of hashmaps. Performance may be better and it is easier then dealing with multiple PageGets. Prior to use this code, a custom report needs to be created in the tenant."/>
+  <decorations x="1018" y="2250" width="453" height="297" type="NOTE" text="For Procurement  transactions,  the integration looks at the record 07 to load Line item details data.  If loading procurement , use the broadcast route "/>
+  <decorations x="899" y="339" width="395" height="108" bgColor="33023" type="NOTE" text="Prerequisite :  This integration considers that the inbound file meets the following requirements: format VCF4  and File is tokenized ( account number is 16 digits , last 4 digits are the last 4 digits account numbers of the Credit card ) "/>
+  <decorations x="1018" y="2554" width="460" height="82" type="NOTE" text="For Expense transactions. "/>
+  <decorations x="443" y="2936" width="446" height="334" type="NOTE" text="In the VCF file, rec 03 and rec 04 are not always present. In that case , in order to get an emplid to assigned the transaction, we look into the hasmap2 to get it based on the token account number in rec 05"/>
+  <decorations x="827" y="3623" width="255" height="204" bgColor="16777088" fgColor="8404992" type="NOTE" text="Global Error Handler"/>
+  <connections type="routesTo">
+    <source href="assembly.xml#CreateXML"/>
+    <target href="assembly.xml#CreateRecords"/>
+  </connections>
+  <connections type="routesTo">
+    <source href="assembly.xml#ConstructXML"/>
+    <target href="assembly.xml#SplitRecords"/>
+  </connections>
+  <connections type="routesTo">
+    <source href="assembly.xml#//@beans/@mixed.1/@splitter.0/@subRoute.0"/>
+    <target href="assembly.xml#RefactorXML"/>
+  </connections>
+  <connections type="routesTo" targetAnchorX="0.3464052287581699" targetAnchorY="0.2641509433962264">
+    <source href="assembly.xml#RefactorXML"/>
+    <target href="assembly.xml#AggregateXMLMessage"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.3191489361702128" targetAnchorX="0.2905405405405405" targetAnchorY="0.2972972972972973">
+    <source href="assembly.xml#CreateRecords"/>
+    <target href="assembly.xml#CallContructXML"/>
+  </connections>
+  <connections type="routesTo" targetAnchorX="0.3577981651376147" targetAnchorY="0.43617021276595747">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.27/@mixed.3"/>
+    <target href="assembly.xml#HandleError"/>
+  </connections>
+  <connections type="routesTo" targetAnchorX="0.17307692307692307" targetAnchorY="0.2153846153846154">
+    <source href="assembly.xml#ProcessEntries"/>
+    <target href="assembly.xml#TransLoadOrNot"/>
+  </connections>
+  <connections type="routesTo" targetAnchorX="0.2348993288590604" targetAnchorY="0.5638297872340425">
+    <source href="assembly.xml#//@beans/@mixed.1/@splitter.1/@subRoute.0"/>
+    <target href="assembly.xml#ProcessRec05"/>
+  </connections>
+  <connections type="routesResponseTo">
+    <source href="assembly.xml#ImportCreditCardTransactions"/>
+    <target href="assembly.xml#StoreEntryResponse"/>
+  </connections>
+  <connections type="routesTo">
+    <source href="assembly.xml#StoreErrorLog"/>
+    <target href="assembly.xml#IsError"/>
+  </connections>
+  <connections type="routesTo">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.0/@subRoute.0"/>
+    <target href="assembly.xml#ErrorLog"/>
+  </connections>
+  <connections type="routesTo">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.0/@subRoute.1"/>
+    <target href="assembly.xml#NoErrors"/>
+  </connections>
+  <connections type="routesTo">
+    <source href="assembly.xml#ErrorLog"/>
+    <target href="assembly.xml#PutErrorLog"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.14893617021276595" targetAnchorX="0.0374331550802139" targetAnchorY="0.05405405405405406">
+    <source href="assembly.xml#Log"/>
+    <target href="assembly.xml#CallLoadCreditCardInfo"/>
+  </connections>
+  <connections type="routesTo">
+    <source href="assembly.xml#GetFilesNames"/>
+    <target href="assembly.xml#File_In_Process"/>
+  </connections>
+  <connections type="routesTo">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.1/@subRoute.1"/>
+    <target href="assembly.xml#NoFileFoundMessage"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.6382978723404256" sourceAnchorY="1.0" targetAnchorX="0.23134328358208955" targetAnchorY="0.14893617021276595">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.2/@subRoute.0"/>
+    <target href="assembly.xml#GetFilesNames"/>
+  </connections>
+  <connections type="routesResponseTo" targetAnchorX="0.037383177570093455" targetAnchorY="0.2922077922077922">
+    <source href="assembly.xml#FileFound"/>
+    <target href="assembly.xml#Route"/>
+  </connections>
+  <connections type="routesTo">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.1/@subRoute.0"/>
+    <target href="assembly.xml#FileFound"/>
+  </connections>
+  <connections type="routesTo">
+    <source href="assembly.xml#AggregateXMLMessage"/>
+    <target href="assembly.xml#Log"/>
+  </connections>
+  <connections type="routesResponseTo" targetAnchorX="0.4419889502762431" targetAnchorY="0.05405405405405406">
+    <source href="assembly.xml#CallProcessEntries"/>
+    <target href="assembly.xml#SuccessExpenseLoad"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.1276595744680851" targetAnchorX="0.2072072072072072" targetAnchorY="0.2653846153846154">
+    <source href="assembly.xml#InitialStep"/>
+    <target href="assembly.xml#EvalFile"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="1.0" sourceAnchorY="0.16216216216216217" targetAnchorX="0.7410071942446043" targetAnchorY="0.5675675675675675">
+    <source href="assembly.xml#File_In_Process"/>
+    <target href="assembly.xml#CallCreateXML"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.776595744680851" sourceAnchorY="1.0" targetAnchorX="0.057291666666666664" targetAnchorY="0.35135135135135137">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.3/@subRoute.0"/>
+    <target href="assembly.xml#Call_Get_LineItemDetail"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.8731343283582089" sourceAnchorY="1.0" targetAnchorX="0.1404494382022472" targetAnchorY="0.13513513513513514">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.3/@subRoute.1"/>
+    <target href="assembly.xml#Call_Get_Detail_Info0"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.7227272727272728" sourceAnchorY="0.624" targetAnchorX="0.1871345029239766" targetAnchorY="0.15422885572139303">
+    <source href="assembly.xml#ProcessRec05"/>
+    <target href="assembly.xml#Get_Detail_Data"/>
+    <bendpoints sourceX="65" sourceY="173" targetX="-69" targetY="-46"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.9567099567099567" sourceAnchorY="0.128" targetAnchorX="0.425" targetAnchorY="0.4307692307692308">
+    <source href="assembly.xml#ProcessRecord04"/>
+    <target href="assembly.xml#CheckEmplidExists"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.9304347826086956" sourceAnchorY="0.7547169811320755" targetAnchorX="0.14942528735632185" targetAnchorY="0.43243243243243246">
+    <source href="assembly.xml#AggregateRecords"/>
+    <target href="assembly.xml#Call_create_Request"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.9459459459459459" sourceAnchorY="0.4864864864864865" targetAnchorX="0.1037344398340249" targetAnchorY="0.40425531914893614">
+    <source href="assembly.xml#Create_Request"/>
+    <target href="assembly.xml#CreateTransactionRequest"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.9507042253521126" sourceAnchorY="0.4594594594594595" targetAnchorX="0.19913419913419914" targetAnchorY="0.296">
+    <source href="assembly.xml#Get_Detail_Info"/>
+    <target href="assembly.xml#ProcessRecord04"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.2978723404255319" targetAnchorX="0.4069767441860465" targetAnchorY="0.5405405405405406">
+    <source href="assembly.xml#GenerateFileNumber"/>
+    <target href="assembly.xml#ProcessInformation0"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.2765957446808511" targetAnchorX="0.15428571428571428" targetAnchorY="0.40540540540540543">
+    <source href="assembly.xml#CreateTransactionRequest"/>
+    <target href="assembly.xml#CallFinalAggregator"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.5426356589147286" sourceAnchorY="1.0" targetAnchorX="0.3442622950819672" targetAnchorY="0.3829787234042553">
+    <source href="assembly.xml#StartPCardInbound"/>
+    <target href="assembly.xml#InitialStep"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.7829457364341085" sourceAnchorY="1.0" targetAnchorX="0.18536585365853658" targetAnchorY="0.2972972972972973">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.4/@subRoute.1"/>
+    <target href="assembly.xml#DontLoadHierarchyInfo"/>
+  </connections>
+  <connections type="routesTo">
+    <source href="assembly.xml#LoadFileCDFInfo"/>
+    <target href="assembly.xml#ProcessInformation"/>
+  </connections>
+  <connections type="routesTo">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.4/@subRoute.0"/>
+    <target href="assembly.xml#LoadFileCDFInfo"/>
+  </connections>
+  <connections type="routesTo">
+    <source href="assembly.xml#LoadCreditCardInfo"/>
+    <target href="assembly.xml#InfoLoadOrNot"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.7732558139534884" sourceAnchorY="1.0" targetAnchorX="0.13114754098360656" targetAnchorY="0.11702127659574468">
+    <source href="assembly.xml#CallProcessCardInfo"/>
+    <target href="assembly.xml#WriteCreditCardLog"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.3020833333333333" targetAnchorX="0.13736263736263737" targetAnchorY="0.5675675675675675">
+    <source href="assembly.xml#InitializeHashmaps"/>
+    <target href="assembly.xml#CallProcessCardHash"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.3901098901098901" sourceAnchorY="0.32432432432432434" targetAnchorX="0.31976744186046513" targetAnchorY="0.1891891891891892">
+    <source href="assembly.xml#CallProcessCardHash"/>
+    <target href="assembly.xml#CallProcessCardInfo"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.8121212121212121" sourceAnchorY="0.08108108108108109" targetAnchorX="0.10738255033557047" targetAnchorY="0.14893617021276595">
+    <source href="assembly.xml#ProcessInformation"/>
+    <target href="assembly.xml#InitializeHashmaps"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.2283464566929134" targetAnchorX="0.20125786163522014" targetAnchorY="0.5135135135135135">
+    <source href="assembly.xml#InitializeCreditCardHash"/>
+    <target href="assembly.xml#GetCreditCards"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.41037735849056606" sourceAnchorY="1.0" targetAnchorX="0.10628019323671498" targetAnchorY="0.40540540540540543">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.105/@mixed.3"/>
+    <target href="assembly.xml#ErrorGetCreditCardList"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.7921348314606742" sourceAnchorY="1.0" targetAnchorX="0.10795454545454546" targetAnchorY="0.136">
+    <source href="assembly.xml#ProcessCardHash"/>
+    <target href="assembly.xml#InitializeCreditCardHash"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.09433962264150944" targetAnchorX="0.417910447761194" targetAnchorY="0.17391304347826086">
+    <source href="assembly.xml#FinalAggregator"/>
+    <target href="assembly.xml#CreateFileRequest"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.6486486486486487" targetAnchorX="0.07801418439716312" targetAnchorY="0.40425531914893614">
+    <source href="assembly.xml#Final_Aggregator"/>
+    <target href="assembly.xml#Debugg"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.5248618784530387" sourceAnchorY="0.35135135135135137" targetAnchorX="0.47761194029850745" targetAnchorY="0.13829787234042554">
+    <source href="assembly.xml#SuccessExpenseLoad"/>
+    <target href="assembly.xml#AsyncMediation1"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.22340425531914893" targetAnchorX="0.09259259259259259" targetAnchorY="0.32432432432432434">
+    <source href="assembly.xml#AsyncMediation1"/>
+    <target href="assembly.xml#CallFinalAggregate"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.2553191489361702" targetAnchorX="0.37254901960784315" targetAnchorY="0.2169811320754717">
+    <source href="assembly.xml#Debugg"/>
+    <target href="assembly.xml#FinalAggregator"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.18085106382978725" targetAnchorX="0.2994011976047904" targetAnchorY="0.13513513513513514">
+    <source href="assembly.xml#CreateFileRequest"/>
+    <target href="assembly.xml#ImportCreditCardTransactions"/>
+  </connections>
+  <connections type="routesTo">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.13/@mixed.3"/>
+    <target href="assembly.xml#RefactorErrorMess"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.580952380952381" sourceAnchorY="1.0" targetAnchorX="0.147239263803681" targetAnchorY="0.5405405405405406">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.69/@mixed.3"/>
+    <target href="assembly.xml#TransRequestError"/>
+  </connections>
+  <connections type="routesTo">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.117/@mixed.3"/>
+    <target href="assembly.xml#ErrorCreateRequest"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.6730769230769231" sourceAnchorY="1.0" targetAnchorX="0.32450331125827814" targetAnchorY="0.17708333333333334">
+    <source href="assembly.xml#//@beans/@mixed.1/@splitter.3/@subRoute.0"/>
+    <target href="assembly.xml#BuildCreditCardHashmaps"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.2553191489361702" targetAnchorX="0.14213197969543148" targetAnchorY="0.168">
+    <source href="assembly.xml#GetCardInfo"/>
+    <target href="assembly.xml#GetAdditionalData"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.630057803468208" sourceAnchorY="1.0" targetAnchorX="0.10050251256281408" targetAnchorY="0.2972972972972973">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.5/@subRoute.0"/>
+    <target href="assembly.xml#CallUpdateCreditCard"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.7456647398843931" sourceAnchorY="1.0" targetAnchorX="0.09137055837563451" targetAnchorY="0.4594594594594595">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.5/@subRoute.1"/>
+    <target href="assembly.xml#CallCreateCreditCard"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.4293785310734463" sourceAnchorY="1.0" targetAnchorX="0.11707317073170732" targetAnchorY="0.4594594594594595">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.5/@subRoute.2"/>
+    <target href="assembly.xml#DoNotLoadCard"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.5988023952095808" sourceAnchorY="1.0" targetAnchorX="0.19653179190751446" targetAnchorY="0.14583333333333334">
+    <source href="assembly.xml#ProcessCardInfo"/>
+    <target href="assembly.xml#RetrieveFile"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.09574468085106383" targetAnchorX="0.29357798165137616" targetAnchorY="0.09090909090909091">
+    <source href="assembly.xml#RetrieveFile"/>
+    <target href="assembly.xml#Split_Rec03"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.4411764705882353" targetAnchorX="0.05555555555555555" targetAnchorY="0.24468085106382978">
+    <source href="assembly.xml#//@beans/@mixed.1/@splitter.2/@subRoute.0"/>
+    <target href="assembly.xml#GetCardInfo"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.8656126482213439" sourceAnchorY="1.0" targetAnchorX="0.16447368421052633" targetAnchorY="0.10416666666666667">
+    <source href="assembly.xml#PutExpenseCreditCardUpdate"/>
+    <target href="assembly.xml#LogUpdatedCard"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.6551724137931034" sourceAnchorY="1.0" targetAnchorX="0.15254237288135594" targetAnchorY="0.125">
+    <source href="assembly.xml#UpdateCreditCard"/>
+    <target href="assembly.xml#UpdateCreditCardRequest"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.5254237288135594" sourceAnchorY="1.0" targetAnchorX="0.06278026905829596" targetAnchorY="0.2702702702702703">
+    <source href="assembly.xml#UpdateCreditCardRequest"/>
+    <target href="assembly.xml#PutExpenseCreditCardUpdate"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.4866666666666667" sourceAnchorY="1.0" targetAnchorX="0.1926605504587156" targetAnchorY="0.23404255319148937">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.161/@mixed.3"/>
+    <target href="assembly.xml#ErrorUpdate"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.2127659574468085" targetAnchorX="0.24456521739130435" targetAnchorY="0.2972972972972973">
+    <source href="assembly.xml#ErrorUpdate"/>
+    <target href="assembly.xml#ErrorUpdateCreditCard"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.701195219123506" sourceAnchorY="1.0" targetAnchorX="0.14" targetAnchorY="0.15625">
+    <source href="assembly.xml#PutExpenseCreditCardCreate"/>
+    <target href="assembly.xml#LogCreatedCard"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.0" sourceAnchorY="0.2708333333333333" targetAnchorX="0.5363636363636364" targetAnchorY="0.2972972972972973">
+    <source href="assembly.xml#CreateCreditCardRequest"/>
+    <target href="assembly.xml#PutExpenseCreditCardCreate"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.6046511627906976" sourceAnchorY="1.0" targetAnchorX="0.09142857142857143" targetAnchorY="0.125">
+    <source href="assembly.xml#CreateCreditCard"/>
+    <target href="assembly.xml#CreateCreditCardRequest"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.43537414965986393" sourceAnchorY="1.0" targetAnchorX="0.24" targetAnchorY="0.0851063829787234">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.175/@mixed.3"/>
+    <target href="assembly.xml#ErrorCreate"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.0" sourceAnchorY="0.19148936170212766" targetAnchorX="0.13812154696132597" targetAnchorY="0.5135135135135135">
+    <source href="assembly.xml#ErrorCreate"/>
+    <target href="assembly.xml#ErrorCreateCreditCard"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.44385026737967914" sourceAnchorY="0.7567567567567568" targetAnchorX="0.49390243902439024" targetAnchorY="0.40540540540540543">
+    <source href="assembly.xml#CallLoadCreditCardInfo"/>
+    <target href="assembly.xml#CallProcessEntries"/>
+  </connections>
+  <connections type="routesTo">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.6/@subRoute.0"/>
+    <target href="assembly.xml#GenerateFileNumber"/>
+  </connections>
+  <connections type="routesTo">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.6/@subRoute.1"/>
+    <target href="assembly.xml#DontLoadTransactions"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="1.0" sourceAnchorY="0.21621621621621623" targetAnchorX="0.05504587155963303" targetAnchorY="0.18181818181818182">
+    <source href="assembly.xml#ProcessInformation0"/>
+    <target href="assembly.xml#Split_Rec05"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.3404255319148936" targetAnchorX="0.031446540880503145" targetAnchorY="0.5675675675675675">
+    <source href="assembly.xml#HandleError"/>
+    <target href="assembly.xml#ErrorProcessRec4"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.3485915492957746" sourceAnchorY="1.0" targetAnchorX="0.4052631578947368" targetAnchorY="0.8378378378378378">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.179/@mixed.3"/>
+    <target href="assembly.xml#ErrorGetAdditionaldata"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.39436619718309857" sourceAnchorY="1.0" targetAnchorX="0.5855855855855856" targetAnchorY="0.6486486486486487">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.67/@mixed.3"/>
+    <target href="assembly.xml#MvelError"/>
+  </connections>
+  <connections type="routesTo">
+    <source href="assembly.xml#CustomReport"/>
+    <target href="assembly.xml#WorkdayOutRest0"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="1.0" sourceAnchorY="0.5405405405405406" targetAnchorX="0.10236220472440945" targetAnchorY="0.1276595744680851">
+    <source href="assembly.xml#WorkdayOutRest0"/>
+    <target href="assembly.xml#ProcessReport"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.32432432432432434" targetAnchorX="0.2897196261682243" targetAnchorY="0.30851063829787234">
+    <source href="assembly.xml#Get_LineItemDetail"/>
+    <target href="assembly.xml#RetreiveFile"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.7647058823529411" targetAnchorX="0.19424460431654678" targetAnchorY="0.2978723404255319">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.7/@subRoute.1"/>
+    <target href="assembly.xml#CheckHashmap2"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.1702127659574468" targetAnchorX="0.43119266055045874" targetAnchorY="0.3116883116883117">
+    <source href="assembly.xml#RetreiveFile"/>
+    <target href="assembly.xml#Split_Rec07"/>
+  </connections>
+  <connections type="routesTo">
+    <source href="assembly.xml#//@beans/@mixed.1/@splitter.4/@subRoute.0"/>
+    <target href="assembly.xml#Get_Key_07"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.7127659574468085" targetAnchorX="0.18994413407821228" targetAnchorY="0.568">
+    <source href="assembly.xml#Get_Key_07"/>
+    <target href="assembly.xml#ProcessRecord07"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.5930232558139535" sourceAnchorY="1.0" targetAnchorX="0.660377358490566" targetAnchorY="0.7027027027027027">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.213/@mixed.3"/>
+    <target href="assembly.xml#ErrorProcessRec7"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.168" targetAnchorX="0.7034482758620689" targetAnchorY="0.12264150943396226">
+    <source href="assembly.xml#ProcessRecord07"/>
+    <target href="assembly.xml#AggregateRecords"/>
+  </connections>
+  <connections type="routesResponseTo">
+    <source href="assembly.xml#CallCustomReport"/>
+    <target href="assembly.xml#CallProcessCardInfo"/>
+  </connections>
+  <connections type="routesTo">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.219"/>
+    <target href="assembly.xml#CriticalError"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.5491803278688525" sourceAnchorY="1.0" targetAnchorX="0.49693251533742333" targetAnchorY="0.4594594594594595">
+    <source href="assembly.xml#CriticalError"/>
+    <target href="assembly.xml#PutIntegrationEvent"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.45535714285714285" sourceAnchorY="1.0" targetAnchorX="0.5691489361702128" targetAnchorY="0.40540540540540543">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.207/@mixed.3"/>
+    <target href="assembly.xml#ErrorProcessRec70"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.2204724409448819" targetAnchorX="0.1165644171779141" targetAnchorY="0.05555555555555555">
+    <source href="assembly.xml#GetAdditionalData"/>
+    <target href="assembly.xml#CheckCreditCard0"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.84" sourceAnchorY="1.0" targetAnchorX="0.2185430463576159" targetAnchorY="0.5520833333333334">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.8/@subRoute.1"/>
+    <target href="assembly.xml#AsyncMediation0"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.8533333333333334" sourceAnchorY="1.0" targetAnchorX="0.06315789473684211" targetAnchorY="0.03140096618357488">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.8/@subRoute.0"/>
+    <target href="assembly.xml#CheckCreditCard"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.16666666666666666" targetAnchorX="0.3" targetAnchorY="0.40540540540540543">
+    <source href="assembly.xml#AsyncMediation0"/>
+    <target href="assembly.xml#StudentCard"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.5666666666666667" sourceAnchorY="1.0" targetAnchorX="0.06842105263157895" targetAnchorY="0.03216374269005848">
+    <source href="assembly.xml#StudentCard"/>
+    <target href="assembly.xml#CheckCreditCard"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.7295597484276729" sourceAnchorY="1.0" targetAnchorX="0.16556291390728478" targetAnchorY="0.20652173913043478">
+    <source href="assembly.xml#GetCreditCards"/>
+    <target href="assembly.xml#AsyncMediation2"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.25" targetAnchorX="0.10738255033557047" targetAnchorY="0.0975609756097561">
+    <source href="assembly.xml#AsyncMediation2"/>
+    <target href="assembly.xml#SplitCreditCards"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.16666666666666666" targetAnchorX="0.04093567251461988" targetAnchorY="0.044444444444444446">
+    <source href="assembly.xml#AsyncMediation3"/>
+    <target href="assembly.xml#CheckCreditCard00"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.8103448275862069" sourceAnchorY="1.0" targetAnchorX="0.07317073170731707" targetAnchorY="0.14150943396226415">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.9/@subRoute.0"/>
+    <target href="assembly.xml#AggregateRecords"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.16666666666666666" targetAnchorX="0.0728476821192053" targetAnchorY="0.23958333333333334">
+    <source href="assembly.xml#CheckHashmap2"/>
+    <target href="assembly.xml#AsyncMediation3"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.7456647398843931" sourceAnchorY="1.0" targetAnchorX="0.09933774834437085" targetAnchorY="0.10416666666666667">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.7/@subRoute.0"/>
+    <target href="assembly.xml#AsyncMediation3"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.8275862068965517" sourceAnchorY="1.0" targetAnchorX="0.06802721088435375" targetAnchorY="0.5945945945945946">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.9/@subRoute.1"/>
+    <target href="assembly.xml#StudentTransactionSkipped"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.5609756097560976" sourceAnchorY="1.0" targetAnchorX="0.0995260663507109" targetAnchorY="0.5135135135135135">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.141/@mixed.3"/>
+    <target href="assembly.xml#ErrorRetrieveFile"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.5909090909090909" sourceAnchorY="1.0" targetAnchorX="0.10106382978723404" targetAnchorY="0.5405405405405406">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.211/@mixed.3"/>
+    <target href="assembly.xml#ErrorProcessRec71"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.3402777777777778" sourceAnchorY="1.0" targetAnchorX="0.09004739336492891" targetAnchorY="0.40540540540540543">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.225/@mixed.3"/>
+    <target href="assembly.xml#ErrorRoutingStudentAccount"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.2905405405405405" sourceAnchorY="1.0" targetAnchorX="0.07446808510638298" targetAnchorY="0.43243243243243246">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.205/@mixed.3"/>
+    <target href="assembly.xml#ErrorAssigningAccountForTransaction"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.8116883116883117" sourceAnchorY="1.0" targetAnchorX="0.16666666666666666" targetAnchorY="0.5405405405405406">
+    <source href="assembly.xml#CallCreateXML"/>
+    <target href="assembly.xml#CallStoreErrorLog"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.7873563218390804" sourceAnchorY="1.0" targetAnchorX="0.07906976744186046" targetAnchorY="0.32432432432432434">
+    <source href="assembly.xml#CallStoreErrorLog"/>
+    <target href="assembly.xml#FinalDocumentMessage"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.49246231155778897" sourceAnchorY="1.0" targetAnchorX="0.09004739336492891" targetAnchorY="0.4594594594594595">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.145/@mixed.3"/>
+    <target href="assembly.xml#ErrorGetAdditionaldata0"/>
+  </connections>
+</wdnm:Diagram>

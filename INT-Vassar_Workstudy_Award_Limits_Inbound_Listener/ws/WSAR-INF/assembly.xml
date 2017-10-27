@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+     xmlns="http://www.springframework.org/schema/beans"
+     xmlns:beans="http://www.springframework.org/schema/beans"
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:cc="http://www.capeclear.com/assembly/10"
+     xmlns:cloud="urn:com.workday/esb/cloud/10.0"
+     xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"
+     xmlns:pi="urn:com.workday/picof"
+     xmlns:wd="urn:com.workday/bsvc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ 
+	<cc:assembly id="WorkdayAssembly" version="2016.6">
+        <cc:async-mediation id="Log2" routes-to="GetWSMemoAndPay" execute-steps-when="props['log']">
+            <cc:steps>
+                <cc:log id="Log">
+                    <cc:log-message>
+                        <cc:text>Here is the last payroll completed end date: @{props['period_end_date']}&#xD;
+Get Payroll Results Response:&#xD;
+&#xD;
+</cc:text>
+                        <cc:message-content/>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:async-mediation id="Log1" routes-to="Splitter" execute-steps-when="props['log']">
+            <cc:steps>
+                <cc:log id="LogOutput">
+                    <cc:log-message>
+                        <cc:text>Log File Ouput:&#xD;
+</cc:text>
+                        <cc:message-content/>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:local-out id="NoEmpl" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'INFO'"/>
+            <cc:set name="is.message.summary" value="'Employee ID ' +props['emp_id'] + ' or Banner ID ' + props['banner_id'] + ' does not exist in Workday'"/>
+            <cc:set name="is.message.detail" value="'Employee ID ' +props['emp_id'] + ' or Colleague ID ' + props['colleague_id'] + ' does not exist in Workday'"/>
+        </cc:local-out>
+        <cc:route id="CheckId">
+            <cc:mvel-strategy>
+                <cc:choose-route expression="props['emp_id'] != null &amp;&amp; props['emp_id'] != ''" route="IdExists"/>
+                <cc:choose-route expression="true" route="None"/>
+            </cc:mvel-strategy>
+            <cc:sub-route name="IdExists" routes-to="SetProperties"/>
+            <cc:sub-route name="None" routes-to="NoEmpl"/>
+        </cc:route>
+        <cc:async-mediation id="GetEmplId" routes-to="CheckId">
+            <cc:steps>
+                <cc:eval id="Eval">
+                <cc:expression>props['banner_id'] = parts[0].xpath('WorkStudy_Data/BANNER_ID')</cc:expression>
+                <cc:expression>props['emp_id'] = parts[0].xpath('WorkStudy_Data/EMPLOYEE_ID')</cc:expression>
+                    <cc:expression>vars['empid_info_node'] = props['id_hash_map'].get(props['emp_id'])</cc:expression>
+                <cc:expression>props['emp_id'] = (props['emp_id'] == '' &amp;&amp; vars['empid_info_node'] != null) ? vars['empid_info_node'].xpath('wd:Report_Entry/wd:Employee_ID', 'wd urn:com.workday.report/RPT_WorkStudy_-_Worker_IDs_Report') : props['emp_id']</cc:expression>
+                    <cc:expression>props['emp_hire_date'] = vars['empid_info_node'] != null ? vars['empid_info_node'].xpath('wd:Report_Entry/wd:Hire_Date', 'wd urn:com.workday.report/RPT_WorkStudy_-_Worker_IDs_Report') : ''</cc:expression>
+                    <cc:expression>props['emp_ws_status'] = vars['empid_info_node'] != null ? vars['empid_info_node'].xpath('wd:Report_Entry/wd:Work_Study_Status/@wd:Descriptor', 'wd urn:com.workday.report/RPT_WorkStudy_-_Worker_IDs_Report') : ''</cc:expression>
+                
+                
+                
+                                
+                </cc:eval>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:workday-out-soap id="CloseFedWSMemoCall" application="Payroll" version="26.0"/>
+        <cc:local-out id="ErrorCloseFedWSMemo" store-message="none" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'ERROR'"/>
+            <cc:set name="is.message.summary" value="'Problem closing pay input for employee ' + props['id']"/>
+            <cc:set name="is.message.detail" value="'Problem closing pay input for employee ' + props['id'] + '. Reason: ' + context.getErrorMessage()"/>
+        </cc:local-out>
+        <cc:async-mediation id="CloseFedWSMemoRequest" routes-to="LogCloseFedWSMemo" handle-downstream-errors="true">
+            <cc:steps>
+                <cc:xslt id="Xslt" url="Close_Fed_WS_Memo.xsl"/>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="ErrorCloseFedWSMemo"/>
+        </cc:async-mediation>
+        <cc:route id="RoutePayResults">
+            <cc:mvel-strategy>
+                <cc:choose-route expression="((props['current_date'] > props['fed_ws_memo_input_recent_end_date'] &amp;&amp; props['fed_ws_memo_input_recent_end_date'] != empty &amp;&amp; props['ins_ws_memo_input_recent_end_date'] == empty) || (props['current_date'] > props['ins_ws_memo_input_recent_end_date'] &amp;&amp; props['ins_ws_memo_input_recent_end_date'] != empty &amp;&amp; props['fed_ws_memo_input_recent_end_date'] == empty) || (props['current_date'] > props['fed_ws_memo_input_recent_end_date'] &amp;&amp; props['current_date'] > props['ins_ws_memo_input_recent_end_date'] &amp;&amp; props['fed_ws_memo_input_recent_end_date'] != empty &amp;&amp; props['ins_ws_memo_input_recent_end_date'] != empty) || (props['ins_ws_memo_input_count'] == 0 &amp;&amp; props['fed_ws_memo_input_count'] == 0)) &amp;&amp; props['award_category'] != 'NONE' &amp;&amp; props['award_period_amount'] != 0 " route="New Entry"/>
+                <cc:choose-route expression="(props['ins_ws_memo_input_count'] != 0 || props['fed_ws_memo_input_count'] != 0) &amp;&amp; props['award_category'] == 'NONE' &amp;&amp; props['award_period_amount'] == ''" route="Ending"/>
+                <cc:choose-route expression="props['award_period_amount'] != 0 &amp;&amp; (props['award_period_amount'] == props['fed_ws_memo_input_amount'] || props['award_period_amount'] == props['ins_ws_memo_input_amount'] ) &amp;&amp; (props['award_memo_code'] == props['fed_ws_memo_input_earning_code'] || props['award_memo_code'] == props['ins_ws_memo_input_earning_code'])" route="NoChange"/>
+                <cc:choose-route expression="props['award_period_amount'] != 0 &amp;&amp; (props['award_period_amount'] != props['fed_ws_memo_input_amount'] || props['award_period_amount'] != props['ins_ws_memo_input_amount'] || props['award_memo_code'] != props['fed_ws_memo_input_earning_code'] || props['award_memo_code'] != props['ins_ws_memo_input_earning_code'])" route="Update/Change"/>
+                <cc:choose-route expression="props['ins_ws_memo_input_count'] == 0 &amp;&amp; props['fed_ws_memo_input_count'] == 0 &amp;&amp; props['award_category'] == 'NONE' &amp;&amp; props['award_period_amount'] = empty" route="NoWS"/>
+            </cc:mvel-strategy>
+            <cc:sub-route name="New Entry" routes-to="CallNewWSMemoInput"/>
+            <cc:sub-route name="Ending" routes-to="CallCloseWSMemoInput"/>
+            <cc:sub-route name="NoChange" routes-to="NoChangeLog"/>
+            <cc:sub-route name="Update/Change" routes-to="CallCloseWSMemoInputInChange"/>
+            <cc:sub-route name="NoWS" routes-to="NoWSLog"/>
+        </cc:route>
+        <cc:local-in id="Route" routes-to="RoutePayResults"/>
+        <cc:local-out id="CallRoute" store-message="none" endpoint="vm://INT-Vassar_Workstudy_Award_Limits_Inbound_Listener/Route"/>
+        <cc:local-out id="ErrorGetInput" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'ERROR'"/>
+            <cc:set name="is.message.summary" value="'Error occurred getting payroll input code'"/>
+            <cc:set name="is.message.detail" value="context.errorMessage"/>
+        </cc:local-out>
+        <cc:async-mediation id="HandlePayResults" routes-to="Log2">
+            <cc:steps>
+                <cc:xslt id="SortResults" url="SortPayResults.xsl"/>
+                <cc:log id="Log">
+                    <cc:log-message>
+                        <cc:message-content/>
+                    </cc:log-message>
+                </cc:log>
+                <cc:eval id="EvalResults"><cc:expression>props['period_end_date'] = (parts[0].xpath(&quot;count(/wd:root/wd:PayPeriodEndDate)&quot;) > 0) ? parts[0].xpath(&quot;/wd:root/wd:PayPeriodEndDate[1]&quot;) : ''</cc:expression><cc:expression>props['period_end_date_formatted'] = (props['period_end_date'].length() > 0) ? new java.text.SimpleDateFormat(&quot;yyyy-MM-dd&quot;).parse(props['period_end_date']) : ''</cc:expression>
+                    <cc:expression>props['next_period_start_date'] = (parts[0].xpath(&quot;count(/wd:root/wd:NextPayPeriodStartDate)&quot;) > 0) ? parts[0].xpath(&quot;/wd:root/wd:NextPayPeriodStartDate[1]&quot;) : ''</cc:expression></cc:eval>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:workday-out-soap id="GetPayResults" routes-response-to="HandlePayResults" application="Payroll" version="26.0"/>
+        <cc:local-out id="ErrorGetPayResults" store-message="none" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'ERROR'"/>
+            <cc:set name="is.message.summary" value="'Could not get pay results for employee ' + props['emp_id']"/>
+            <cc:set name="is.message.detail" value="'Could not get pay results for employee ' + props['id'] + '. Reason: ' + context.getErrorMessage()"/>
+        </cc:local-out>
+        <cc:async-mediation id="PayResultRequest" routes-to="GetPayResults" handle-downstream-errors="true">
+            <cc:steps>
+                <cc:xslt id="CreateRequest" url="GetPayResults.xsl"/>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="ErrorGetPayResults"/>
+        </cc:async-mediation>
+        <cc:local-in id="PayResults" routes-to="PayResultRequest"/>
+        <cc:local-out id="CallPayResults" store-message="none" endpoint="vm://INT-Vassar_Workstudy_Award_Limits_Inbound_Listener/PayResults"/>
+        <cc:local-out id="ErrorTextToXMLStep" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'CRITICAL'"/>
+            <cc:set name="is.message.summary" value="'Error Occurred while converting the file to XML'"/>
+            <cc:set name="is.message.detail" value="'Error Occurred while converting the file to XML. Reason: ' +  context.getErrorMessage()"/>
+        </cc:local-out>
+        <cc:async-mediation id="SetProperties" routes-to="CallPayResults" handle-downstream-errors="true">
+            <cc:steps>
+                <cc:eval id="Eval">
+                <cc:expression>props['record.count'] = props['record.count'] + 1</cc:expression>
+                <cc:expression>props['award_period_amount'] = parts[0].xpath('WorkStudy_Data/AWARD_PERIOD_AMOUNT')</cc:expression>  
+                <cc:expression>props['award_period_start_date'] = parts[0].xpath('WorkStudy_Data/AWARD_PERIOD_START_DATE')</cc:expression>
+                <cc:expression>props['award_period_end_date'] = parts[0].xpath('WorkStudy_Data/AWARD_PERIOD_END_DATE')</cc:expression>
+                <cc:expression>props['award_category'] = parts[0].xpath('WorkStudy_Data/AWARD_CATEGORY')</cc:expression>
+                <cc:expression>props['award_memo_code'] = (props['award_category'] != 'NONE' ) ? intsys.integrationMapReverseLookup('Work Study Memo', props['award_category']).get(0).getReferenceData('Earning_Code') : ''</cc:expression>
+                
+                
+                
+                
+                
+                
+                <cc:expression>props['is_award_current_year'] = props['current_date'] > props['award_period_start_date']</cc:expression>
+                
+                
+                
+                </cc:eval>
+                <cc:copy id="Copy" output="variable" output-variable="current_record"/>
+                <cc:validate-exp id="Validate">
+                    <cc:expression failure-message="'Could not lookup award memo payroll input from action code: ' + props['award_category']">props['award_memo_code'] != empty || props['award_category'] == 'NONE'</cc:expression>
+                </cc:validate-exp>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="ErrorGetInput"/>
+        </cc:async-mediation>
+        <cc:splitter id="Splitter">
+            <cc:sub-route name="SubRoute" routes-to="GetEmplId"/>
+            <cc:xpath-splitter xpath="/WorkStudy/WorkStudy_Data"/>
+        </cc:splitter>
+        <cc:async-mediation id="TransformFile" routes-to="Log1">
+            <cc:steps>
+                <cc:csv-to-xml id="CsvToXml" input="variable" input-variable="wd.retrieve.variable" colNames="BANNER_ID,EMPLOYEE_ID,AWARD_PERIOD_START_DATE,AWARD_PERIOD_END_DATE,AWARD_CATEGORY,AWARD_PERIOD_AMOUNT" format="rfc4180" rootName="WorkStudy" rowName="WorkStudy_Data" useFirstLineAsHeader="true"/>
+                <cc:eval id="Eval"><cc:expression>props['record.count'] = 0</cc:expression></cc:eval>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="ErrorTextToXMLStep"/>
+        </cc:async-mediation>
+        <cc:local-in id="ProcessFile" routes-to="TransformFile"/>
+        <cc:send-error id="GlobalHandler" rethrow-error="false" routes-to="CriticalError"/>
+        <cc:local-out id="CriticalError" store-message="both" routes-response-to="CallPutIntegrationEvent" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'CRITICAL'"/>
+            <cc:set name="is.message.summary" value="'A Critical unhandled error occurred which prevented successful completion: ' + context.errorMessage"/>
+            <cc:set name="is.message.detail" value="'A Critical unhandled error occurred which prevented successful completion: ' + context.errorMessage"/>
+        </cc:local-out>
+        <cc:local-out id="CallPutIntegrationEvent" endpoint="vm://wcc/PutIntegrationEvent">
+            <cc:set name="is.event.completed"/>
+        </cc:local-out>
+        <cc:route id="RouteDocuments">
+            <cc:doc-iterator/>
+            <cc:sub-route name="ProcessFile" routes-to="CallSetIds"/>
+        </cc:route>
+        <cc:local-out id="CallProcessFile" store-message="none" endpoint="vm://INT-Vassar_Workstudy_Award_Limits_Inbound_Listener/ProcessFile"/>
+        <cc:async-mediation id="LogNoDocsRetrieved" routes-to="LogNoDocsRetrievedMessage">
+            <cc:steps>
+                <cc:log id="Log" level="warn">
+                    <cc:log-message>
+                        <cc:text>Retrieval service did not retrieve any documents.  Aborting file processing.</cc:text>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:local-out id="LogNoDocsRetrievedMessage" store-message="both" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'INFO'"/>
+            <cc:set name="is.message.summary" value="'No Documents Retrieved for processing'"/>
+            <cc:set name="is.message.detail" value="'No Documents Retrieved for processing'"/>
+        </cc:local-out>
+        <cc:workday-in id="In" routes-to="InitializeProps">
+            <cc:integration-system name="INT007 Vassar Workstudy Award Limits Inbound Listener Service">
+        <cloud:attribute-map-service name="Workstudy Limits Inbound Map Service">
+          <cloud:attribute name="Run Category">
+            <cloud:type>
+              <cloud:class-report-field description="Run Category" type="WID" singular="true">59a4ef31411d41c48ca70a3c30c7bcaf</cloud:class-report-field>
+            </cloud:type>
+          </cloud:attribute>
+          <cloud:attribute name="Verbose Logging">
+            <cloud:type>
+              <cloud:simple-type>boolean</cloud:simple-type>
+            </cloud:type>
+          </cloud:attribute>
+          <cloud:attribute name="Federal Work Study Memo">
+            <cloud:type>
+              <cloud:class-report-field description="Earning" type="WID" singular="true">c5453cef909149b5a409b1c9e41520a5</cloud:class-report-field>
+            </cloud:type>
+          </cloud:attribute>
+          <cloud:attribute name="Institution Work Study Memo">
+            <cloud:type>
+              <cloud:class-report-field description="Earning" type="WID" singular="true">c5453cef909149b5a409b1c9e41520a5</cloud:class-report-field>
+            </cloud:type>
+          </cloud:attribute>
+          <cloud:map name="Work Study Memo">
+            <cloud:internal-type>
+              <cloud:class-report-field description="Earning" type="WID">c5453cef909149b5a409b1c9e41520a5</cloud:class-report-field>
+            </cloud:internal-type>
+            <cloud:external-type>
+              <cloud:simple-type>text</cloud:simple-type>
+            </cloud:external-type>
+          </cloud:map>
+        </cloud:attribute-map-service>
+        <cloud:report-service name="Workstudy Limits Inbound Report Service">
+          <cloud:report-alias description="RPT WorkStudy - Worker IDs Report" name="ID Report">
+            <cloud:report-reference description="RPT WorkStudy - Worker IDs Report" type="WID">282046273641100582f286ab8239d8b9</cloud:report-reference>
+          </cloud:report-alias>
+        </cloud:report-service>
+        <cloud:listener-service name="Workstudy Limits Inbound Listener Service"/>
+      </cc:integration-system>
+        </cc:workday-in>
+        <cc:async-mediation id="InitializeProps" routes-to="CheckRetrievedDocuments">
+            <cc:steps>
+                <cc:eval id="SetProps"><cc:expression>props['current_date'] = util.currentDateAsString('-7')</cc:expression><cc:expression>props['run_category'] = intsys.getAttributeReferenceData('Run Category', 'Run_Category_ID')</cc:expression><cc:expression>props['log'] = intsys.getAttributeAsBoolean('Verbose Logging')</cc:expression><cc:expression>props['id_hash_map'] = new java.util.HashMap()</cc:expression><cc:expression>props['federal_ws_memo_code'] = intsys.getAttributeReferenceData('Federal Work Study Memo', 'Earning_Code')</cc:expression><cc:expression>props['institution_ws_memo_code'] = intsys.getAttributeReferenceData('Institution Work Study Memo', 'Earning_Code')</cc:expression></cc:eval>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:route id="CheckRetrievedDocuments">
+            <cc:mvel-strategy>
+                <cc:choose-route expression="da.size() > 0" route="DocumentsRetrieved"/>
+                <cc:choose-route expression="true" route="NoDocumentsRetrieved"/>
+            </cc:mvel-strategy>
+            <cc:sub-route name="DocumentsRetrieved" routes-to="RouteDocuments"/>
+            <cc:sub-route name="NoDocumentsRetrieved" routes-to="LogNoDocsRetrieved"/>
+        </cc:route>
+        <cc:async-mediation id="StoreHashMap">
+            <cc:steps>
+                <cc:eval id="putValues"><cc:expression>props['key_value'] = parts[0].xpath('wd:Report_Entry/wd:Employee_ID', 'wd urn:com.workday.report/RPT_WorkStudy_-_Worker_IDs_Report')</cc:expression><cc:expression>props['id_hash_map'].put(props['key_value'], parts[0].text)</cc:expression></cc:eval>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:splitter id="SplitRaaS">
+            <cc:sub-route name="storeHash" routes-to="StoreHashMap"/>
+            <cc:xpath-splitter namespaces="wd urn:com.workday.report/RPT_WorkStudy_-_Worker_IDs_Report" xpath="wd:Report_Data/wd:Report_Entry"/>
+        </cc:splitter>
+        <cc:local-out id="IsErrorMessage" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'CRITICAL'"/>
+            <cc:set name="is.message.summary" value="'A critical error occurred setting IDs'"/>
+            <cc:set name="is.message.detail" value="'A critical error occurred setting IDs: ' +  context.getErrorMessage()"/>
+        </cc:local-out>
+        <cc:workday-out-rest id="GetIdReport" routes-response-to="SplitRaaS" extra-path="@{intsys.reportService.getExtrapath('ID Report')}"/>
+        <cc:async-mediation id="CatchErrors" routes-to="GetIdReport" handle-downstream-errors="true">
+            <cc:steps>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="IsErrorMessage"/>
+        </cc:async-mediation>
+        <cc:local-in id="SetIds" routes-to="CatchErrors"/>
+        <cc:local-out id="CallSetIds" store-message="none" routes-response-to="CallProcessFile" endpoint="vm://INT-Vassar_Workstudy_Award_Limits_Inbound_Listener/SetIds"/>
+        <cc:local-in id="GetFedWSMemo" routes-to="FedWSMemoRequest"/>
+        <cc:async-mediation id="LogFedWSMemo" execute-steps-when="props['log']">
+            <cc:steps>
+                <cc:log id="Log">
+                    <cc:log-message>
+                        <cc:text>Federal Input count: @{props['fed_ws_memo_input_count']}&#xD;
+Federal Input amount: @{props['fed_ws_memo_input_amount']}&#xD;
+Federal Input recent start date: @{props['fed_ws_memo_input_recent_start_date']}&#xD;
+Federal Input recent Pay Input ID: @{props['fed_ws_memo_recent_pay_input_id']}&#xD;
+&#xD;
+&#xD;
+</cc:text>
+                        <cc:message-content/>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:async-mediation id="HandleFedWSMemoInput" routes-to="LogFedWSMemo">
+            <cc:steps>
+                <cc:eval id="EvalResults">
+                <cc:expression>props['fed_ws_memo_input_count'] = parts[0].xpath(&quot;env:Envelope/env:Body/wd:Get_Submit_Payroll_Inputs_Response/wd:Response_Results/wd:Total_Results&quot;)</cc:expression>
+                <cc:expression>props['fed_ws_memo_input_amount'] = parts[0].xpath(&quot;env:Envelope/env:Body/wd:Get_Submit_Payroll_Inputs_Response/wd:Response_Data/wd:Payroll_Input[last()]/wd:Payroll_Input_Data/wd:Amount&quot;)</cc:expression>
+                <cc:expression>props['fed_ws_memo_input_recent_start_date'] = parts[0].xpath(&quot;env:Envelope/env:Body/wd:Get_Submit_Payroll_Inputs_Response/wd:Response_Data/wd:Payroll_Input[last()]/wd:Payroll_Input_Data/wd:Start_Date&quot;)</cc:expression>
+                <cc:expression>props['fed_ws_memo_input_recent_end_date'] = parts[0].xpath(&quot;env:Envelope/env:Body/wd:Get_Submit_Payroll_Inputs_Response/wd:Response_Data/wd:Payroll_Input[last()]/wd:Payroll_Input_Data/wd:End_Date&quot;)</cc:expression>                
+                <cc:expression>props['fed_ws_memo_input_recent_start_date_formatted'] = (props['fed_ws_memo_input_recent_start_date'].length() > 0) ? new java.text.SimpleDateFormat(&quot;yyyy-MM-dd&quot;).parse(props['fed_ws_memo_input_recent_start_date']) : ''</cc:expression>
+                <cc:expression>props['fed_ws_memo_recent_pay_input_id'] = parts[0].xpath(&quot;env:Envelope/env:Body/wd:Get_Submit_Payroll_Inputs_Response/wd:Response_Data/wd:Payroll_Input[last()]/wd:Payroll_Input_Data/wd:Payroll_Input_ID&quot;)</cc:expression>
+                <cc:expression>props['fed_ws_memo_input_earning_code'] = parts[0].xpath(&quot;env:Envelope/env:Body/wd:Get_Submit_Payroll_Inputs_Response/wd:Response_Data/wd:Payroll_Input[last()]/wd:Payroll_Input_Data/wd:Earning_Reference/wd:ID[@wd:type='Earning_Code']&quot;)</cc:expression>
+                </cc:eval>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:local-out id="ErrorGetFedWSMemo" store-message="none" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'ERROR'"/>
+            <cc:set name="is.message.summary" value="'Could not get Federal Work Study Memo for employee ' + props['emp_id']"/>
+            <cc:set name="is.message.detail" value="'Could not get Federal Work Study Memo for employee ' + props['emp_id'] + '. Reason: ' + context.getErrorMessage()"/>
+        </cc:local-out>
+        <cc:workday-out-soap id="GetFedWSMemoCall" routes-response-to="HandleFedWSMemoInput" application="Payroll" version="26.0"/>
+        <cc:async-mediation id="FedWSMemoRequest" routes-to="GetFedWSMemoCall" handle-downstream-errors="true">
+            <cc:steps>
+                <cc:xslt id="CreateRequest" url="Get_Fed_WS_Memo.xsl"/>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="ErrorGetFedWSMemo"/>
+        </cc:async-mediation>
+        <cc:async-mediation id="LogInsWSMemo" execute-steps-when="props['log']">
+            <cc:steps>
+                <cc:log id="Log">
+                    <cc:log-message>
+                        <cc:text>Institution Input count: @{props['ins_ws_memo_input_count']}&#xD;
+Institution Input amount: @{props['ins_ws_memo_input_amount']}&#xD;
+Institution Input recent start date: @{props['ins_ws_memo_input_recent_start_date']}&#xD;
+Institution Input recent Pay Input ID: @{props['ins_ws_memo_recent_pay_input_id']}&#xD;
+</cc:text>
+                        <cc:message-content/>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:async-mediation id="HandleInsWSMemoInput" routes-to="LogInsWSMemo">
+            <cc:steps>
+                <cc:eval id="EvalResults">
+                <cc:expression>props['ins_ws_memo_input_count'] = parts[0].xpath(&quot;env:Envelope/env:Body/wd:Get_Submit_Payroll_Inputs_Response/wd:Response_Results/wd:Total_Results&quot;)</cc:expression>
+                <cc:expression>props['ins_ws_memo_input_amount'] = parts[0].xpath(&quot;env:Envelope/env:Body/wd:Get_Submit_Payroll_Inputs_Response/wd:Response_Data/wd:Payroll_Input[last()]/wd:Payroll_Input_Data/wd:Amount&quot;)</cc:expression>
+                <cc:expression>props['ins_ws_memo_input_recent_start_date'] = parts[0].xpath(&quot;env:Envelope/env:Body/wd:Get_Submit_Payroll_Inputs_Response/wd:Response_Data/wd:Payroll_Input[last()]/wd:Payroll_Input_Data/wd:Start_Date&quot;)</cc:expression>
+                <cc:expression>props['ins_ws_memo_input_recent_end_date'] = parts[0].xpath(&quot;env:Envelope/env:Body/wd:Get_Submit_Payroll_Inputs_Response/wd:Response_Data/wd:Payroll_Input[last()]/wd:Payroll_Input_Data/wd:End_Date&quot;)</cc:expression>
+                <cc:expression>props['ins_ws_memo_input_recent_start_date_formatted'] = (props['ins_ws_memo_input_recent_start_date'].length() > 0) ? new java.text.SimpleDateFormat(&quot;yyyy-MM-dd&quot;).parse(props['ins_ws_memo_input_recent_start_date']) : ''</cc:expression>
+                <cc:expression>props['ins_ws_memo_recent_pay_input_id'] = parts[0].xpath(&quot;env:Envelope/env:Body/wd:Get_Submit_Payroll_Inputs_Response/wd:Response_Data/wd:Payroll_Input[last()]/wd:Payroll_Input_Data/wd:Payroll_Input_ID&quot;)</cc:expression>
+                <cc:expression>props['ins_ws_memo_input_earning_code'] = parts[0].xpath(&quot;env:Envelope/env:Body/wd:Get_Submit_Payroll_Inputs_Response/wd:Response_Data/wd:Payroll_Input[last()]/wd:Payroll_Input_Data/wd:Earning_Reference/wd:ID[@wd:type='Earning_Code']&quot;)</cc:expression>
+                </cc:eval>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:local-out id="ErrorGetInsWSMemo" store-message="none" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'ERROR'"/>
+            <cc:set name="is.message.summary" value="'Could not get Federal Work Study Memo for employee ' + props['emp_id']"/>
+            <cc:set name="is.message.detail" value="'Could not get Federal Work Study Memo for employee ' + props['emp_id'] + '. Reason: ' + context.getErrorMessage()"/>
+        </cc:local-out>
+        <cc:workday-out-soap id="GetInsWSMemoCall" routes-response-to="HandleInsWSMemoInput" application="Payroll" version="26.0"/>
+        <cc:async-mediation id="InsWSMemoRequest" routes-to="GetInsWSMemoCall" handle-downstream-errors="true">
+            <cc:steps>
+                <cc:xslt id="CreateRequest" url="Get_Ins_WS_Memo.xsl"/>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="ErrorGetInsWSMemo"/>
+        </cc:async-mediation>
+        <cc:local-in id="GetInsWSMemo" routes-to="InsWSMemoRequest"/>
+        <cc:route id="GetWSMemoAndPay">
+            <cc:all-strategy/>
+            <cc:sub-route name="Get Federal Memo" routes-to="CallGetFedWSMemo"/>
+            <cc:sub-route name="Get Institute Memo" routes-to="CallGetInsWSMemo"/>
+        </cc:route>
+        <cc:local-out id="CallGetFedWSMemo" store-message="none" endpoint="vm://INT-Vassar_Workstudy_Award_Limits_Inbound_Listener/GetFedWSMemo"/>
+        <cc:local-out id="CallGetInsWSMemo" store-message="none" routes-response-to="CallRoute" endpoint="vm://INT-Vassar_Workstudy_Award_Limits_Inbound_Listener/GetInsWSMemo"/>
+        <cc:workday-out-soap id="NewWSMemoInputCall" application="Payroll" version="26.0"/>
+        <cc:local-out id="ErrorNewWSMemoInput" store-message="none" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'ERROR'"/>
+            <cc:set name="is.message.summary" value="'Problem creating pay input for employee ' + props['id']"/>
+            <cc:set name="is.message.detail" value="'Problem creating pay input for employee ' + props['id'] + '. Reason: ' + context.getErrorMessage()"/>
+        </cc:local-out>
+        <cc:async-mediation id="LogNewWSMemoInput" routes-to="NewWSMemoInputCall" execute-steps-when="props['log']">
+            <cc:steps>
+                <cc:log id="Log">
+                    <cc:log-message>
+                        <cc:message-content/>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:async-mediation id="NewWSMemoInputRequest" routes-to="LogNewWSMemoInput" handle-downstream-errors="true">
+            <cc:steps>
+                <cc:xslt id="Xslt" url="New_WS_Memo_Input.xsl"/>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="ErrorNewWSMemoInput"/>
+        </cc:async-mediation>
+        <cc:local-in id="NewWSMemoInput" routes-to="NewWSMemoInputRequest"/>
+        <cc:local-out id="CallNewWSMemoInput" store-message="none" routes-response-to="AssignWSStatusEffectiveDateInNew" endpoint="vm://INT-Vassar_Workstudy_Award_Limits_Inbound_Listener/NewWSMemoInput"/>
+        <cc:route id="CheckMemo">
+            <cc:mvel-strategy>
+                <cc:choose-route expression="props['fed_ws_memo_input_count'] != 0 &amp;&amp; props['fed_ws_memo_input_recent_end_date'] > props['current_date']" route="CloseFedMemo"/>
+                <cc:choose-route expression="props['ins_ws_memo_input_count'] != 0 &amp;&amp; props['ins_ws_memo_input_recent_end_date'] > props['current_date']" route="CloseIntMemo"/>
+            </cc:mvel-strategy>
+            <cc:sub-route name="CloseFedMemo" routes-to="CloseFedWSMemoRequest"/>
+            <cc:sub-route name="CloseIntMemo" routes-to="CloseInsWSMemoRequest"/>
+        </cc:route>
+        <cc:async-mediation id="LogCloseFedWSMemo" routes-to="CloseFedWSMemoCall" execute-steps-when="props['log']">
+            <cc:steps>
+                <cc:log id="Log">
+                    <cc:log-message>
+                        <cc:message-content/>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:workday-out-soap id="CloseInsWSMemoCall" application="Payroll" version="26.0"/>
+        <cc:local-out id="ErrorCloseInsWSMemo" store-message="none" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'ERROR'"/>
+            <cc:set name="is.message.summary" value="'Problem closing pay input for employee ' + props['id']"/>
+            <cc:set name="is.message.detail" value="'Problem closing pay input for employee ' + props['id'] + '. Reason: ' + context.getErrorMessage()"/>
+        </cc:local-out>
+        <cc:async-mediation id="LogCloseInsWSMemo" routes-to="CloseInsWSMemoCall" execute-steps-when="props['log']">
+            <cc:steps>
+                <cc:log id="Log">
+                    <cc:log-message>
+                        <cc:message-content/>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:async-mediation id="CloseInsWSMemoRequest" routes-to="LogCloseInsWSMemo" handle-downstream-errors="true">
+            <cc:steps>
+                <cc:xslt id="Xslt" url="Close_Ins_WS_Memo.xsl"/>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="ErrorCloseInsWSMemo"/>
+        </cc:async-mediation>
+        <cc:local-in id="CloseWSMemoInput" routes-to="CheckMemo"/>
+        <cc:local-out id="CallCloseWSMemoInput" store-message="none" routes-response-to="CallChangeWSStatus" endpoint="vm://INT-Vassar_Workstudy_Award_Limits_Inbound_Listener/CloseWSMemoInput"/>
+        <cc:local-out id="CallCloseWSMemoInputInChange" store-message="none" routes-response-to="CallNewWSMemoInputInChange" endpoint="vm://INT-Vassar_Workstudy_Award_Limits_Inbound_Listener/CloseWSMemoInput"/>
+        <cc:local-out id="CallNewWSMemoInputInChange" store-message="none" routes-response-to="CheckMemoCode" endpoint="vm://INT-Vassar_Workstudy_Award_Limits_Inbound_Listener/NewWSMemoInput"/>
+        <cc:async-mediation id="NoWSLog" routes-to="AssignWSStatusEffectiveDateInNew" execute-steps-when="props['log']">
+            <cc:steps>
+                <cc:log id="Log">
+                    <cc:log-message>
+                        <cc:line-separator/>
+                        <cc:text>No Work Study Award for this employee. EmpID: @{props['emp_id']}</cc:text>
+                        <cc:line-separator/>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:async-mediation id="NoChangeLog" routes-to="CheckMemoCode" execute-steps-when="props['log']">
+            <cc:steps>
+                <cc:log id="Log">
+                    <cc:log-message>
+                        <cc:line-separator/>
+                        <cc:text>No Work Study Award Change for this employee. EmpID: @{props['emp_id']}</cc:text>
+                        <cc:line-separator/>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:workday-out-soap id="ChangeWSStatusCall" routes-response-to="ResetWSEffectiveDate" application="Staffing" version="27.2"/>
+        <cc:local-out id="ErrorChangeWSStatusRequest" store-message="none" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'ERROR'"/>
+            <cc:set name="is.message.summary" value="'Problem creating work study status for employee ' + props['emp_id']"/>
+            <cc:set name="is.message.detail" value="'Problem creating work study status for employee ' + props['emp_id'] + '. Reason: ' + context.getErrorMessage()"/>
+        </cc:local-out>
+        <cc:async-mediation id="LogChangeWSStatusRequest" routes-to="ChangeWSStatusCall" execute-steps-when="props['log']">
+            <cc:steps>
+                <cc:log id="Log">
+                    <cc:log-message>
+                        <cc:message-content/>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:async-mediation id="ChangeWSStatusRequest" routes-to="LogChangeWSStatusRequest" handle-downstream-errors="true">
+            <cc:steps>
+                <cc:xslt id="Xslt" url="Edit_Worker_Additional_Data_Request.xsl"/>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="ErrorChangeWSStatusRequest"/>
+        </cc:async-mediation>
+        <cc:local-in id="ChangeWSStatus" routes-to="ChangeWSStatusRequest"/>
+        <cc:async-mediation id="AssignWSStatusEffectiveDateInNew" routes-to="CallChangeWSStatus">
+            <cc:steps>
+                <cc:eval id="Eval">
+                    <cc:expression>props['ws_effective_date'] = props['emp_hire_date']</cc:expression>
+                </cc:eval>
+                <cc:log id="Log">
+                    <cc:log-message>
+                        <cc:line-separator/>
+                        <cc:line-separator/>
+                        <cc:text>@{props['ws_effective_date']}</cc:text>
+                        <cc:line-separator/>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="ErrorAssignWSEffectiveDate"/>
+        </cc:async-mediation>
+        <cc:local-out id="CallChangeWSStatus" store-message="none" endpoint="vm://INT-Vassar_Workstudy_Award_Limits_Inbound_Listener/ChangeWSStatus"/>
+        <cc:local-out id="ErrorAssignWSEffectiveDate" store-message="none" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'ERROR'"/>
+            <cc:set name="is.message.summary" value="'Problem assigning work study effective date for employee ' + props['emp_id']"/>
+            <cc:set name="is.message.detail" value="'Problem assigning work study effective date for employee ' + props['id'] + '. Reason: ' + context.getErrorMessage()"/>
+        </cc:local-out>
+        <cc:route id="CheckMemoCode">
+            <cc:mvel-strategy>
+                <cc:choose-route expression="(props['emp_ws_status'] != 'Non Work-Study' &amp;&amp;  props['award_category'] == 'NONE') || (props['emp_ws_status'] != 'Federal Work-Study' &amp;&amp;  props['award_category'] == 'CWS') || (props['emp_ws_status'] != 'Institutional Work-Study' &amp;&amp;  props['award_category'] == 'ISEP') || props['emp_ws_status'] =='' " route="Changed"/>
+                <cc:choose-route expression="true" route="NotChanged"/>
+            </cc:mvel-strategy>
+            <cc:sub-route name="Changed" routes-to="CallChangeWSStatus"/>
+            <cc:sub-route name="NotChanged" routes-to="NoMemoCodeChangeLog"/>
+        </cc:route>
+        <cc:async-mediation id="NoMemoCodeChangeLog" execute-steps-when="props['log']">
+            <cc:steps>
+                <cc:log id="Log">
+                    <cc:log-message>
+                        <cc:line-separator/>
+                        <cc:text>No Work Study Memo Code Change for this employee. EmpID: @{props['emp_id']}</cc:text>
+                        <cc:line-separator/>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:async-mediation id="ResetWSEffectiveDate">
+            <cc:steps>
+                <cc:eval id="Eval">
+                    <cc:expression>props['ws_effective_date'] = ''</cc:expression>
+                </cc:eval>
+            </cc:steps>
+        </cc:async-mediation>
+	</cc:assembly>
+
+</beans>

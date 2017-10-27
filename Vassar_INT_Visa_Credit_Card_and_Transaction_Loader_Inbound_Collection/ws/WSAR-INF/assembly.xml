@@ -1,0 +1,908 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+     xmlns="http://www.springframework.org/schema/beans"
+     xmlns:beans="http://www.springframework.org/schema/beans"
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:cc="http://www.capeclear.com/assembly/10"
+     xmlns:cloud="urn:com.workday/esb/cloud/10.0"
+     xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"
+     xmlns:pi="urn:com.workday/picof"
+     xmlns:wd="urn:com.workday/bsvc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ 
+	<cc:assembly id="WorkdayAssembly" version="22.1">
+        <cc:local-in id="CreateXML" routes-to="CreateRecords"/>
+        <cc:async-mediation id="CreateRecords" routes-to="CallContructXML">
+            <cc:steps>
+                <cc:textschema id="CreateXML" style="text2xml" url="text_schema.xsd"/>
+                <cc:log id="Log">
+                    <cc:log-message>
+                        <cc:text>
+***** Parse the Inbound File and Perform XSD transformation ********** 
+</cc:text>
+                        <cc:line-separator/>
+                        <cc:message-content/>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:local-out id="CallContructXML" store-message="both" endpoint="vm://Vassar_INT_Visa_Credit_Card_and_Transaction_Loader_Inbound_Collection/ConstructXML"/>
+        <cc:local-in id="ConstructXML" routes-to="SplitRecords"/>
+        <cc:async-mediation id="Log" routes-to="CallLoadCreditCardInfo">
+            <cc:steps>
+                <cc:copy id="CopyMessage" output="variable" output-variable="file.xml"/>
+                <cc:log id="DebugLog1" level="info">
+                    <cc:log-message>
+                        <cc:text>
+ ***********************************
+XML Message after Refactor and Agregate
+ ***********************************</cc:text>
+                        <cc:line-separator/>
+                        <cc:message-content/>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:local-out id="CallProcessEntries" store-message="both" routes-response-to="SuccessExpenseLoad" endpoint="vm://Vassar_INT_Visa_Credit_Card_and_Transaction_Loader_Inbound_Collection/ProcessEntries"/>
+        <cc:async-mediation id="RefactorXML" routes-to="AggregateXMLMessage">
+            <cc:steps>
+                <cc:eval id="InitVar"><cc:expression> props['current.type'] = parts[0].xpath('Transaction/TransactionCode')</cc:expression><cc:expression>props['current.field4'] = parts[0].xpath('Transaction/Field4')</cc:expression><cc:expression>if(props['current.type'] == 8) {props['record.type'] = props['current.field4'];}</cc:expression><cc:expression>if(props['current.type'] == 8) {props['eight.record']= true;}</cc:expression><cc:expression>if(props['current.type'] == 9) {props['nine.record'] = true;}</cc:expression>
+                    <cc:expression>if(props['current.type'] == 7) {props['seven.record'] = true;}</cc:expression></cc:eval>
+                <cc:xslt id="ConstructXML" url="Refactor_XML_Vassar.xsl"/>
+                <cc:log id="Log" level="debug">
+                    <cc:log-message>
+                        <cc:text>&#xD;
+**************************&#xD;
+XML Message after Refactor_XML.xsl&#xD;
+**************************&#xD;
+</cc:text>
+                        <cc:message-content/>
+                    </cc:log-message>
+                </cc:log>
+                <cc:eval id="Eval1"><cc:expression>props['eight.record'] = false;</cc:expression><cc:expression>props['nine.record']= false;</cc:expression>
+                    <cc:expression>props['seven.record'] = false;</cc:expression></cc:eval>
+            </cc:steps>
+            <cc:send-error id="SendError" rethrow-error="false" routes-to="RefactorErrorMess"/>
+        </cc:async-mediation>
+        <cc:splitter id="SplitRecords" no-split-message-error="false">
+            <cc:sub-route name="Refactor" routes-to="RefactorXML"/>
+            <cc:xml-stream-splitter xpath="/File/Transaction"/>
+        </cc:splitter>
+        <cc:workday-out-soap id="ImportCreditCardTransactions" routes-response-to="StoreEntryResponse" application="Resource_Management" version="v23.0"/>
+        <cc:async-mediation id="StoreEntryResponse">
+            <cc:steps>
+                <cc:eval id="Eval"><cc:expression>props['process.entries.count'] = props['process.entries.count'] + 1</cc:expression></cc:eval>
+            </cc:steps>
+        </cc:async-mediation>
+            <cc:local-in id="ProcessEntries" routes-to="TransLoadOrNot"/>
+        <cc:splitter id="Split_Rec05" no-split-message-error="false">
+            <cc:sub-route name="Process" routes-to="ProcessRec05"/>
+            <cc:xml-stream-splitter xpath="/File/Transaction/Record_05"/>
+        </cc:splitter>
+        <cc:async-mediation id="HandleError" routes-to="ErrorProcessRec4">
+            <cc:steps>
+                <cc:eval id="ErrorLog"><cc:expression>props['error.log'].append(props['transaction.num']+','+props['record.four.first']+','+props['record.four.last']+','+context.getErrorMessage()+'\n')</cc:expression><cc:expression>props['p.errors'] = true;</cc:expression></cc:eval>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:async-mediation id="ProcessRecord04" routes-to="CheckEmplidExists" handle-downstream-errors="true">
+            <cc:steps>
+                <cc:xslt id="Pull_03tkn" output="variable" output-variable="5recordtokenlookup" input="variable" input-variable="file.xml" url="3tokenfrom5record.xsl"/>
+                <cc:eval id="PullXml0"><cc:expression>props['tokenfor5.long.token'] = vars['5recordtokenlookup'].xpath('Record/Long_Token')</cc:expression><cc:expression>props['tokenfor5.short.token'] = vars['5recordtokenlookup'].xpath('Record/Short_Token')</cc:expression></cc:eval>
+                <cc:xslt id="Pull_Rec04" output="variable" output-mimetype="text/xml" output-variable="curr.additional.info" input="variable" input-variable="file.xml" url="Additional_Info.xsl"/>
+                <cc:eval id="PullXml"><cc:expression>props['record.four.first'] = vars['curr.additional.info'].xpath('Record/First_Name')</cc:expression><cc:expression>props['record.four.last'] = vars['curr.additional.info'].xpath('Record/Last_Name')</cc:expression><cc:expression>props['record.four.empid'] = vars['curr.additional.info'].xpath('Record/emp_id')</cc:expression><cc:expression>props['record.four.cc_num'] = vars['curr.additional.info'].xpath('Record/CreditCard_number')</cc:expression><cc:expression>props['p.batch'] = true</cc:expression></cc:eval>
+                <cc:log id="Log">
+                    <cc:log-message>
+                        <cc:text>&#xD;
+props['trans.number']= @{props['trans.number']} &#xD;
+props['record.four.first'] = @{props['record.four.first']} &#xD;
+props['record.four.last'] = @{props['record.four.last']} &#xD;
+props['record.four.empid'] = @{props['record.four.empid']} &#xD;
+props['record.four.cc_num'] = @{props['record.four.cc_num']} &#xD;
+&#xD;
+&#xD;
+</cc:text>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+            <cc:send-error id="ErrorProcessingRec04" routes-to="HandleError"/>
+        </cc:async-mediation>
+        <cc:async-mediation id="ErrorLog" routes-to="PutErrorLog" handle-downstream-errors="false">
+            <cc:steps>
+                <cc:write id="WriteErrors">
+                    <cc:message>
+                        <cc:text>Transaction Number, First Name, Last Name, Error Info
+=====================================
+@{props['error.log'].toString()}
+</cc:text>
+                    </cc:message>
+                </cc:write>
+                <cc:log id="Log">
+                    <cc:log-message>
+                        <cc:text>--------------- ERROR LOG ---------------</cc:text>
+                        <cc:message-content/>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:async-mediation id="NoErrors">
+            <cc:steps>
+                <cc:log id="Log">
+                    <cc:log-message>
+                        <cc:line-separator/>
+                        <cc:text>
+*******************************************************
+*****       No Error Occurred in Integration        ******
+*******************************************************
+</cc:text>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:local-in id="StoreErrorLog" routes-to="IsError"/>
+        <cc:local-out id="PutErrorLog" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'INFO'"/>
+            <cc:set name="is.message.summary" value="'Transaction Errors were Logged'"/>
+            
+            
+        </cc:local-out>
+        <cc:route id="IsError">
+            <cc:mvel-strategy>
+                <cc:choose-route expression="props['p.errors'] == false" route="None"/>
+                <cc:choose-route expression="props['p.errors'] == true" route="Errors"/>
+            </cc:mvel-strategy>
+            <cc:sub-route name="Errors" routes-to="ErrorLog"/>
+            <cc:sub-route name="None" routes-to="NoErrors"/>
+        </cc:route>
+        <cc:route id="EvalFile">
+            <cc:mvel-strategy>
+                <cc:choose-route expression="props['file_count'] >0" route="FileFound"/>
+                <cc:choose-route expression="props['file_count'] ==0" route="NoFile"/>
+            </cc:mvel-strategy>
+            <cc:sub-route name="FileFound" routes-to="FileFound"/>
+            <cc:sub-route name="NoFile" routes-to="NoFileFoundMessage"/>
+        </cc:route>
+        <cc:async-mediation id="InitialStep" routes-to="EvalFile">
+            <cc:steps>
+                <cc:eval id="Eval"><cc:expression>props['file_count']= da.size()</cc:expression><cc:expression>props['file_processed']= 0</cc:expression><cc:expression>props['current.date']=util.currentDateAsString().toString().substring(0,10)</cc:expression><cc:expression>props['error.log'] = new java.lang.StringBuilder();</cc:expression><cc:expression>props['success.log'] = new java.lang.StringBuilder();</cc:expression><cc:expression>props['record.type'] = '00';</cc:expression><cc:expression>props['eight.record'] = false;</cc:expression><cc:expression>props['nine.record'] = false;</cc:expression><cc:expression>props['p.errors'] = false;</cc:expression><cc:expression>props['date.time']=  new java.text.SimpleDateFormat(&quot;yyyyMMdd_HHmmss&quot;).format(new java.util.Date())</cc:expression><cc:expression>props['load_credit_card_information']=intsys.getAttribute('LoadCreditCardInformation')</cc:expression><cc:expression>props['load_credit_card_transactions']=intsys.getAttribute('LoadCreditCardTransactions')</cc:expression>
+                    <cc:expression>props['attr.StudentEEID.FirstCharacter'] =intsys.getAttribute('attr.StudentEEID.FirstCharacter')</cc:expression>
+                    <cc:expression>props['attr.StudentCorpAcct'] =intsys.getAttribute('attr.StudentCorporateAccountNumber')</cc:expression>
+                    <cc:expression>props['attr.ReassignedStudentCards.EEID'] =intsys.getAttribute('attr.ReassignedStudentCards.EEID')</cc:expression>
+                    <cc:expression>props['seven.record'] = false;</cc:expression></cc:eval>
+                <cc:log id="Log">
+                    <cc:log-message>
+                        <cc:line-separator/>
+                        <cc:text>Detected @{props['file_count']} file(s), starting the import process.&#xD;
+&#xD;
+-------------------&#xD;
+Current Date : @{props['current.date']}&#xD;
+props['process.entries.count'] =@{props['process.entries.count']}&#xD;
+-------------------</cc:text>
+                        <cc:line-separator/>
+                        <cc:text>Current Date : @{props['current.date']}</cc:text>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:local-out id="FileFound" routes-response-to="Route" endpoint="vm://wcc/PutIntegrationMessage" clone-request="true">
+            <cc:set name="is.message.severity" value="'INFO'"/>
+            <cc:set name="is.message.summary" value="'Detected ' + props['file_count'] + ' file(s), starting the import process.'"/>
+        </cc:local-out>
+        <cc:local-out id="CallCreateXML" store-message="both" routes-response-to="CallStoreErrorLog" endpoint="vm://Vassar_INT_Visa_Credit_Card_and_Transaction_Loader_Inbound_Collection/CreateXML"/>
+        <cc:local-out id="FinalDocumentMessage" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'INFO'"/>
+            <cc:set name="is.message.summary" value="'Integration completed for inbound file : ' + props['file.name']"/>
+        </cc:local-out>
+        <cc:route id="Route">
+            <cc:doc-iterator sort-by="FILENAME_ASCENDING"/>
+            <cc:sub-route name="SubRoute" routes-to="GetFilesNames"/>
+        </cc:route>
+        <cc:async-mediation id="GetFilesNames" routes-to="File_In_Process">
+            <cc:steps>
+                <cc:eval id="Eval"><cc:expression>props['file.name'] = vars['wd.retrieve.variable'].fileName</cc:expression><cc:expression>props['file.name.datetime'] = props['file.name'] +'.'+props['date.time']</cc:expression><cc:expression>props['file.name.no.extension'] = props['file.name'].replaceAll(&quot;.PGP&quot;, &quot;&quot;);</cc:expression></cc:eval>
+                <cc:copy id="Copy" output-mimetype="text/xml" input="variable" input-variable="wd.retrieve.variable"/>
+                <cc:log id="Log">
+                    <cc:log-message>
+                        <cc:line-separator/>
+                        <cc:text>&#xD;
+------------------------&#xD;
+props['file.name.no.extension'] =@{props['file.name.no.extension'] }&#xD;
+props['file.name'] =@{props['file.name'] }&#xD;
+------------------------&#xD;
+</cc:text>
+                        <cc:message-content/>
+                        <cc:line-separator/>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:local-out id="NoFileFoundMessage" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'WARNING'"/>
+            <cc:set name="is.message.summary" value="'Integration terminated, no file available for processing'"/>
+        </cc:local-out>
+        <cc:local-out id="File_In_Process" routes-response-to="CallCreateXML" endpoint="vm://wcc/PutIntegrationMessage" clone-request="true">
+            <cc:set name="is.message.severity" value="'INFO'"/>
+            <cc:set name="is.message.summary" value="'Starting the Load process for file : '+ props['file.name']"/>
+        </cc:local-out>
+        <cc:aggregator id="AggregateXMLMessage" routes-to="Log" allow-external-control="false" collate-when="true" force-batch-on-last-message="true">
+            <cc:size-batch-strategy batch-size="-1"/>
+            <cc:xml-message-content-collater>
+        <cc:header-text>&lt;File></cc:header-text>
+        <cc:footer-text>&lt;/File></cc:footer-text>
+      </cc:xml-message-content-collater>
+        </cc:aggregator>
+        <cc:local-out id="SuccessExpenseLoad" routes-response-to="AsyncMediation1" endpoint="vm://wcc/PutIntegrationMessage" clone-request="true">
+            <cc:set name="is.message.severity" value="'INFO'"/>
+            <cc:set name="is.message.summary" value="props['process.entries.count'] + ' transaction(s) successfully loaded from file ' +  props['file.name']      "/>
+        </cc:local-out>
+        <cc:async-mediation id="GenerateFileNumber" routes-to="ProcessInformation0">
+            <cc:steps>
+                <cc:copy id="Copy" output-mimetype="text/xml" input="variable" input-variable="file.xml"/>
+                <cc:eval id="Eval"><cc:expression>props['process.entries.count'] =0</cc:expression><cc:expression>props['file.number'] = props['file.name.datetime']</cc:expression></cc:eval>
+                <cc:log id="DebugLog2">
+                    <cc:log-message>
+                        <cc:line-separator/>
+                        <cc:text>&#xD;
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&#xD;
+    PROCESSING EXPENSES  &#xD;
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&#xD;
+Detected @{props['file_count']} file(s), starting the import process.&#xD;
+&#xD;
+-------------------&#xD;
+Current Date : @{props['current.date']}&#xD;
+props['file.number'] = @{props['file.number'] }&#xD;
+props['process.entries.count'] =@{props['process.entries.count']}&#xD;
+props['file.name.no.extension'] =@{props['file.name.no.extension'] }&#xD;
+-------------------</cc:text>
+                        <cc:line-separator/>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:route id="Get_Detail_Data">
+            <cc:all-strategy/>
+            <cc:sub-route name="Get_Lines_Details" routes-to="Call_Get_LineItemDetail"/>
+            <cc:sub-route name="Get_Detail_Info" routes-to="Call_Get_Detail_Info0"/>
+        </cc:route>
+        <cc:aggregator id="AggregateRecords" routes-to="Call_create_Request" collate-when="props['p.collate'] == true" force-batch-on-last-message="false" force-batch-when="props['p.batch'] == true">
+            <cc:size-batch-strategy batch-size="-1"/>
+            <cc:message-content-collater>
+        <cc:header-text>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&lt;File></cc:header-text>
+        <cc:footer-text>&lt;/File></cc:footer-text>
+      </cc:message-content-collater>
+        </cc:aggregator>
+        <cc:async-mediation id="ProcessRec05" routes-to="Get_Detail_Data">
+            <cc:steps>
+                <cc:eval id="PullXml"><cc:expression>props['acct.number'] = parts[0].xpath('Record_05/acct_num')</cc:expression><cc:expression>props['trans.number'] = parts[0].xpath('Record_05/trans_num')</cc:expression><cc:expression>props['Key_05'] = parts[0].xpath('Record_05/Key_05')</cc:expression><cc:expression>props['p.collate'] = true</cc:expression><cc:expression>props['p.batch'] = false</cc:expression><cc:expression>props['isCollate'] = true</cc:expression><cc:expression>props['isBatchNow'] = false</cc:expression><cc:expression>props['trans.type.code'] = parts[0].xpath('Record_05/trans_type_cd')</cc:expression><cc:expression>props['rec05.acct.number.6digits'] = parts[0].xpath('Record_05/acct_num_6digits')</cc:expression><cc:expression>props['rec05.acct_num_token'] = parts[0].xpath('Record_05/acct_num_token')</cc:expression><cc:expression>props.CorpAccount = props.hmCorpAcct.get(parts[0].xpath('Record_05/acct_num_token'))</cc:expression><cc:expression>props['rec05.acct_num_token2'] = parts[0].xpath('Record_05/acct_num_token')</cc:expression>
+                    <cc:expression>props['record.four.corpaccount'] = parts[0].xpath('Record_05/corp_account')</cc:expression></cc:eval>
+                <cc:log id="Log" level="info">
+                    <cc:log-message>
+                        <cc:text>&#xD;
+BEGIN -------After Spit_Rec05 -------------&#xD;
+props['acct.number'] = @{props['acct.number']}&#xD;
+props['trans.number'] =@{ props['trans.number']}&#xD;
+props['Key_05']=@{props['Key_05']}|&#xD;
+props['rec05.acct.number.6digits'] = @{props['rec05.acct.number.6digits'] }&#xD;
+props['rec05.acct_num_token'] = @{props['rec05.acct_num_token'] }&#xD;
+props['rec05.acct_num_token2'] = @{props['rec05.acct_num_token2'] }&#xD;
+props['CorpAccount'] = @{props['CorpAccount'] }&#xD;
+&#xD;
+&#xD;
+</cc:text>
+                        <cc:text>&#xD;
+END -------After Spit_Rec05 -------------</cc:text>
+                    </cc:log-message>
+                </cc:log>
+                <cc:validate-exp id="Is_not_payment"><cc:expression>(props['trans.type.code'] != 30 &amp;&amp; props['trans.type.code'] != 31)</cc:expression></cc:validate-exp>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="MvelError"/>
+        </cc:async-mediation>
+        <cc:async-mediation id="CreateTransactionRequest" routes-to="CallFinalAggregator">
+            <cc:steps>
+                <cc:log id="Log">
+                    <cc:log-message>
+                        <cc:text>&#xD;
+BEGIN---------- After Aggregate  Records--------------&#xD;
+</cc:text>
+                        <cc:text>&#xD;
+END ------------ After Aggregate Records ---------------</cc:text>
+                    </cc:log-message>
+                </cc:log>
+                <cc:xslt id="CreateRequest" url="Create_Request_Vassar.xsl"/>
+                <cc:log id="LogRequest">
+                    <cc:log-message>
+                        <cc:text>
+BEGIN ************ CC Expense Entry SOAP Request  *******
+</cc:text>
+                        <cc:text>
+END ************ CC Expense Entry SOAP Request  *******
+</cc:text>
+                    </cc:log-message>
+                </cc:log>
+                <cc:eval id="Count_Trans"><cc:expression>props['process.entries.count'] = props['process.entries.count'] + 1</cc:expression></cc:eval></cc:steps>
+            <cc:send-error id="CreateTransRequestError" routes-to="TransRequestError"/>
+        </cc:async-mediation>
+        <cc:local-out id="Call_Get_LineItemDetail" store-message="none" endpoint="vm://Vassar_INT_Visa_Credit_Card_and_Transaction_Loader_Inbound_Collection/Get_LineItemDetail"/>
+        <cc:local-in id="Get_LineItemDetail" routes-to="RetreiveFile"/>
+        <cc:local-in id="Get_Detail_Info" routes-to="ProcessRecord04"/>
+        <cc:local-out id="Call_Get_Detail_Info" store-message="none" endpoint="vm://Vassar_INT_Visa_Credit_Card_and_Transaction_Loader_Inbound_Collection/Get_Detail_Info"/>
+        <cc:local-in id="Create_Request" routes-to="CreateTransactionRequest"/>
+        <cc:local-out id="Call_create_Request" store-message="none" endpoint="vm://Vassar_INT_Visa_Credit_Card_and_Transaction_Loader_Inbound_Collection/Create_Request"/>
+        <cc:workday-in id="StartPCardInbound" routes-to="InitialStep">
+            <cc:integration-system name="FIN-INT008 JP Morgan - Visa Procurement Inbound">
+        <cloud:attribute-map-service name="WIX SVC GetCreditCardLoaderAttributes">
+          <cloud:attribute name="LoadCreditCardInformation">
+            <cloud:type>
+              <cloud:simple-type>boolean</cloud:simple-type>
+            </cloud:type>
+          </cloud:attribute>
+          <cloud:attribute name="LoadCreditCardTransactions">
+            <cloud:type>
+              <cloud:simple-type>boolean</cloud:simple-type>
+            </cloud:type>
+          </cloud:attribute>
+          <cloud:attribute name="attr.StudentEEID.FirstCharacter">
+            <cloud:type>
+              <cloud:simple-type>number</cloud:simple-type>
+            </cloud:type>
+          </cloud:attribute>
+          <cloud:attribute name="attr.ReassignedStudentCards.EEID">
+            <cloud:type>
+              <cloud:simple-type>text</cloud:simple-type>
+            </cloud:type>
+          </cloud:attribute>
+          <cloud:attribute name="attr.StudentCorporateAccountNumber">
+            <cloud:type>
+              <cloud:simple-type>number</cloud:simple-type>
+            </cloud:type>
+          </cloud:attribute>
+        </cloud:attribute-map-service>
+        <cloud:attribute-map-service name="WIX SVC GetCreditCardStatuses">
+          <cloud:map name="creditcard_state">
+            <cloud:internal-type>
+              <cloud:simple-type>text</cloud:simple-type>
+            </cloud:internal-type>
+            <cloud:external-type>
+              <cloud:simple-type>text</cloud:simple-type>
+            </cloud:external-type>
+          </cloud:map>
+        </cloud:attribute-map-service>
+        <cloud:attribute-map-service name="WIX SVC GetCreditCardUnitMeasure">
+          <cloud:map name="creditcard_uom">
+            <cloud:internal-type>
+              <cloud:simple-type>text</cloud:simple-type>
+            </cloud:internal-type>
+            <cloud:external-type>
+              <cloud:simple-type>text</cloud:simple-type>
+            </cloud:external-type>
+          </cloud:map>
+        </cloud:attribute-map-service>
+        <cloud:retrieval-service name="WIX SVC Get_VCF_Files"/>
+      </cc:integration-system>
+        </cc:workday-in>
+        <cc:local-out id="ProcessInformation" store-message="none" routes-response-to="InitializeHashmaps" endpoint="vm://wcc/PutIntegrationMessage" clone-request="true">
+            <cc:set name="is.message.severity" value="'INFO'"/>
+            <cc:set name="is.message.summary" value="'Loading credit card information for file : '+ props['file.name']"/>
+        </cc:local-out>
+        <cc:local-in id="LoadCreditCardInfo" routes-to="InfoLoadOrNot"/>
+        <cc:route id="InfoLoadOrNot">
+            <cc:mvel-strategy>
+                <cc:choose-route expression="props['load_credit_card_information'] == 1" route="LoadInfo"/>
+                <cc:choose-route expression="props['load_credit_card_information'] != 1" route="DontLoadInfo"/>
+            </cc:mvel-strategy>
+            <cc:sub-route name="LoadInfo" routes-to="LoadFileCDFInfo"/>
+            <cc:sub-route name="DontLoadInfo" routes-to="DontLoadHierarchyInfo"/>
+        </cc:route>
+        <cc:async-mediation id="LoadFileCDFInfo" routes-to="ProcessInformation">
+            <cc:steps>
+                <cc:copy id="Copy" output-mimetype="text/xml" input="variable" input-variable="file.xml"/>
+                <cc:log id="InfoLog">
+                    <cc:log-message>
+                        <cc:line-separator/>
+                        <cc:text>&#xD;
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&#xD;
+    PROCESSING CREDIT CARDS   &#xD;
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&#xD;
+Loading credit cards Information from file @{ props['file.name.no.extension']}.</cc:text>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:local-out id="DontLoadHierarchyInfo" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'INFO'"/>
+            <cc:set name="is.message.summary" value="'Credit card hierarchy information for file '+ props['file.name'] + ' will not be loaded.'"/>
+        </cc:local-out>
+        <cc:local-out id="CallLoadCreditCardInfo" store-message="none" routes-response-to="CallProcessEntries" endpoint="vm://Vassar_INT_Visa_Credit_Card_and_Transaction_Loader_Inbound_Collection/LoadCreditCardInfo"/>
+        <cc:local-out id="CallProcessCardInfo" store-message="none" routes-response-to="WriteCreditCardLog" endpoint="vm://Vassar_INT_Visa_Credit_Card_and_Transaction_Loader_Inbound_Collection/ProcessCardInfo"/>
+        <cc:local-out id="CallProcessCardHash" store-message="none" routes-response-to="CallProcessCardInfo" endpoint="vm://Vassar_INT_Visa_Credit_Card_and_Transaction_Loader_Inbound_Collection/ProcessCardHash"/>
+        <cc:async-mediation id="InitializeHashmaps" routes-to="CallProcessCardHash" handle-downstream-errors="true">
+            <cc:steps>
+                <cc:eval id="InitializeHashmaps"><cc:expression>props['ProcessedCards'] = &quot;&quot;</cc:expression><cc:expression>props['p.creditcardinfo.hash.map'] = new java.util.HashMap()</cc:expression><cc:expression>props['p.creditcardinfo.hash.map2'] = new java.util.HashMap()</cc:expression><cc:expression>props['p.creditcardinfo.hash.map3'] = new java.util.HashMap()</cc:expression>
+                    <cc:expression>props['p.creditcardinfo.hash.map4'] = new java.util.HashMap()</cc:expression></cc:eval>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:async-mediation id="WriteCreditCardLog">
+            <cc:steps>
+                <cc:write id="Write" output-mimetype="text/plain">
+                    <cc:message>
+                        <cc:text>EmployeeID, AccountLast4Digits, CreditCardState, Action&#xD;
+@{props['ProcessedCards'].toString()}</cc:text>
+                    </cc:message>
+                </cc:write>
+                <cc:store id="Store" output="variable" output-mimetype="text/plain" output-variable="StoredProcessedCards" createDocumentReference="true" title="CreditCardsProcessingLog.txt"/>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:async-mediation id="InitializeCreditCardHash" routes-to="GetCreditCards" handle-downstream-errors="true">
+            <cc:steps>
+                <cc:xslt id="GetCreditCards" url="Get_CreditCards.xsl"/>
+            </cc:steps>
+            <cc:send-error id="SendError" rethrow-error="false" routes-to="ErrorGetCreditCardList"/>
+        </cc:async-mediation>
+        <cc:splitter id="Split_Rec03">
+            <cc:sub-route name="SubRoute" routes-to="GetCardInfo"/>
+            <cc:xml-stream-splitter xpath="/File/Transaction/Record_03"/>
+        </cc:splitter>
+        <cc:local-in id="ProcessCardHash" routes-to="InitializeCreditCardHash"/>
+        <cc:local-out id="ErrorGetCreditCardList" store-message="request" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'ERROR'"/>
+            <cc:set name="is.message.summary" value="'Corporate card definition currently doesn\'t have expense cards defined. - ' + context.errorMessage"/>
+        </cc:local-out>
+        <cc:workday-out-soap id="GetCreditCards" routes-response-to="AsyncMediation2" application="Resource_Management" version="v22.1"/>
+        <cc:aggregator id="FinalAggregator" routes-to="CreateFileRequest" collate-when="props['isCollate'] == true" force-batch-on-last-message="false" force-batch-when="props['isBatchNow'] == true">
+            <cc:size-batch-strategy batch-size="-1"/>
+            <cc:xml-message-content-collater xpath="/env:Envelope/env:Body/wd:Credit_Card_Transaction_Header__HV__Request/wd:Expense_Credit_Card_Transaction_File_Data">
+        <cc:header-text>&lt;wd:Transactions xmlns:wd=&quot;urn:com.workday/bsvc&quot;></cc:header-text>
+        <cc:footer-text>&lt;/wd:Transactions></cc:footer-text>
+      </cc:xml-message-content-collater>
+        </cc:aggregator>
+        <cc:async-mediation id="CreateFileRequest" routes-to="ImportCreditCardTransactions" handle-downstream-errors="true">
+            <cc:steps>
+                <cc:log id="FinalAggrLog">
+                    <cc:log-message>
+                        <cc:text>&#xD;
+BEGIN---- After Aggregator  global---------------&#xD;
+</cc:text>
+                        <cc:text>&#xD;
+END---- After Aggregator  global---------------</cc:text>
+                    </cc:log-message>
+                </cc:log>
+                <cc:xslt id="CreateImportWSReq" url="Import_WS_Request.xsl"/>
+                <cc:log id="LogFileRequest" level="info">
+                    <cc:log-message>
+                        <cc:text>
+BEGIN ************ Import Web Service SOAP Request  *******
+</cc:text>
+                        <cc:message-content/>
+                        <cc:text>
+END  ************ Import Web Service SOAP Request  *******
+</cc:text>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+            <cc:send-error id="CreateFileRequestError" routes-to="ErrorCreateRequest"/>
+        </cc:async-mediation>
+        <cc:async-mediation id="AsyncMediation1" routes-to="CallFinalAggregate">
+            <cc:steps>
+                <cc:eval id="Eval"><cc:expression>props['file_processed']= props['file_processed'] +1</cc:expression><cc:expression>props['isBatchNow'] = true</cc:expression><cc:expression>props['isCollate']  = false</cc:expression></cc:eval>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:local-out id="CallFinalAggregator" store-message="none" endpoint="vm://Vassar_INT_Visa_Credit_Card_and_Transaction_Loader_Inbound_Collection/Final_Aggregator" clone-request="true"/>
+        <cc:local-in id="Final_Aggregator" routes-to="Debugg"/>
+        <cc:local-out id="CallFinalAggregate" store-message="none" endpoint="vm://Vassar_INT_Visa_Credit_Card_and_Transaction_Loader_Inbound_Collection/Final_Aggregator"/>
+        <cc:async-mediation id="Debugg" routes-to="FinalAggregator">
+            <cc:steps>
+                <cc:log id="Log">
+                    <cc:log-message>
+                        <cc:text>&#xD;
+BEGIN---------- Before Aggregator  global---------------&#xD;
+&#xD;
+props['isCollate'] = @{props['isCollate'] }&#xD;
+props['isBatchNow'] = @{props['isBatchNow']  }&#xD;
+&#xD;
+</cc:text>
+                        <cc:text>&#xD;
+END ------------Before Aggregator  global-- ---------------</cc:text>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:local-out id="RefactorErrorMess" endpoint="vm://wcc/PutIntegrationMessage"><cc:set name="is.message.severity" value="'ERROR'"/><cc:set name="is.message.summary" value="'An error occured during the refactor XML step. - ' + context.errorMessage"/></cc:local-out>
+        <cc:local-out id="ErrorProcessRec7" endpoint="vm://wcc/PutIntegrationMessage"><cc:set name="is.message.severity" value="'WARNING'"/><cc:set name="is.message.summary" value="' An error occured while processing Line Items details for transaction : ' + props['trans.number'] "/></cc:local-out>
+        <cc:local-out id="ErrorCreateRequest" endpoint="vm://wcc/PutIntegrationMessage"><cc:set name="is.message.severity" value="'ERROR'"/><cc:set name="is.message.summary" value="'An error occured while creating WebService Request for file : ' +props['file.name']+ ' -- ' + context.errorMessage"/></cc:local-out>
+        <cc:local-out id="TransRequestError" endpoint="vm://wcc/PutIntegrationMessage"><cc:set name="is.message.severity" value="'WARNING'"/><cc:set name="is.message.summary" value="'An error occured while creating Soap Request for transaction: ' + props['trans.number'] + ' -- ' + context.errorMessage"/></cc:local-out>
+        <cc:splitter id="SplitCreditCards">
+            <cc:sub-route name="SubRoute" routes-to="BuildCreditCardHashmaps"/>
+            <cc:xml-stream-splitter xpath="/env:Envelope/env:Body/wd:Get_Expense_Credit_Cards_Response/wd:Response_Data/wd:Expense_Credit_Card/wd:Expense_Credit_Card_Data"/>
+        </cc:splitter>
+        <cc:async-mediation id="BuildCreditCardHashmaps">
+            <cc:steps>
+                <cc:eval id="PopulateHashmaps"><cc:expression>props['p.creditcardinfo.id']=parts[0].xpath(&quot;wd:Expense_Credit_Card_Data/wd:Employee_Reference/wd:ID[@wd:type=\&quot;Employee_ID\&quot;]&quot;) + &quot;-&quot; + parts[0].xpath(&quot;wd:Expense_Credit_Card_Data/wd:Last_4_Digits_of_Credit_Card_Number&quot;)</cc:expression><cc:expression>props['p.creditcardinfo.descr']= parts[0].xpath(&quot;wd:Expense_Credit_Card_Data/wd:Credit_Card_Description&quot;)</cc:expression><cc:expression>props['p.creditcardinfo.hash.map'].put(props['p.creditcardinfo.descr'], parts[0].xpath(&quot;wd:Expense_Credit_Card_Data/wd:Expense_Credit_Card_ID&quot;))</cc:expression><cc:expression>props['p.creditcardinfo.hash.map2'].put(props['p.creditcardinfo.descr'], parts[0].xpath(&quot;wd:Expense_Credit_Card_Data/wd:Employee_Reference/wd:ID[@wd:type='Employee_ID']&quot;))</cc:expression><cc:expression>props['p.creditcardinfo.hash.map3'].put(props['p.creditcardinfo.descr'], parts[0].xpath(&quot;wd:Expense_Credit_Card_Data/wd:Employee_Reference/@wd:Descriptor&quot;))</cc:expression>
+                    <cc:expression>props['p.creditcardinfo.hash.map4'].put(props['p.creditcardinfo.descr'], parts[0].xpath(&quot;wd:Expense_Credit_Card_Data/wd:Corporate_Credit_Card_Account_Reference/wd:ID[@wd:type='Corporate_Credit_Card_Account_ID']&quot;))</cc:expression></cc:eval>
+                <cc:log id="Log" level="info">
+                    <cc:log-message>
+                        <cc:text>***********After Split Credit Card  Hash ********&#xD;
+props['p.creditcardinfo.id'] =@{props['p.creditcardinfo.id']}&#xD;
+props['p.creditcardinfo.hash.map'] = @{props['p.creditcardinfo.hash.map']}&#xD;
+-----ach&#xD;
+props['p.creditcardinfo.hash.map2'] = @{props['p.creditcardinfo.hash.map2']}&#xD;
+-----ach&#xD;
+props['p.creditcardinfo.hash.map3'] = @{props['p.creditcardinfo.hash.map3']}&#xD;
+-----ach&#xD;
+props['p.creditcardinfo.hash.map4'] = @{props['p.creditcardinfo.hash.map4']}&#xD;
+-----ach&#xD;
+</cc:text>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:async-mediation id="RetrieveFile" routes-to="Split_Rec03" handle-downstream-errors="true">
+            <cc:steps>
+                <cc:eval id="Eval"><cc:expression>props.hmKeys = new java.util.HashMap()</cc:expression><cc:expression>props.hmCorpAcct = new java.util.HashMap()</cc:expression></cc:eval>
+                <cc:copy id="CopyFromVar" output="message" output-mimetype="text/xml" input="variable" input-variable="file.xml"/>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="ErrorRetrieveFile"/>
+        </cc:async-mediation>
+        <cc:local-out id="CallCreateCreditCard" store-message="none" endpoint="vm://Vassar_INT_Visa_Credit_Card_and_Transaction_Loader_Inbound_Collection/CreateCreditCard"/>
+        <cc:async-mediation id="GetCardInfo" routes-to="GetAdditionalData" handle-downstream-errors="true">
+            <cc:steps>
+                <cc:eval id="InitCCvars"><cc:expression>props['CC.acct.number'] = parts[0].xpath('Record_03/acct_num')</cc:expression><cc:expression>props['CC.expire.date'] = parts[0].xpath('Record_03/expire_date')</cc:expression><cc:expression>props['CC.spending_limit'] = parts[0].xpath('Record_03/spending_limit')</cc:expression><cc:expression>props['CC.status_code'] = parts[0].xpath('Record_03/status_code')</cc:expression><cc:expression>props['CC.efft_date'] = parts[0].xpath('Record_03/efft_date')</cc:expression><cc:expression>props['CreditCardState'] = intsys.integrationMapLookup('creditcard_state',parts[0].xpath('Record_03/status_code'))</cc:expression><cc:expression>props['account_type'] = parts[0].xpath('Record_03/account_type')</cc:expression><cc:expression>props['rec03.acct_num_token'] = parts[0].xpath('Record_03/acct_num_token')</cc:expression><cc:expression>props['CorporateAccountNumber'] =  parts[0].xpath('Record_03/corp_num')</cc:expression><cc:expression>props['rec03.acct_num_token05'] = parts[0].xpath('Record_03/acct_num_token05')</cc:expression>
+                    <cc:expression>props['CC.status.date'] = parts[0].xpath('Record_03/status_date')</cc:expression></cc:eval>
+                <cc:eval id="Eval"><cc:expression>props['rec03.acct_num_token05'] = parts[0].xpath('Record_03/acct_num_token05')</cc:expression><cc:expression>props.hmKeys.put(props['rec03.acct_num_token05'], props['rec03.acct_num_token'])</cc:expression><cc:expression>props.hmCorpAcct.put(props['rec03.acct_num_token05'], props['CorporateAccountNumber'])</cc:expression></cc:eval>
+                <cc:log id="Debug">
+                    <cc:log-message>
+                        <cc:text>&#xD;
+----- After Split rec03 --------------&#xD;
+props['CC.acct.number'] : @{props['CC.acct.number']}&#xD;
+props['CC.expire.date'] : @{  props['CC.expire.date']    }&#xD;
+props['CC.spending_limit']  : @{  props['CC.spending_limit']}&#xD;
+props['CC.status_code']  : @{  props['CC.status_code']}&#xD;
+props['CC.efft_date']  : @{ props['CC.efft_date']}&#xD;
+props['account_type']  : @{ props['account_type']}&#xD;
+props['rec03.acct_num_token'] =@{props['rec03.acct_num_token']}&#xD;
+props['CorporateAccountNumber'] =@{props['CorporateAccountNumber']}&#xD;
+props['rec03.acct_num_token05'] =@{props['rec03.acct_num_token05']}&#xD;
+props['CreditCardState']  : @{props['CreditCardState']}&#xD;
+props['ExpenseCreditCardID'] =@{props['ExpenseCreditCardID']}&#xD;
+-------------------------------&#xD;
+&#xD;
+&#xD;
+</cc:text>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="ErrorGetAdditionaldata0"/>
+        </cc:async-mediation>
+        <cc:local-in id="ProcessCardInfo" routes-to="RetrieveFile"/>
+        <cc:local-out id="DoNotLoadCard" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'INFO'"/>
+            <cc:set name="is.message.summary" value="'No account information to load or no employee id in definition for corporation number: ' + props['CorporateAccountNumber']  + 'for' + props['CC.firstname'] + props['CC.lastname']"/>
+        </cc:local-out>
+        <cc:local-out id="CallUpdateCreditCard" store-message="none" endpoint="vm://Vassar_INT_Visa_Credit_Card_and_Transaction_Loader_Inbound_Collection/UpdateCreditCard"/>
+        <cc:route id="CheckCreditCard">
+            <cc:mvel-strategy>
+                <cc:choose-route expression="props['EmployeeID'] == &quot;&quot;" route="DoNothing"/>
+                <cc:choose-route expression="props['ExpenseCreditCardID'] != null" route="CreditCardFound"/>
+                <cc:choose-route expression="true" route="CreditCardNotFound"/>
+            </cc:mvel-strategy>
+            <cc:sub-route name="CreditCardFound" routes-to="CallUpdateCreditCard"/>
+            <cc:sub-route name="CreditCardNotFound" routes-to="CallCreateCreditCard"/>
+            <cc:sub-route name="DoNothing" routes-to="DoNotLoadCard"/>
+        </cc:route>
+        <cc:local-out id="ErrorUpdateCreditCard" store-message="request" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'WARNING'"/>
+            <cc:set name="is.message.summary" value="'Cannot update worker credit card information for Emplid:  ' + props['CC.empid'] + ' -- ' + context.errorMessage "/>
+        </cc:local-out>
+        <cc:async-mediation id="ErrorUpdate" routes-to="ErrorUpdateCreditCard">
+            <cc:steps>
+                <cc:log id="UpdateLog">
+                    <cc:log-message>
+                        <cc:line-separator/>
+                        <cc:text>Error updating Credit Card xxxxxxxxxxxx@{props['CC.acct.number']} for Employee : @{props['CC.firstname'] }  @{ props['CC.lastname']}  ( @{props['CC.empid']} ).</cc:text>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:workday-out-soap id="PutExpenseCreditCardUpdate" routes-response-to="LogUpdatedCard" application="Resource_Management" version="v22.1"/>
+        <cc:async-mediation id="UpdateCreditCardRequest" routes-to="PutExpenseCreditCardUpdate" handle-downstream-errors="true">
+            <cc:steps>
+                <cc:xslt id="UpdateCreditCardInfo" url="UpdateCreditCardInfo.xsl"/>
+                <cc:log id="DEBUG" level="info">
+                    <cc:log-message>
+                        <cc:text>&#xD;
+BEGIN -------After UpdateCreditCardInfo.xsl ----- </cc:text>
+                        <cc:message-content/>
+                        <cc:text>&#xD;
+END -------After UpdateCreditCardInfo.xsl ----- </cc:text>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+            <cc:send-error id="SendError" rethrow-error="false" routes-to="ErrorUpdate"/>
+        </cc:async-mediation>
+        <cc:local-in id="UpdateCreditCard" routes-to="UpdateCreditCardRequest"/>
+        <cc:async-mediation id="LogUpdatedCard">
+            <cc:steps>
+                <cc:eval id="Eval"><cc:expression>props['ProcessedCards'] = props['ProcessedCards'] + props['CC.empid'] + &quot;,&quot; + props['CC.acct.number'] + &quot;,&quot; + props['CreditCardState'] +&quot;, Update&quot;+ &quot;\r\n&quot;</cc:expression></cc:eval>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:workday-out-soap id="PutExpenseCreditCardCreate" routes-response-to="LogCreatedCard" application="Resource_Management" version="v22.1"/>
+        <cc:local-in id="CreateCreditCard" routes-to="CreateCreditCardRequest"/>
+        <cc:async-mediation id="ErrorCreate" routes-to="ErrorCreateCreditCard">
+            <cc:steps>
+                <cc:log id="CreateLog" level="info">
+                    <cc:log-message>
+                        <cc:line-separator/>
+                        <cc:text>Error creating Credit Card xxxxxxxxxxxx@{props['CC.acct.number']} for Employee : @{props['CC.firstname'] }  @{ props['CC.lastname']}  ( @{props['CC.empid']} ).</cc:text>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:local-out id="ErrorCreateCreditCard" store-message="request" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'WARNING'"/>
+            <cc:set name="is.message.summary" value="'Cannot create worker credit card for Emplid: ' + props['CC.empid'] + ' -- ' + context.errorMessage"/>
+        </cc:local-out>
+        <cc:async-mediation id="CreateCreditCardRequest" routes-to="PutExpenseCreditCardCreate" handle-downstream-errors="true">
+            <cc:steps>
+                <cc:xslt id="CreateCreditCardInfo" url="CreateCreditCardInfo.xsl"/>
+                <cc:log id="DEBUG" level="info">
+                    <cc:log-message>
+                        <cc:text>&#xD;
+BEGIN -------After CreateCreditCardInfo.xsl ----- </cc:text>
+                        <cc:message-content/>
+                        <cc:text>&#xD;
+END -------After CreateCreditCardInfo.xsl ----- </cc:text>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+            <cc:send-error id="SendError" rethrow-error="false" routes-to="ErrorCreate"/>
+        </cc:async-mediation>
+        <cc:async-mediation id="LogCreatedCard">
+            <cc:steps>
+                <cc:eval id="Eval"><cc:expression>props['ProcessedCards'] = props['ProcessedCards'] + props['CC.empid'] + &quot;,&quot; + props['CC.acct.number'] + &quot;,&quot; + props['CreditCardState']  +&quot;, Create&quot;+ &quot;\r\n&quot;</cc:expression></cc:eval>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:async-mediation id="GetAdditionalData" routes-to="CheckCreditCard0" continue-after-error="rewind" handle-downstream-errors="true">
+            <cc:steps>
+                <cc:validate-exp id="IsNotCorpAcct" filter="true"><cc:expression>props['account_type'] != 0</cc:expression></cc:validate-exp>
+                <cc:xslt id="Pull_Rec04" output="variable" output-mimetype="text/xml" output-variable="CreditCard.additional.info" input="variable" input-variable="file.xml" url="CC_Additional_Info.xsl"/>
+                <cc:eval id="CardholderVar"><cc:expression>props['CC.firstname'] = vars['CreditCard.additional.info'].xpath('Record/First_Name')</cc:expression><cc:expression>props['CC.lastname'] = vars['CreditCard.additional.info'].xpath('Record/Last_Name')</cc:expression><cc:expression>props['CC.empid'] = vars['CreditCard.additional.info'].xpath('Record/emp_id').trim()</cc:expression><cc:expression>props['CC.num'] = vars['CreditCard.additional.info'].xpath('Record/CreditCard_number').trim()</cc:expression><cc:expression>props['ExpenseCreditCardID'] = props['p.creditcardinfo.hash.map'].get(props['rec03.acct_num_token05'])</cc:expression></cc:eval>
+                <cc:eval id="CardholderVar0">
+                    <cc:expression>props['CC.empid.firstchar'] = props['CC.empid'].substring(0,1)</cc:expression>
+                    <cc:expression>props['CC.empid.firstchar.plus10'] = props['CC.empid.firstchar']+10</cc:expression></cc:eval>
+                <cc:log id="Debug">
+                    <cc:log-message>
+                        <cc:text>&#xD;
+----- After Split rec04 --------------&#xD;
+props['CC.acct.number'] : @{props['CC.acct.number']}&#xD;
+props['CC.expire.date'] : @{  props['CC.expire.date']    }&#xD;
+props['CC.spending_limit']  : @{  props['CC.spending_limit']}&#xD;
+props['CC.status_code']  : @{  props['CC.status_code']}&#xD;
+props['CC.efft_date']  : @{ props['CC.efft_date']}&#xD;
+props['account_type']  : @{ props['account_type']}&#xD;
+props['rec03.acct_num_token'] =@{props['rec03.acct_num_token']}&#xD;
+props['CorporateAccountNumber'] =@{props['CorporateAccountNumber']}&#xD;
+props['rec03.acct_num_token05'] =@{props['rec03.acct_num_token05']}&#xD;
+props['CreditCardState']  : @{props['CreditCardState']}&#xD;
+props['ExpenseCreditCardID'] =@{props['ExpenseCreditCardID']}&#xD;
+props['CC.empid'] =@{props['CC.empid']}&#xD;
+props['CC.empid.firstchar'] =@{props['CC.empid.firstchar']}&#xD;
+props['CC.StudentCard'] =@{props['CC.StudentCard']}&#xD;
+&#xD;
+-------------------------------&#xD;
+&#xD;
+&#xD;
+</cc:text>
+                    </cc:log-message>
+                </cc:log>
+                <cc:eval id="Eval">
+                    <cc:expression>props['CC.StudentCard'] = props['CC.empid.firstchar'] == props['attr.StudentEEID.FirstCharacter'] ? true : false</cc:expression>
+                </cc:eval>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="ErrorGetAdditionaldata"/>
+        </cc:async-mediation>
+        <cc:route id="TransLoadOrNot">
+            <cc:mvel-strategy>
+                <cc:choose-route expression="props['load_credit_card_transactions'] == 1" route="LoadTransactions"/>
+                <cc:choose-route expression="props['load_credit_card_transactions']  != 1" route="NoLoad"/>
+            </cc:mvel-strategy>
+            <cc:sub-route name="LoadTransactions" routes-to="GenerateFileNumber"/>
+            <cc:sub-route name="NoLoad" routes-to="DontLoadTransactions"/>
+        </cc:route>
+        <cc:local-out id="DontLoadTransactions" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'INFO'"/>
+            <cc:set name="is.message.summary" value="'Expense transactions for file '+ props['file.name'] + ' will not be loaded.'"/>
+        </cc:local-out>
+        <cc:local-out id="ProcessInformation0" store-message="none" routes-response-to="Split_Rec05" endpoint="vm://wcc/PutIntegrationMessage" clone-request="true">
+            <cc:set name="is.message.severity" value="'INFO'"/>
+            <cc:set name="is.message.summary" value="'Loading Expense transactions for file : '+ props['file.name']"/>
+        </cc:local-out>
+        <cc:local-out id="ErrorProcessRec4" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'WARNING'"/>
+            <cc:set name="is.message.summary" value="'An error occured while processing Employee details for Emplid: ' + props['record.four.empid'] + ' for Account: ' + props['acct.number'] + ' -- ' + context.errorMessage"/>
+        </cc:local-out>
+        <cc:local-out id="ErrorGetAdditionaldata" store-message="request" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'WARNING'"/>
+            <cc:set name="is.message.summary" value="'Cannot retrieve employee info for account xx'   + props['CC.acct.number']  +' with EmpID: ' + props['CC.empid'] + ' -- ' + context.errorMessage"/>
+        </cc:local-out>
+        <cc:local-out id="MvelError" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'WARNING'"/>
+            <cc:set name="is.message.summary" value="' Transaction type is payment, transaction not loaded : ' + props['trans.number'] "/>
+        </cc:local-out>
+        <cc:async-mediation id="ProcessReport">
+            <cc:steps>
+                <cc:log id="Log">
+                    <cc:log-message>
+                        <cc:text>&#xD;
+BEGIN*********  WORKDAY Report Result</cc:text>
+                        <cc:line-separator/>
+                        <cc:message-content/>
+                        <cc:text>&#xD;
+END *********  WORKDAY Report Result</cc:text>
+                    </cc:log-message>
+                </cc:log>
+                <cc:copy id="CopyMessage" output="variable" output-mimetype="text/xml" output-variable="StoredReportResults.xml"/>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:workday-out-rest id="WorkdayOutRest0" routes-response-to="ProcessReport" extra-path="@{intsys.reportService.getExtrapath('YourCustomReportName')}"/>
+        <cc:local-in id="CustomReport" routes-to="WorkdayOutRest0"/>
+        <cc:local-out id="CallCustomReport" store-message="none" routes-response-to="CallProcessCardInfo" endpoint="vm://Vassar_INT_Visa_Credit_Card_and_Transaction_Loader_Inbound_Collection/CustomReport"/>
+        <cc:local-out id="Call_Get_Detail_Info0" store-message="none" endpoint="vm://Vassar_INT_Visa_Credit_Card_and_Transaction_Loader_Inbound_Collection/Get_Detail_Info"/>
+        <cc:route id="CheckEmplidExists">
+            <cc:mvel-strategy>
+                <cc:choose-route expression="props['record.four.empid']  != &quot;&quot;" route="DoNothing"/>
+                <cc:choose-route expression="props['record.four.empid'] == &quot;&quot;" route="DoCheckHashMap2"/>
+            </cc:mvel-strategy>
+            <cc:sub-route name="DoNothing" routes-to="AsyncMediation3"/>
+            <cc:sub-route name="DoCheckHashMap2" routes-to="CheckHashmap2"/>
+        </cc:route>
+        <cc:async-mediation id="CheckHashmap2" routes-to="AsyncMediation3">
+            <cc:steps>
+                <cc:eval id="GetEmplid"><cc:expression>props['record.four.empid']= props['p.creditcardinfo.hash.map2'].get(props['rec05.acct_num_token']) </cc:expression><cc:expression>props['record.four.first'] = props['p.creditcardinfo.hash.map3'].get(props['rec05.acct_num_token']) </cc:expression>
+                    <cc:expression>props['record.four.corpaccount'] = props['p.creditcardinfo.hash.map4'].get(props['rec05.acct_num_token']) </cc:expression></cc:eval>
+                <cc:log id="Log" level="info">
+                    <cc:log-message>
+                        <cc:text>&#xD;
+props['record.four.empid'] from hashmap2 = @{props['record.four.empid']}&#xD;
+props['rec05.acct_num_token'] = @{props['rec05.acct_num_token']}&#xD;
+props['record.four.corpaccount'] =@{props['record.four.corpaccount']}&#xD;
+</cc:text>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="ErrorAssigningAccountForTransaction"/>
+        </cc:async-mediation>
+        <cc:async-mediation id="RetreiveFile" routes-to="Split_Rec07" handle-downstream-errors="true">
+            <cc:steps>
+                <cc:copy id="Copy" output="message" input="variable" input-variable="file.xml"/>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="ErrorProcessRec70"/>
+        </cc:async-mediation>
+        <cc:splitter id="Split_Rec07" no-split-message-error="false">
+            <cc:sub-route name="SubRoute" routes-to="Get_Key_07"/>
+            <cc:xml-stream-splitter xpath="/File/Transaction/Record_07"/>
+        </cc:splitter>
+        <cc:async-mediation id="Get_Key_07" routes-to="ProcessRecord07">
+            <cc:steps>
+                <cc:eval id="Eval"><cc:expression>props['Key_07'] = parts[0].xpath('Record_07/Key_07')</cc:expression></cc:eval>
+                <cc:validate-exp id="ValidateExp" filter="true">
+                    <cc:expression>props['Key_07'] == props['Key_05']</cc:expression>
+                </cc:validate-exp>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="ErrorProcessRec71"/>
+        </cc:async-mediation>
+        <cc:async-mediation id="ProcessRecord07" routes-to="AggregateRecords">
+            <cc:steps>
+                <cc:xslt id="PullData" output="message" output-mimetype="text/xml" input="message" url="Line_Details.xsl"/>
+                <cc:eval id="Eval"><cc:expression>props['Key_07'] = parts[0].xpath('Transaction/Key_07')</cc:expression><cc:expression>props['item_seq'] = parts[0].xpath('Transaction/item_seq')</cc:expression><cc:expression>props['Purc_item_line_num'] = parts[0].xpath('Transaction/Purc_item_line_num')</cc:expression><cc:expression>props['item_desc'] = parts[0].xpath('Transaction/item_desc')</cc:expression><cc:expression>props['UPC'] = parts[0].xpath('Transaction/UPC')</cc:expression><cc:expression>props['product_code'] = parts[0].xpath('Transaction/product_code')</cc:expression><cc:expression>props['item_quantity'] = parts[0].xpath('Transaction/item_quantity')</cc:expression><cc:expression>props['measure_code'] = parts[0].xpath('Transaction/measure_code')</cc:expression><cc:expression>props['unit_price'] = parts[0].xpath('Transaction/Unit_Price')</cc:expression><cc:expression>props['Ext_Amt'] = parts[0].xpath('Transaction/Ext_Amt')</cc:expression><cc:expression>props['Tax_Rate'] = parts[0].xpath('Transaction/Tax_Rate')</cc:expression><cc:expression>props['unit_tax'] = parts[0].xpath('Transaction/unit_tax')</cc:expression><cc:expression>props['unit_discnt'] = parts[0].xpath('Transaction/unit_discnt')</cc:expression></cc:eval>
+                <cc:write id="Write">
+                    <cc:message>
+                        <cc:text>&lt;wd:Credit_Card_Transaction_Line_Data xmlns:wd=&quot;urn:com.workday/bsvc&quot;>&#xD;
+    &lt;wd:Credit_Card_Transaction_Line_ID>@{props['item_seq']}&lt;/wd:Credit_Card_Transaction_Line_ID>&#xD;
+    &lt;wd:Purchase_Order_Line_Number>@{props['Purc_item_line_num'] }&lt;/wd:Purchase_Order_Line_Number>&#xD;
+    &lt;wd:Item_Description>@{props['item_desc']}&lt;/wd:Item_Description>&#xD;
+    &lt;wd:UPC>@{props['UPC']}&lt;/wd:UPC> &#xD;
+    &lt;wd:Vendor_Part_Number>@{props['product_code']}&lt;/wd:Vendor_Part_Number>&#xD;
+    &lt;wd:Quantity>@{props['item_quantity']}&lt;/wd:Quantity>&#xD;
+    &lt;wd:Unit_of_Measure_Reference>@{props['measure_code']}&lt;/wd:Unit_of_Measure_Reference>&#xD;
+    &lt;wd:Unit_Price>@{props['unit_price']}&lt;/wd:Unit_Price>&#xD;
+    &lt;wd:Extended_Amount>@{props['Ext_Amt'] }&lt;/wd:Extended_Amount>&#xD;
+    &lt;wd:Tax_Rate>@{props['Tax_Rate']}&lt;/wd:Tax_Rate>&#xD;
+    &lt;wd:Tax_Amount>@{props['unit_tax']}&lt;/wd:Tax_Amount>&#xD;
+    &lt;wd:Discount_Amount>@{props['unit_discnt']}&lt;/wd:Discount_Amount>&#xD;
+&lt;/wd:Credit_Card_Transaction_Line_Data>&#xD;
+&#xD;
+</cc:text>
+                    </cc:message>
+                </cc:write>
+            </cc:steps>
+            <cc:send-error id="ErrorProcessingRec07" routes-to="ErrorProcessRec7"/>
+        </cc:async-mediation>
+        <cc:local-out id="PutIntegrationEvent" endpoint="vm://wcc/PutIntegrationEvent">
+            <cc:set name="is.event.completed" value="'current'"/>
+        </cc:local-out>
+        <cc:local-out id="CriticalError" routes-response-to="PutIntegrationEvent" endpoint="vm://wcc/PutIntegrationMessage" unset-properties="true">
+            <cc:set name="is.message.severity" value="'ERROR'"/>
+            <cc:set name="is.message.summary" value="'A Critical unhandled error occurred which prevented successful completion'"/>
+            <cc:set name="is.message.detail" value="context.errorMessage"/>
+        </cc:local-out>
+        <cc:send-error id="GlobalHandler" rethrow-error="false" routes-to="CriticalError"/>
+        <cc:local-out id="ErrorProcessRec70" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'WARNING'"/>
+            <cc:set name="is.message.summary" value="' An error occured while processing Line Items details for transaction : ' + props['trans.number'] "/>
+        </cc:local-out>
+        <cc:local-out id="StudentCard" routes-response-to="CheckCreditCard" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'INFO'"/>
+            <cc:set name="is.message.summary" value="'Student Card xx' + props['CC.acct.number'] + ' for ' + props['CC.firstname'] + ' ' + props['CC.lastname'] + ' has been added to the Student Account and reassigned to Employee ID: ' + props['CC.empid']"/>
+        </cc:local-out>
+        <cc:async-mediation id="AsyncMediation0" routes-to="StudentCard">
+            <cc:steps>
+                <cc:eval id="Eval">
+                    <cc:expression>props['CorporateAccountNumber'] = props['attr.StudentCorpAcct']</cc:expression>
+                    <cc:expression>props['CC.empid'] = props['attr.ReassignedStudentCards.EEID']</cc:expression>
+                </cc:eval>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="ErrorRoutingStudentAccount"/>
+        </cc:async-mediation>
+        <cc:route id="CheckCreditCard0">
+            <cc:mvel-strategy>
+                <cc:choose-route expression="props['CC.StudentCard'] == true" route="SkipEmployee"/>
+                <cc:choose-route expression="true" route="DoNothing"/>
+            </cc:mvel-strategy>
+            <cc:sub-route name="DoNothing" routes-to="CheckCreditCard"/>
+            <cc:sub-route name="SkipEmployee" routes-to="AsyncMediation0"/>
+        </cc:route>
+        <cc:async-mediation id="AsyncMediation2" routes-to="SplitCreditCards">
+            <cc:steps>
+                <cc:log id="Log0">
+                    <cc:log-message>
+                        <cc:text>XXXXXXXXXXXXXXX BEGIN FULL CREDIT CARD LOAD XXXXXXXXXXXXXXX</cc:text>
+                        <cc:message-content/>
+                        <cc:text>XXXXXXXXXXXXXXX END FULL CREDIT CARD LOAD XXXXXXXXXXXXXXX</cc:text>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:async-mediation id="AsyncMediation3" routes-to="CheckCreditCard00">
+            <cc:steps>
+                <cc:eval id="Eval">
+                    <cc:expression>props['CC.empid.firstchar.trans'] = props['record.four.empid'].substring(0,1)</cc:expression>
+                </cc:eval>
+                <cc:eval id="Eval0">
+                    <cc:expression>props['CC.StudentCardTrans'] = props['CC.empid.firstchar.trans'] == props['attr.StudentEEID.FirstCharacter'] ? true : false</cc:expression>
+                </cc:eval>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:route id="CheckCreditCard00">
+            <cc:mvel-strategy>
+                <cc:choose-route expression="props['CC.StudentCardTrans'] == true || props['record.four.corpaccount'] == props['attr.StudentCorpAcct']" route="SkipEmployee"/>
+                <cc:choose-route expression="true" route="ProcessTransaction"/>
+            </cc:mvel-strategy>
+            <cc:sub-route name="ProcessTransaction" routes-to="AggregateRecords"/>
+            <cc:sub-route name="SkipEmployee" routes-to="StudentTransactionSkipped"/>
+        </cc:route>
+        <cc:local-out id="StudentTransactionSkipped" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'INFO'"/>
+            <cc:set name="is.message.summary" value="'Student Transaction skipped for ' + props['record.four.first'] + props['record.four.last'] + 'Transaction: ' + props['trans.number']"/>
+        </cc:local-out>
+        <cc:local-out id="ErrorRetrieveFile" store-message="request" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'INFO'"/>
+            <cc:set name="is.message.summary" value="'Cannot retrieve file from Variables. ' + context.errorMessage"/>
+        </cc:local-out>
+        <cc:local-out id="ErrorProcessRec71" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'WARNING'"/>
+            <cc:set name="is.message.summary" value="' An error occured while validating Line Items details for transaction : ' + props['trans.number'] "/>
+        </cc:local-out>
+        <cc:local-out id="ErrorRoutingStudentAccount" store-message="request" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'WARNING'"/>
+            <cc:set name="is.message.summary" value="'Error routing Student CC Account '   + props['CC.acct.number']  +'--' + context.errorMessage"/>
+        </cc:local-out>
+        <cc:local-out id="ErrorAssigningAccountForTransaction" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'WARNING'"/>
+            <cc:set name="is.message.summary" value="' An error occured while assigning account details for Transaction: ' + props['trans.number'] + ' -- ' + context.errorMessage"/>
+        </cc:local-out>
+        <cc:local-out id="CallStoreErrorLog" store-message="none" routes-response-to="FinalDocumentMessage" endpoint="vm://Vassar_INT_Visa_Credit_Card_and_Transaction_Loader_Inbound_Collection/StoreErrorLog"/>
+        <cc:local-out id="ErrorGetAdditionaldata0" store-message="request" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'WARNING'"/>
+            <cc:set name="is.message.summary" value="'Error intializing 03 record variables for account: ' + props['CC.acct.number'] + '--' + context.errorMessage"/>
+        </cc:local-out>
+	</cc:assembly>
+
+</beans>

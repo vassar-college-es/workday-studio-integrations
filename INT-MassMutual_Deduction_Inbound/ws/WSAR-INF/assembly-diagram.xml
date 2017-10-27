@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wdnm:Diagram xmlns:wdnm="http://workday.com/studio/editors/notation">
+  <element href="assembly.xml#WorkdayAssembly"/>
+  <visualProperties x="95" y="137">
+    <element href="assembly.xml#//@beans/@mixed.1/@mixed.5"/>
+  </visualProperties>
+  <visualProperties x="295" y="137">
+    <element href="assembly.xml#CriticalError"/>
+  </visualProperties>
+  <visualProperties x="479" y="137">
+    <element href="assembly.xml#CallPutIntegrationEvent"/>
+  </visualProperties>
+  <visualProperties x="116" y="339">
+    <element href="assembly.xml#In"/>
+  </visualProperties>
+  <visualProperties x="292" y="311">
+    <element href="assembly.xml#AsyncMediation"/>
+  </visualProperties>
+  <visualProperties x="513" y="252">
+    <element href="assembly.xml#CheckRetrievedDocuments"/>
+  </visualProperties>
+  <visualProperties x="1265" y="245">
+    <element href="assembly.xml#RouteDocuments"/>
+  </visualProperties>
+  <visualProperties x="810" y="440">
+    <element href="assembly.xml#LogNoDocsRetrieved"/>
+  </visualProperties>
+  <visualProperties x="1049" y="459">
+    <element href="assembly.xml#LogNoDocsRetrievedMessage"/>
+  </visualProperties>
+  <visualProperties x="106" y="688">
+    <element href="assembly.xml#ProcessFile"/>
+  </visualProperties>
+  <visualProperties x="350" y="618">
+    <element href="assembly.xml#ConvertCSV2XML"/>
+  </visualProperties>
+  <visualProperties x="340" y="798">
+    <element href="assembly.xml#ErrorInTextToXMLStep"/>
+  </visualProperties>
+  <visualProperties x="617" y="618">
+    <element href="assembly.xml#SplitRecords"/>
+  </visualProperties>
+  <visualProperties x="1516" y="331">
+    <element href="assembly.xml#CallProcessFile"/>
+  </visualProperties>
+  <visualProperties x="863" y="656">
+    <element href="assembly.xml#CallProcessEmpl"/>
+  </visualProperties>
+  <visualProperties x="130" y="958">
+    <element href="assembly.xml#ProcessEmpl"/>
+  </visualProperties>
+  <visualProperties x="363" y="930">
+    <element href="assembly.xml#SetFileProps"/>
+  </visualProperties>
+  <visualProperties x="354" y="1098">
+    <element href="assembly.xml#ErrorInFileProps"/>
+  </visualProperties>
+  <visualProperties x="813" y="930">
+    <element href="assembly.xml#SetIndvRateProps"/>
+  </visualProperties>
+  <visualProperties x="1178" y="871">
+    <element href="assembly.xml#RouteAction"/>
+  </visualProperties>
+  <visualProperties x="1433" y="913">
+    <element href="assembly.xml#CallAdd"/>
+  </visualProperties>
+  <visualProperties x="1433" y="994">
+    <element href="assembly.xml#CallCancel"/>
+  </visualProperties>
+  <visualProperties x="1433" y="1187">
+    <element href="assembly.xml#PutNoChangeMessage"/>
+  </visualProperties>
+  <visualProperties x="129" y="1353">
+    <element href="assembly.xml#Add"/>
+  </visualProperties>
+  <visualProperties x="133" y="1659">
+    <element href="assembly.xml#Cancel"/>
+  </visualProperties>
+  <visualProperties x="367" y="1340">
+    <element href="assembly.xml#CreatChgBenefits"/>
+  </visualProperties>
+  <visualProperties x="370" y="1500">
+    <element href="assembly.xml#ErrorChgBenefits"/>
+  </visualProperties>
+  <visualProperties x="584" y="1340">
+    <element href="assembly.xml#ChangeBenefits"/>
+  </visualProperties>
+  <visualProperties x="1232" y="1597">
+    <element href="assembly.xml#CreateGetIndvRates"/>
+  </visualProperties>
+  <visualProperties x="1437" y="1612">
+    <element href="assembly.xml#GetIndvRates"/>
+  </visualProperties>
+  <visualProperties x="1023" y="1612">
+    <element href="assembly.xml#GetIndvRate"/>
+  </visualProperties>
+  <visualProperties x="611" y="963">
+    <element href="assembly.xml#CallGetIndvRate"/>
+  </visualProperties>
+  <visualProperties x="1232" y="1746">
+    <element href="assembly.xml#UpdateErrorMessage"/>
+  </visualProperties>
+  <visualProperties x="800" y="1340">
+    <element href="assembly.xml#CallGetIndvRate1"/>
+  </visualProperties>
+  <visualProperties x="984" y="1319">
+    <element href="assembly.xml#SetProps"/>
+  </visualProperties>
+  <visualProperties x="1049" y="1486">
+    <element href="assembly.xml#ErrorIndvRate"/>
+  </visualProperties>
+  <visualProperties x="1510" y="1340">
+    <element href="assembly.xml#PutIndivRate"/>
+  </visualProperties>
+  <visualProperties x="343" y="1598">
+    <element href="assembly.xml#CreateCxlBenefit"/>
+  </visualProperties>
+  <visualProperties x="338" y="1746">
+    <element href="assembly.xml#ErrorCxBenefits"/>
+  </visualProperties>
+  <visualProperties x="1304" y="1309">
+    <element href="assembly.xml#CreatePutIndvRate"/>
+  </visualProperties>
+  <visualProperties x="1432" y="1062">
+    <element href="assembly.xml#CallUpdate"/>
+  </visualProperties>
+  <visualProperties x="1260" y="1486">
+    <element href="assembly.xml#Update"/>
+  </visualProperties>
+  <visualProperties x="595" y="1603">
+    <element href="assembly.xml#CxlBenefits"/>
+  </visualProperties>
+  <visualProperties x="1507" y="1420">
+    <element href="assembly.xml#PutUpdateSuccess"/>
+  </visualProperties>
+  <visualProperties x="564" y="1695">
+    <element href="assembly.xml#PutCancelMsg"/>
+  </visualProperties>
+  <visualProperties x="869" y="1092">
+    <element href="assembly.xml#ErrorInIndivRateProps"/>
+  </visualProperties>
+  <visualProperties x="28" y="1900">
+    <element href="assembly.xml#CreateEmpIDHashMap"/>
+  </visualProperties>
+  <visualProperties x="267" y="1871">
+    <element href="assembly.xml#InitiateEmpIDHashMap"/>
+  </visualProperties>
+  <visualProperties x="515" y="1877">
+    <element href="assembly.xml#CallEmpIDsReport"/>
+  </visualProperties>
+  <visualProperties x="746" y="1850">
+    <element href="assembly.xml#Splitter"/>
+  </visualProperties>
+  <visualProperties x="916" y="1889">
+    <element href="assembly.xml#StoreEmpIDHashMap"/>
+  </visualProperties>
+  <visualProperties x="893" y="323">
+    <element href="assembly.xml#CallCreateEmpIDHashMap"/>
+  </visualProperties>
+  <visualProperties x="510" y="1974">
+    <element href="assembly.xml#ErrorCallEmpIDsReport"/>
+  </visualProperties>
+  <visualProperties x="1477" y="1477">
+    <element href="assembly.xml#ErrorCreatePutIndvRate"/>
+  </visualProperties>
+  <decorations x="3" y="8" width="1658" height="64" font="Arial|18|1" bgColor="12632256" fgColor="1" fontColor="1" text="Vassar - Mass Mutual Deduction Inbound"/>
+  <decorations x="3" y="71" width="1658" height="124" font="Arial|12|1" fontColor="1" text="Global Error Handler"/>
+  <decorations x="3" y="194" width="1658" height="375" font="Arial|12|1" bgColor="16777130" fgColor="16711680" fontColor="1" text="Main Execution"/>
+  <decorations x="3" y="568" width="1658" height="299" font="Arial|12|1" bgColor="14024652" fgColor="1824512" fontColor="1" type="NOTE" text="Process File"/>
+  <decorations x="3" y="866" width="1666" height="414" font="Arial|12|1" bgColor="12698111" fgColor="9201407" fontColor="1" type="NOTE" text="Process Employee"/>
+  <decorations x="3" y="1279" width="1666" height="294" font="Arial|12|1" fontColor="1" type="NOTE" text="Add/Update Benefit Plan and Individual Rate"/>
+  <decorations x="3" y="1572" width="858" height="232" font="Arial|12|1" bgColor="16776938" fgColor="15003648" fontColor="1" type="NOTE" text="Cancel Benefit Plan"/>
+  <decorations x="863" y="1572" width="806" height="232" font="Arial|12|1" bgColor="13631417" fgColor="4258305" fontColor="1" type="NOTE" text="Get Individual Rate "/>
+  <decorations x="1" y="1814" width="1110" height="258" type="NOTE" text="Create Employee IDs Hash Map"/>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.4864864864864865" targetAnchorX="0.3524590163934426" targetAnchorY="0.40540540540540543">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.5"/>
+    <target href="assembly.xml#CriticalError"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.9918032786885246" sourceAnchorY="0.3783783783783784" targetAnchorX="0.22162162162162163" targetAnchorY="0.35135135135135137">
+    <source href="assembly.xml#CriticalError"/>
+    <target href="assembly.xml#CallPutIntegrationEvent"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.7277777777777777" sourceAnchorY="1.0" targetAnchorX="0.26875" targetAnchorY="0.22340425531914893">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.1/@subRoute.1"/>
+    <target href="assembly.xml#LogNoDocsRetrieved"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.20212765957446807" targetAnchorX="0.14601769911504425" targetAnchorY="0.24324324324324326">
+    <source href="assembly.xml#LogNoDocsRetrieved"/>
+    <target href="assembly.xml#LogNoDocsRetrievedMessage"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.7804878048780488" sourceAnchorY="1.0" targetAnchorX="0.17045454545454544" targetAnchorY="0.096">
+    <source href="assembly.xml#ProcessFile"/>
+    <target href="assembly.xml#ConvertCSV2XML"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.224" targetAnchorX="0.6106194690265486" targetAnchorY="0.1038961038961039">
+    <source href="assembly.xml#ConvertCSV2XML"/>
+    <target href="assembly.xml#SplitRecords"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.4556213017751479" sourceAnchorY="1.0" targetAnchorY="0.43243243243243246">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.23/@mixed.3"/>
+    <target href="assembly.xml#ErrorInTextToXMLStep"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.29411764705882354" targetAnchorX="0.07586206896551724" targetAnchorY="0.4864864864864865">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.0/@subRoute.0"/>
+    <target href="assembly.xml#CallProcessFile"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.3235294117647059" targetAnchorX="0.06206896551724138" targetAnchorY="0.2702702702702703">
+    <source href="assembly.xml#//@beans/@mixed.1/@splitter.0/@subRoute.0"/>
+    <target href="assembly.xml#CallProcessEmpl"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.2702702702702703" targetAnchorX="0.23893805309734514" targetAnchorY="0.2127659574468085">
+    <source href="assembly.xml#ProcessEmpl"/>
+    <target href="assembly.xml#SetFileProps"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.5035460992907801" sourceAnchorY="1.0" targetAnchorX="0.5578231292517006" targetAnchorY="0.1891891891891892">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.33/@mixed.3"/>
+    <target href="assembly.xml#ErrorInFileProps"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.1595744680851064" targetAnchorX="0.2231404958677686" targetAnchorY="0.045180722891566265">
+    <source href="assembly.xml#SetIndvRateProps"/>
+    <target href="assembly.xml#RouteAction"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.3235294117647059" targetAnchorX="0.08571428571428572" targetAnchorY="0.2702702702702703">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.2/@subRoute.0"/>
+    <target href="assembly.xml#CallAdd"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" targetAnchorX="0.1016949152542373" targetAnchorY="0.16216216216216217">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.2/@subRoute.1"/>
+    <target href="assembly.xml#CallCancel"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" targetAnchorX="0.13978494623655913" targetAnchorY="0.2702702702702703">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.2/@subRoute.3"/>
+    <target href="assembly.xml#PutNoChangeMessage"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.3783783783783784" targetAnchorX="0.07857142857142857" targetAnchorY="0.1595744680851064">
+    <source href="assembly.xml#Add"/>
+    <target href="assembly.xml#CreatChgBenefits"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.631578947368421" sourceAnchorY="1.0" targetAnchorX="0.5460526315789473" targetAnchorY="0.16216216216216217">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.51/@mixed.3"/>
+    <target href="assembly.xml#ErrorChgBenefits"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.112" targetAnchorX="0.11842105263157894" targetAnchorY="0.1891891891891892">
+    <source href="assembly.xml#CreatChgBenefits"/>
+    <target href="assembly.xml#ChangeBenefits"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.04" targetAnchorX="0.06870229007633588" targetAnchorY="0.1891891891891892">
+    <source href="assembly.xml#CreateGetIndvRates"/>
+    <target href="assembly.xml#GetIndvRates"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.5675675675675675" targetAnchorX="0.09803921568627451" targetAnchorY="0.208">
+    <source href="assembly.xml#GetIndvRate"/>
+    <target href="assembly.xml#CreateGetIndvRates"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.176" targetAnchorX="0.14383561643835616" targetAnchorY="0.13513513513513514">
+    <source href="assembly.xml#SetFileProps"/>
+    <target href="assembly.xml#CallGetIndvRate"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="1.0" sourceAnchorY="0.40540540540540543" targetAnchorX="0.06382978723404255" targetAnchorY="0.22340425531914893">
+    <source href="assembly.xml#CallGetIndvRate"/>
+    <target href="assembly.xml#SetIndvRateProps"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorY="1.0" targetAnchorX="0.4342857142857143" targetAnchorY="0.32432432432432434">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.59/@mixed.3"/>
+    <target href="assembly.xml#UpdateErrorMessage"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="1.0" sourceAnchorY="0.35135135135135137" targetAnchorX="0.0915032679738562" targetAnchorY="0.35135135135135137">
+    <source href="assembly.xml#ChangeBenefits"/>
+    <target href="assembly.xml#CallGetIndvRate1"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="1.0" sourceAnchorY="0.24324324324324326" targetAnchorX="0.11940298507462686" targetAnchorY="0.1956521739130435">
+    <source href="assembly.xml#CallGetIndvRate1"/>
+    <target href="assembly.xml#SetProps"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.6666666666666666" sourceAnchorY="1.0" targetAnchorX="0.6287878787878788" targetAnchorY="0.10810810810810811">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.69/@mixed.3"/>
+    <target href="assembly.xml#ErrorIndvRate"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.3783783783783784" targetAnchorX="0.15671641791044777" targetAnchorY="0.11702127659574468">
+    <source href="assembly.xml#Cancel"/>
+    <target href="assembly.xml#CreateCxlBenefit"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.6377952755905512" sourceAnchorY="1.0" targetAnchorX="0.5974842767295597" targetAnchorY="0.4864864864864865">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.75/@mixed.3"/>
+    <target href="assembly.xml#ErrorCxBenefits"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.4594594594594595" targetAnchorX="0.08396946564885496" targetAnchorY="0.22340425531914893">
+    <source href="assembly.xml#In"/>
+    <target href="assembly.xml#AsyncMediation"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.128" targetAnchorX="0.08275862068965517" targetAnchorY="0.2127659574468085">
+    <source href="assembly.xml#SetProps"/>
+    <target href="assembly.xml#CreatePutIndvRate"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.2978723404255319" targetAnchorX="0.14285714285714285" targetAnchorY="0.32432432432432434">
+    <source href="assembly.xml#CreatePutIndvRate"/>
+    <target href="assembly.xml#PutIndivRate"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" targetAnchorX="0.16806722689075632" targetAnchorY="0.43243243243243246">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.2/@subRoute.2"/>
+    <target href="assembly.xml#CallUpdate"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.2702702702702703" targetAnchorX="0.496551724137931" targetAnchorY="0.7127659574468085">
+    <source href="assembly.xml#Update"/>
+    <target href="assembly.xml#CreatePutIndvRate"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.13829787234042554" targetAnchorX="0.14507772020725387" targetAnchorY="0.057692307692307696">
+    <source href="assembly.xml#AsyncMediation"/>
+    <target href="assembly.xml#CheckRetrievedDocuments"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.088" targetAnchorX="0.07894736842105263" targetAnchorY="0.40540540540540543">
+    <source href="assembly.xml#CreateCxlBenefit"/>
+    <target href="assembly.xml#CxlBenefits"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.4523809523809524" sourceAnchorY="1.0" targetAnchorX="0.3558282208588957" targetAnchorY="0.2972972972972973">
+    <source href="assembly.xml#PutIndivRate"/>
+    <target href="assembly.xml#PutUpdateSuccess"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.42016806722689076" sourceAnchorY="1.0" targetAnchorX="0.5912408759124088" targetAnchorY="0.24324324324324326">
+    <source href="assembly.xml#CxlBenefits"/>
+    <target href="assembly.xml#PutCancelMsg"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.4552238805970149" sourceAnchorY="1.0" targetAnchorX="0.42934782608695654" targetAnchorY="0.24324324324324326">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.37/@mixed.3"/>
+    <target href="assembly.xml#ErrorInIndivRateProps"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.7839506172839507" sourceAnchorY="1.0" targetAnchorX="0.0" targetAnchorY="0.5208333333333334">
+    <source href="assembly.xml#CreateEmpIDHashMap"/>
+    <target href="assembly.xml#InitiateEmpIDHashMap"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.28125" targetAnchorX="0.3352941176470588" targetAnchorY="0.40540540540540543">
+    <source href="assembly.xml#InitiateEmpIDHashMap"/>
+    <target href="assembly.xml#CallEmpIDsReport"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.8470588235294118" sourceAnchorY="1.0" targetAnchorX="0.27350427350427353" targetAnchorY="0.45121951219512196">
+    <source href="assembly.xml#CallEmpIDsReport"/>
+    <target href="assembly.xml#Splitter"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.6538461538461539" sourceAnchorY="1.0" targetAnchorX="0.5099337748344371" targetAnchorY="0.46875">
+    <source href="assembly.xml#//@beans/@mixed.1/@splitter.1/@subRoute.0"/>
+    <target href="assembly.xml#StoreEmpIDHashMap"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.8833333333333333" sourceAnchorY="1.0" targetAnchorX="0.09027777777777778" targetAnchorY="0.4864864864864865">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.1/@subRoute.0"/>
+    <target href="assembly.xml#CallCreateEmpIDHashMap"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.5833333333333334" sourceAnchorY="1.0" targetAnchorX="0.45323741007194246" targetAnchorY="0.42857142857142855">
+    <source href="assembly.xml#CallCreateEmpIDHashMap"/>
+    <target href="assembly.xml#RouteDocuments"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.7530864197530864" sourceAnchorY="1.0" targetAnchorX="0.18478260869565216" targetAnchorY="0.5675675675675675">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.99/@mixed.3"/>
+    <target href="assembly.xml#ErrorCallEmpIDsReport"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.644927536231884" sourceAnchorY="1.0" targetAnchorX="0.14673913043478262" targetAnchorY="0.40540540540540543">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.79/@mixed.3"/>
+    <target href="assembly.xml#ErrorCreatePutIndvRate"/>
+  </connections>
+</wdnm:Diagram>

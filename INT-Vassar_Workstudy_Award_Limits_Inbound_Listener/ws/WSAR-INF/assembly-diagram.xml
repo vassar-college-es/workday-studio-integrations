@@ -1,0 +1,574 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wdnm:Diagram xmlns:wdnm="http://workday.com/studio/editors/notation">
+  <element href="assembly.xml#WorkdayAssembly"/>
+  <visualProperties x="428" y="95">
+    <element href="assembly.xml#CheckRetrievedDocuments"/>
+  </visualProperties>
+  <visualProperties x="199" y="123">
+    <element href="assembly.xml#InitializeProps"/>
+  </visualProperties>
+  <visualProperties x="52" y="142">
+    <element href="assembly.xml#In"/>
+  </visualProperties>
+  <visualProperties x="923" y="279">
+    <element href="assembly.xml#LogNoDocsRetrievedMessage"/>
+  </visualProperties>
+  <visualProperties x="690" y="267">
+    <element href="assembly.xml#LogNoDocsRetrieved"/>
+  </visualProperties>
+  <visualProperties x="1168" y="116">
+    <element href="assembly.xml#CallProcessFile"/>
+  </visualProperties>
+  <visualProperties x="690" y="93">
+    <element href="assembly.xml#RouteDocuments"/>
+  </visualProperties>
+  <visualProperties x="482" y="420">
+    <element href="assembly.xml#CallPutIntegrationEvent"/>
+  </visualProperties>
+  <visualProperties x="307" y="420">
+    <element href="assembly.xml#CriticalError"/>
+  </visualProperties>
+  <visualProperties x="98" y="420">
+    <element href="assembly.xml#//@beans/@mixed.1/@mixed.47"/>
+  </visualProperties>
+  <visualProperties x="13" y="560">
+    <element href="assembly.xml#ProcessFile"/>
+  </visualProperties>
+  <visualProperties x="171" y="534">
+    <element href="assembly.xml#TransformFile"/>
+  </visualProperties>
+  <visualProperties x="530" y="513">
+    <element href="assembly.xml#Splitter"/>
+  </visualProperties>
+  <visualProperties x="1017" y="506">
+    <element href="assembly.xml#SetProperties"/>
+  </visualProperties>
+  <visualProperties x="189" y="686">
+    <element href="assembly.xml#ErrorTextToXMLStep"/>
+  </visualProperties>
+  <visualProperties x="1248" y="534">
+    <element href="assembly.xml#CallPayResults"/>
+  </visualProperties>
+  <visualProperties x="29" y="862">
+    <element href="assembly.xml#PayResults"/>
+  </visualProperties>
+  <visualProperties x="199" y="827">
+    <element href="assembly.xml#PayResultRequest"/>
+  </visualProperties>
+  <visualProperties x="421" y="915">
+    <element href="assembly.xml#ErrorGetPayResults"/>
+  </visualProperties>
+  <visualProperties x="428" y="833">
+    <element href="assembly.xml#GetPayResults"/>
+  </visualProperties>
+  <visualProperties x="631" y="827">
+    <element href="assembly.xml#HandlePayResults"/>
+  </visualProperties>
+  <visualProperties x="1238" y="656">
+    <element href="assembly.xml#ErrorGetInput"/>
+  </visualProperties>
+  <visualProperties x="1238" y="1038">
+    <element href="assembly.xml#CallRoute"/>
+  </visualProperties>
+  <visualProperties x="44" y="2157">
+    <element href="assembly.xml#Route"/>
+  </visualProperties>
+  <visualProperties x="328" y="2034">
+    <element href="assembly.xml#RoutePayResults"/>
+  </visualProperties>
+  <visualProperties x="452" y="2683">
+    <element href="assembly.xml#CloseFedWSMemoRequest"/>
+  </visualProperties>
+  <visualProperties x="775" y="2771">
+    <element href="assembly.xml#ErrorCloseFedWSMemo"/>
+  </visualProperties>
+  <visualProperties x="1053" y="2691">
+    <element href="assembly.xml#CloseFedWSMemoCall"/>
+  </visualProperties>
+  <visualProperties x="692" y="532">
+    <element href="assembly.xml#GetEmplId"/>
+  </visualProperties>
+  <visualProperties x="867" y="486">
+    <element href="assembly.xml#CheckId"/>
+  </visualProperties>
+  <visualProperties x="1041" y="703">
+    <element href="assembly.xml#NoEmpl"/>
+  </visualProperties>
+  <visualProperties x="378" y="543">
+    <element href="assembly.xml#Log1"/>
+  </visualProperties>
+  <visualProperties x="869" y="827">
+    <element href="assembly.xml#Log2"/>
+  </visualProperties>
+  <visualProperties x="69" y="3428">
+    <element href="assembly.xml#SetIds"/>
+  </visualProperties>
+  <visualProperties x="293" y="3416">
+    <element href="assembly.xml#CatchErrors"/>
+  </visualProperties>
+  <visualProperties x="465" y="3416">
+    <element href="assembly.xml#GetIdReport"/>
+  </visualProperties>
+  <visualProperties x="452" y="3506">
+    <element href="assembly.xml#IsErrorMessage"/>
+  </visualProperties>
+  <visualProperties x="680" y="3392">
+    <element href="assembly.xml#SplitRaaS"/>
+  </visualProperties>
+  <visualProperties x="874" y="3413">
+    <element href="assembly.xml#StoreHashMap"/>
+  </visualProperties>
+  <visualProperties x="956" y="116">
+    <element href="assembly.xml#CallSetIds"/>
+  </visualProperties>
+  <visualProperties x="47" y="1205">
+    <element href="assembly.xml#GetFedWSMemo"/>
+  </visualProperties>
+  <visualProperties x="286" y="1177">
+    <element href="assembly.xml#FedWSMemoRequest"/>
+  </visualProperties>
+  <visualProperties x="540" y="1185">
+    <element href="assembly.xml#GetFedWSMemoCall"/>
+  </visualProperties>
+  <visualProperties x="537" y="1256">
+    <element href="assembly.xml#ErrorGetFedWSMemo"/>
+  </visualProperties>
+  <visualProperties x="835" y="1177">
+    <element href="assembly.xml#HandleFedWSMemoInput"/>
+  </visualProperties>
+  <visualProperties x="1131" y="1185">
+    <element href="assembly.xml#LogFedWSMemo"/>
+  </visualProperties>
+  <visualProperties x="38" y="1426">
+    <element href="assembly.xml#GetInsWSMemo"/>
+  </visualProperties>
+  <visualProperties x="284" y="1398">
+    <element href="assembly.xml#InsWSMemoRequest"/>
+  </visualProperties>
+  <visualProperties x="538" y="1406">
+    <element href="assembly.xml#GetInsWSMemoCall"/>
+  </visualProperties>
+  <visualProperties x="535" y="1477">
+    <element href="assembly.xml#ErrorGetInsWSMemo"/>
+  </visualProperties>
+  <visualProperties x="833" y="1398">
+    <element href="assembly.xml#HandleInsWSMemoInput"/>
+  </visualProperties>
+  <visualProperties x="1129" y="1406">
+    <element href="assembly.xml#LogInsWSMemo"/>
+  </visualProperties>
+  <visualProperties x="1014" y="769">
+    <element href="assembly.xml#GetWSMemoAndPay"/>
+  </visualProperties>
+  <visualProperties x="1217" y="862">
+    <element href="assembly.xml#CallGetFedWSMemo"/>
+  </visualProperties>
+  <visualProperties x="1219" y="930">
+    <element href="assembly.xml#CallGetInsWSMemo"/>
+  </visualProperties>
+  <visualProperties x="66" y="3173">
+    <element href="assembly.xml#NewWSMemoInput"/>
+  </visualProperties>
+  <visualProperties x="285" y="3173">
+    <element href="assembly.xml#NewWSMemoInputRequest"/>
+  </visualProperties>
+  <visualProperties x="556" y="3145">
+    <element href="assembly.xml#LogNewWSMemoInput"/>
+  </visualProperties>
+  <visualProperties x="545" y="3261">
+    <element href="assembly.xml#ErrorNewWSMemoInput"/>
+  </visualProperties>
+  <visualProperties x="773" y="3151">
+    <element href="assembly.xml#NewWSMemoInputCall"/>
+  </visualProperties>
+  <visualProperties x="626" y="2082">
+    <element href="assembly.xml#CallNewWSMemoInput"/>
+  </visualProperties>
+  <visualProperties x="254" y="2691">
+    <element href="assembly.xml#CheckMemo"/>
+  </visualProperties>
+  <visualProperties x="766" y="2649">
+    <element href="assembly.xml#LogCloseFedWSMemo"/>
+  </visualProperties>
+  <visualProperties x="454" y="2881">
+    <element href="assembly.xml#CloseInsWSMemoRequest"/>
+  </visualProperties>
+  <visualProperties x="775" y="2847">
+    <element href="assembly.xml#LogCloseInsWSMemo"/>
+  </visualProperties>
+  <visualProperties x="782" y="2978">
+    <element href="assembly.xml#ErrorCloseInsWSMemo"/>
+  </visualProperties>
+  <visualProperties x="1055" y="2904">
+    <element href="assembly.xml#CloseInsWSMemoCall"/>
+  </visualProperties>
+  <visualProperties x="27" y="2811">
+    <element href="assembly.xml#CloseWSMemoInput"/>
+  </visualProperties>
+  <visualProperties x="636" y="2177">
+    <element href="assembly.xml#CallCloseWSMemoInput"/>
+  </visualProperties>
+  <visualProperties x="637" y="2378">
+    <element href="assembly.xml#CallCloseWSMemoInputInChange"/>
+  </visualProperties>
+  <visualProperties x="787" y="2469">
+    <element href="assembly.xml#CallNewWSMemoInputInChange"/>
+  </visualProperties>
+  <visualProperties x="669" y="2441">
+    <element href="assembly.xml#NoWSLog"/>
+  </visualProperties>
+  <visualProperties x="665" y="2256">
+    <element href="assembly.xml#NoChangeLog"/>
+  </visualProperties>
+  <visualProperties x="34" y="1728">
+    <element href="assembly.xml#ChangeWSStatus"/>
+  </visualProperties>
+  <visualProperties x="288" y="1717">
+    <element href="assembly.xml#ChangeWSStatusRequest"/>
+  </visualProperties>
+  <visualProperties x="561" y="1709">
+    <element href="assembly.xml#LogChangeWSStatusRequest"/>
+  </visualProperties>
+  <visualProperties x="570" y="1820">
+    <element href="assembly.xml#ErrorChangeWSStatusRequest"/>
+  </visualProperties>
+  <visualProperties x="880" y="1709">
+    <element href="assembly.xml#ChangeWSStatusCall"/>
+  </visualProperties>
+  <visualProperties x="903" y="2000">
+    <element href="assembly.xml#AssignWSStatusEffectiveDateInNew"/>
+  </visualProperties>
+  <visualProperties x="1323" y="2177">
+    <element href="assembly.xml#CallChangeWSStatus"/>
+  </visualProperties>
+  <visualProperties x="1068" y="2141">
+    <element href="assembly.xml#ErrorAssignWSEffectiveDate"/>
+  </visualProperties>
+  <visualProperties x="1203" y="2317">
+    <element href="assembly.xml#CheckMemoCode"/>
+  </visualProperties>
+  <visualProperties x="1377" y="2469">
+    <element href="assembly.xml#NoMemoCodeChangeLog"/>
+  </visualProperties>
+  <visualProperties x="1136" y="1682">
+    <element href="assembly.xml#ResetWSEffectiveDate"/>
+  </visualProperties>
+  <decorations x="4" y="1" width="1395" height="64" font="Arial|18|1" bgColor="12632256" fgColor="1" fontColor="1" text="Vassar Workstudy Award Limits Inbound"/>
+  <decorations x="4" y="67" width="1395" height="415" font="Arial|16|0" fontColor="1" type="NOTE" text="Main Execution"/>
+  <decorations x="4" y="481" width="1397" height="270" font="Arial|16|0" bgColor="16373194" fgColor="14248017" fontColor="1" type="NOTE" text="Process File"/>
+  <decorations x="4" y="750" width="1397" height="367" font="Arial|16|0" bgColor="15394559" fgColor="7757567" fontColor="1" type="NOTE" text="Get Payroll Results"/>
+  <decorations x="5" y="1979" width="1547" height="607" font="Arial|18|0" fontColor="1" type="NOTE" text="Get Payroll Input and Route"/>
+  <decorations x="9" y="2632" width="1386" height="434" font="Arial|18|0" bgColor="15138781" fgColor="7536490" fontColor="1" type="NOTE" text="Close WS Memo Input"/>
+  <decorations x="4" y="3361" width="1386" height="238" font="Arial|18|0" bgColor="16744703" fontColor="1" type="NOTE" text="SetIDs"/>
+  <decorations x="4" y="1134" width="1396" height="208" font="Arial|18|0" bgColor="8454016" fontColor="1" type="NOTE" text="Get Federal WS Memo"/>
+  <decorations x="5" y="1355" width="1394" height="201" font="Arial|18|0" bgColor="16777088" fontColor="1" type="NOTE" text="Get Institute WS Memo"/>
+  <decorations x="6" y="3077" width="1391" height="264" font="Arial|18|0" bgColor="16777088" fontColor="1" type="NOTE" text="Create New WS Memo Input"/>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.18085106382978725" targetAnchorX="0.22797927461139897" targetAnchorY="0.1576923076923077">
+    <source href="assembly.xml#InitializeProps"/>
+    <target href="assembly.xml#CheckRetrievedDocuments"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.4411764705882353" targetAnchorX="0.22302158273381295" targetAnchorY="0.38961038961038963">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.3/@subRoute.0"/>
+    <target href="assembly.xml#RouteDocuments"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.23529411764705882" targetAnchorX="0.2" targetAnchorY="0.1595744680851064">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.3/@subRoute.1"/>
+    <target href="assembly.xml#LogNoDocsRetrieved"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.32432432432432434" targetAnchorX="0.44537815126050423" targetAnchorY="0.19148936170212766">
+    <source href="assembly.xml#In"/>
+    <target href="assembly.xml#InitializeProps"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.20212765957446807" targetAnchorX="0.14601769911504425" targetAnchorY="0.24324324324324326">
+    <source href="assembly.xml#LogNoDocsRetrieved"/>
+    <target href="assembly.xml#LogNoDocsRetrievedMessage"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.9918032786885246" sourceAnchorY="0.3783783783783784" targetAnchorX="0.22162162162162163" targetAnchorY="0.35135135135135137">
+    <source href="assembly.xml#CriticalError"/>
+    <target href="assembly.xml#CallPutIntegrationEvent"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.4864864864864865" targetAnchorX="0.3524590163934426" targetAnchorY="0.40540540540540543">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.47"/>
+    <target href="assembly.xml#CriticalError"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.40540540540540543" targetAnchorX="0.0944206008583691" targetAnchorY="0.2978723404255319">
+    <source href="assembly.xml#ProcessFile"/>
+    <target href="assembly.xml#TransformFile"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.18085106382978725" targetAnchorX="0.3228346456692913" targetAnchorY="0.10869565217391304">
+    <source href="assembly.xml#TransformFile"/>
+    <target href="assembly.xml#Log1"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.5619469026548672" sourceAnchorY="1.0" targetAnchorX="0.5903614457831325" targetAnchorY="0.43243243243243246">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.43/@mixed.3"/>
+    <target href="assembly.xml#ErrorTextToXMLStep"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.22826086956521738" targetAnchorX="0.16822429906542055" targetAnchorY="0.07792207792207792">
+    <source href="assembly.xml#Log1"/>
+    <target href="assembly.xml#Splitter"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.47058823529411764" targetAnchorX="0.06299212598425197" targetAnchorY="0.2391304347826087">
+    <source href="assembly.xml#//@beans/@mixed.1/@splitter.0/@subRoute.0"/>
+    <target href="assembly.xml#GetEmplId"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.24468085106382978" targetAnchorX="0.08074534161490683" targetAnchorY="0.16216216216216217">
+    <source href="assembly.xml#SetProperties"/>
+    <target href="assembly.xml#CallPayResults"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.38235294117647056" targetAnchorX="0.15083798882681565" targetAnchorY="0.12">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.0/@subRoute.0"/>
+    <target href="assembly.xml#SetProperties"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.5333333333333333" targetAnchorX="0.07692307692307693" targetAnchorY="0.21621621621621623">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.39/@mixed.3"/>
+    <target href="assembly.xml#ErrorGetInput"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.35135135135135137" targetAnchorX="0.1103448275862069" targetAnchorY="0.152">
+    <source href="assembly.xml#PayResults"/>
+    <target href="assembly.xml#PayResultRequest"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.184" targetAnchorX="0.26618705035971224" targetAnchorY="0.24324324324324326">
+    <source href="assembly.xml#PayResultRequest"/>
+    <target href="assembly.xml#GetPayResults"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.2" targetAnchorX="0.08433734939759036" targetAnchorY="0.21621621621621623">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.31/@mixed.3"/>
+    <target href="assembly.xml#ErrorGetPayResults"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="1.0" sourceAnchorY="0.2702702702702703" targetAnchorX="0.08783783783783784" targetAnchorY="0.07446808510638298">
+    <source href="assembly.xml#GetPayResults"/>
+    <target href="assembly.xml#HandlePayResults"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.2872340425531915" targetAnchorX="0.2191780821917808" targetAnchorY="0.18085106382978725">
+    <source href="assembly.xml#HandlePayResults"/>
+    <target href="assembly.xml#Log2"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.43333333333333335" targetAnchorX="0.06944444444444445" targetAnchorY="0.4864864864864865">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.15/@mixed.3"/>
+    <target href="assembly.xml#ErrorCloseFedWSMemo"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.2553191489361702" targetAnchorX="0.4444444444444444" targetAnchorY="0.019230769230769232">
+    <source href="assembly.xml#GetEmplId"/>
+    <target href="assembly.xml#CheckId"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.23529411764705882" targetAnchorX="0.5196078431372549" targetAnchorY="0.32432432432432434">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.0/@subRoute.1"/>
+    <target href="assembly.xml#NoEmpl"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.35135135135135137" targetAnchorX="0.1111111111111111" targetAnchorY="0.18478260869565216">
+    <source href="assembly.xml#SetIds"/>
+    <target href="assembly.xml#CatchErrors"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.18478260869565216" targetAnchorX="0.07317073170731707" targetAnchorY="0.2972972972972973">
+    <source href="assembly.xml#CatchErrors"/>
+    <target href="assembly.xml#GetIdReport"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.36666666666666664" targetAnchorX="0.2620689655172414" targetAnchorY="0.2972972972972973">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.75/@mixed.3"/>
+    <target href="assembly.xml#IsErrorMessage"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="1.0" sourceAnchorY="0.3783783783783784" targetAnchorX="0.3177570093457944" targetAnchorY="0.07142857142857142">
+    <source href="assembly.xml#GetIdReport"/>
+    <target href="assembly.xml#SplitRaaS"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.6470588235294118" targetAnchorX="0.2125984251968504" targetAnchorY="0.22826086956521738">
+    <source href="assembly.xml#//@beans/@mixed.1/@splitter.1/@subRoute.0"/>
+    <target href="assembly.xml#StoreHashMap"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.6754385964912281" sourceAnchorY="1.0" targetAnchorX="0.12413793103448276" targetAnchorY="0.5405405405405406">
+    <source href="assembly.xml#CallSetIds"/>
+    <target href="assembly.xml#CallProcessFile"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.176" targetAnchorX="0.13821138211382114" targetAnchorY="0.13513513513513514">
+    <source href="assembly.xml#FedWSMemoRequest"/>
+    <target href="assembly.xml#GetFedWSMemoCall"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.5333333333333333" targetAnchorX="0.02666666666666667" targetAnchorY="0.6216216216216216">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.91/@mixed.3"/>
+    <target href="assembly.xml#ErrorGetFedWSMemo"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.2553191489361702" targetAnchorX="0.136986301369863" targetAnchorY="0.18085106382978725">
+    <source href="assembly.xml#HandleFedWSMemoInput"/>
+    <target href="assembly.xml#LogFedWSMemo"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.7678571428571429" sourceAnchorY="1.0" targetAnchorX="0.3076923076923077" targetAnchorY="0.344">
+    <source href="assembly.xml#GetFedWSMemo"/>
+    <target href="assembly.xml#FedWSMemoRequest"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.877906976744186" sourceAnchorY="1.0" targetAnchorX="0.3442622950819672" targetAnchorY="0.2978723404255319">
+    <source href="assembly.xml#GetFedWSMemoCall"/>
+    <target href="assembly.xml#HandleFedWSMemoInput"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.7678571428571429" sourceAnchorY="1.0" targetAnchorX="0.3076923076923077" targetAnchorY="0.344">
+    <source href="assembly.xml#GetInsWSMemo"/>
+    <target href="assembly.xml#InsWSMemoRequest"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.176" targetAnchorX="0.13821138211382114" targetAnchorY="0.13513513513513514">
+    <source href="assembly.xml#InsWSMemoRequest"/>
+    <target href="assembly.xml#GetInsWSMemoCall"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.5333333333333333" targetAnchorX="0.02666666666666667" targetAnchorY="0.6216216216216216">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.101/@mixed.3"/>
+    <target href="assembly.xml#ErrorGetInsWSMemo"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.877906976744186" sourceAnchorY="1.0" targetAnchorX="0.3442622950819672" targetAnchorY="0.2978723404255319">
+    <source href="assembly.xml#GetInsWSMemoCall"/>
+    <target href="assembly.xml#HandleInsWSMemoInput"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.2553191489361702" targetAnchorX="0.136986301369863" targetAnchorY="0.18085106382978725">
+    <source href="assembly.xml#HandleInsWSMemoInput"/>
+    <target href="assembly.xml#LogInsWSMemo"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.26595744680851063" targetAnchorX="0.2803738317757009" targetAnchorY="0.24607329842931938">
+    <source href="assembly.xml#Log2"/>
+    <target href="assembly.xml#GetWSMemoAndPay"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.7253521126760564" sourceAnchorY="1.0" targetAnchorX="0.13372093023255813" targetAnchorY="0.24324324324324326">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.4/@subRoute.0"/>
+    <target href="assembly.xml#CallGetFedWSMemo"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.9507042253521126" sourceAnchorY="1.0" targetAnchorX="0.35714285714285715" targetAnchorY="0.32432432432432434">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.4/@subRoute.1"/>
+    <target href="assembly.xml#CallGetInsWSMemo"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.5405405405405406" targetAnchorX="0.1347517730496454" targetAnchorY="0.152">
+    <source href="assembly.xml#NewWSMemoInput"/>
+    <target href="assembly.xml#NewWSMemoInputRequest"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.08" targetAnchorX="0.0958904109589041" targetAnchorY="0.14893617021276595">
+    <source href="assembly.xml#NewWSMemoInputRequest"/>
+    <target href="assembly.xml#LogNewWSMemoInput"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.4" targetAnchorX="0.07352941176470588" targetAnchorY="0.4594594594594595">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.117/@mixed.3"/>
+    <target href="assembly.xml#ErrorNewWSMemoInput"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.1595744680851064" targetAnchorX="0.28440366972477066" targetAnchorY="0.32432432432432434">
+    <source href="assembly.xml#LogNewWSMemoInput"/>
+    <target href="assembly.xml#NewWSMemoInputCall"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.6888888888888889" sourceAnchorY="1.0" targetAnchorX="0.2463768115942029" targetAnchorY="0.31092436974789917">
+    <source href="assembly.xml#Route"/>
+    <target href="assembly.xml#RoutePayResults"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.40476190476190477" sourceAnchorY="1.0" targetAnchorX="0.45535714285714285" targetAnchorY="0.5405405405405406">
+    <source href="assembly.xml#CallGetInsWSMemo"/>
+    <target href="assembly.xml#CallRoute"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.7647058823529411" targetAnchorX="0.1358695652173913" targetAnchorY="0.43243243243243246">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.1/@subRoute.0"/>
+    <target href="assembly.xml#CallNewWSMemoInput"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.128" targetAnchorX="0.10588235294117647" targetAnchorY="0.48936170212765956">
+    <source href="assembly.xml#CloseFedWSMemoRequest"/>
+    <target href="assembly.xml#LogCloseFedWSMemo"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.5352941176470588" sourceAnchorY="1.0" targetAnchorX="0.3978494623655914" targetAnchorY="0.24324324324324326">
+    <source href="assembly.xml#LogCloseFedWSMemo"/>
+    <target href="assembly.xml#CloseFedWSMemoCall"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.128" targetAnchorX="0.10588235294117647" targetAnchorY="0.48936170212765956">
+    <source href="assembly.xml#CloseInsWSMemoRequest"/>
+    <target href="assembly.xml#LogCloseInsWSMemo"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.43333333333333335" targetAnchorX="0.06944444444444445" targetAnchorY="0.4864864864864865">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.133/@mixed.3"/>
+    <target href="assembly.xml#ErrorCloseInsWSMemo"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.5352941176470588" sourceAnchorY="1.0" targetAnchorX="0.3978494623655914" targetAnchorY="0.24324324324324326">
+    <source href="assembly.xml#LogCloseInsWSMemo"/>
+    <target href="assembly.xml#CloseInsWSMemoCall"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.8015267175572519" sourceAnchorY="1.0" targetAnchorX="0.09183673469387756" targetAnchorY="0.288">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.5/@subRoute.0"/>
+    <target href="assembly.xml#CloseFedWSMemoRequest"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.3435114503816794" sourceAnchorY="1.0" targetAnchorX="0.3385416666666667" targetAnchorY="0.512">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.5/@subRoute.1"/>
+    <target href="assembly.xml#CloseInsWSMemoRequest"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.7352941176470589" sourceAnchorY="1.0" targetAnchorX="0.3263888888888889" targetAnchorY="0.5807692307692308">
+    <source href="assembly.xml#CloseWSMemoInput"/>
+    <target href="assembly.xml#CheckMemo"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.7076923076923077" sourceAnchorY="1.0" targetAnchorX="0.2708333333333333" targetAnchorY="0.35135135135135137">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.1/@subRoute.1"/>
+    <target href="assembly.xml#CallCloseWSMemoInput"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.7846153846153846" sourceAnchorY="1.0" targetAnchorX="0.18292682926829268" targetAnchorY="0.10810810810810811">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.1/@subRoute.3"/>
+    <target href="assembly.xml#CallCloseWSMemoInputInChange"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.7845528455284553" sourceAnchorY="1.0" targetAnchorX="0.22916666666666666" targetAnchorY="0.4864864864864865">
+    <source href="assembly.xml#CallCloseWSMemoInputInChange"/>
+    <target href="assembly.xml#CallNewWSMemoInputInChange"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.5230769230769231" sourceAnchorY="1.0" targetAnchorX="0.3543307086614173">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.1/@subRoute.4"/>
+    <target href="assembly.xml#NoWSLog"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.8333333333333334" sourceAnchorY="1.0" targetAnchorX="0.21929824561403508" targetAnchorY="0.43243243243243246">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.2/@subRoute.0"/>
+    <target href="assembly.xml#CallSetIds"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.823076923076923" sourceAnchorY="1.0" targetAnchorX="0.42857142857142855" targetAnchorY="0.48936170212765956">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.1/@subRoute.2"/>
+    <target href="assembly.xml#NoChangeLog"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.08" targetAnchorX="0.0958904109589041" targetAnchorY="0.14893617021276595">
+    <source href="assembly.xml#ChangeWSStatusRequest"/>
+    <target href="assembly.xml#LogChangeWSStatusRequest"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.4" targetAnchorX="0.07352941176470588" targetAnchorY="0.4594594594594595">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.153/@mixed.3"/>
+    <target href="assembly.xml#ErrorChangeWSStatusRequest"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.1595744680851064" targetAnchorX="0.28440366972477066" targetAnchorY="0.32432432432432434">
+    <source href="assembly.xml#LogChangeWSStatusRequest"/>
+    <target href="assembly.xml#ChangeWSStatusCall"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.7391304347826086" sourceAnchorY="1.0" targetAnchorX="0.22966507177033493" targetAnchorY="0.40425531914893614">
+    <source href="assembly.xml#CallNewWSMemoInput"/>
+    <target href="assembly.xml#AssignWSStatusEffectiveDateInNew"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.2765957446808511" targetAnchorX="0.3680555555555556" targetAnchorY="0.2972972972972973">
+    <source href="assembly.xml#AssignWSStatusEffectiveDateInNew"/>
+    <target href="assembly.xml#CallChangeWSStatus"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.24468085106382978" targetAnchorX="0.14832535885167464" targetAnchorY="0.7553191489361702">
+    <source href="assembly.xml#NoWSLog"/>
+    <target href="assembly.xml#AssignWSStatusEffectiveDateInNew"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.7772277227722773" sourceAnchorY="1.0" targetAnchorX="0.09248554913294797" targetAnchorY="0.32432432432432434">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.157/@mixed.3"/>
+    <target href="assembly.xml#ErrorAssignWSEffectiveDate"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.7773109243697479" sourceAnchorY="1.0" targetAnchorX="0.22695035460992907" targetAnchorY="0.5653846153846154">
+    <source href="assembly.xml#CallNewWSMemoInputInChange"/>
+    <target href="assembly.xml#CheckMemoCode"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.875" sourceAnchorY="1.0" targetAnchorX="0.25384615384615383" targetAnchorY="0.40425531914893614">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.6/@subRoute.1"/>
+    <target href="assembly.xml#NoMemoCodeChangeLog"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.875" sourceAnchorY="1.0" targetAnchorX="0.23728813559322035" targetAnchorY="0.7567567567567568">
+    <source href="assembly.xml#CallCloseWSMemoInput"/>
+    <target href="assembly.xml#CallChangeWSStatus"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.8516129032258064" sourceAnchorY="1.0" targetAnchorX="0.25133689839572193" targetAnchorY="0.384">
+    <source href="assembly.xml#ChangeWSStatus"/>
+    <target href="assembly.xml#ChangeWSStatusRequest"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.5480225988700564" sourceAnchorY="1.0" targetAnchorX="0.33858267716535434" targetAnchorY="0.5434782608695652">
+    <source href="assembly.xml#ChangeWSStatusCall"/>
+    <target href="assembly.xml#ResetWSEffectiveDate"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.1276595744680851" targetAnchorX="0.11347517730496454" targetAnchorY="0.4115384615384615">
+    <source href="assembly.xml#NoChangeLog"/>
+    <target href="assembly.xml#CheckMemoCode"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.6875" sourceAnchorY="1.0" targetAnchorX="0.6779661016949152" targetAnchorY="0.5675675675675675">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.6/@subRoute.0"/>
+    <target href="assembly.xml#CallChangeWSStatus"/>
+  </connections>
+</wdnm:Diagram>

@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+     xmlns="http://www.springframework.org/schema/beans"
+     xmlns:beans="http://www.springframework.org/schema/beans"
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:cc="http://www.capeclear.com/assembly/10"
+     xmlns:cloud="urn:com.workday/esb/cloud/10.0"
+     xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"
+     xmlns:pi="urn:com.workday/picof"
+     xmlns:wd="urn:com.workday/bsvc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ 
+	<cc:assembly id="WorkdayAssembly" version="20">
+        <cc:local-out id="CallPutIntegrationEvent" endpoint="vm://wcc/PutIntegrationEvent">
+            <cc:set name="is.event.completed"/>
+        </cc:local-out>
+        <cc:local-out id="CriticalError" store-message="both" routes-response-to="CallPutIntegrationEvent" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'CRITICAL'"/>
+            <cc:set name="is.message.summary" value="'A Critical unhandled error occurred which prevented successful completion: ' + context.errorMessage"/>
+            <cc:set name="is.message.detail" value="'A Critical unhandled error occurred which prevented successful completion: ' + context.errorMessage"/>
+        </cc:local-out>
+        <cc:send-error id="GlobalHandler" rethrow-error="false" routes-to="CriticalError"/>
+        <cc:workday-in id="In" routes-to="AsyncMediation">
+            <cc:integration-system name="INT030a Mass Mutual Deduction  Inbound">
+        <cloud:attribute-map-service name="MassMutual Attribute  Service">
+          <cloud:attribute name="Benefit Plan">
+            <cloud:type>
+              <cloud:class-report-field description="Benefit Plan" type="WID" singular="true">3b9a67c783724ef68beb2bfa1b9bf6ae</cloud:class-report-field>
+            </cloud:type>
+          </cloud:attribute>
+          <cloud:attribute name="Benefit Event">
+            <cloud:type>
+              <cloud:class-report-field description="Benefit Life Event Type" type="WID" singular="false">5b59af5850fd487f95c1ed72d88834cc</cloud:class-report-field>
+            </cloud:type>
+          </cloud:attribute>
+          <cloud:attribute name="Insurance Coverage Level">
+            <cloud:type>
+              <cloud:class-report-field description="Insurance Coverage Level" type="WID" singular="true">0ce87c0012af48dfa5edbcd08e4d69cb</cloud:class-report-field>
+            </cloud:type>
+          </cloud:attribute>
+        </cloud:attribute-map-service>
+        <cloud:retrieval-service name="MassMutual Retrieval Service"/>
+        <cloud:report-service name="MassMutual Report Service">
+          <cloud:report-alias description="RPT Mass Mutual - Worker IDs" name="RPT_EmpIDs">
+            <cloud:report-reference description="RPT Mass Mutual - Worker IDs" type="WID">282046273641100582f2c0195f00d8d0</cloud:report-reference>
+          </cloud:report-alias>
+        </cloud:report-service>
+      </cc:integration-system>
+        </cc:workday-in>
+        <cc:async-mediation id="AsyncMediation" routes-to="CheckRetrievedDocuments">
+            <cc:steps>
+                <cc:eval id="SetVars"><cc:expression>props['benefit_plan'] = intsys.getAttribute('Benefit Plan')</cc:expression><cc:expression>props['benefit_event'] = intsys.getAttributeReferenceData('Benefit Event', 'Benefit_Event_Type_ID')</cc:expression><cc:expression>props['benefit_plan_id'] = intsys.getAttributeReferenceData('Benefit Plan', 'Insurance_Coverage_Plan_ID')</cc:expression><cc:expression>props['insurance_coverage_level_WID'] = intsys.getAttributeReferenceData('Insurance Coverage Level', 'WID')</cc:expression></cc:eval>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:local-out id="LogNoDocsRetrievedMessage" store-message="both" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'INFO'"/>
+            <cc:set name="is.message.summary" value="'No Documents Retrieved for processing'"/>
+            <cc:set name="is.message.detail" value="'No Documents Retrieved for processing'"/>
+        </cc:local-out>
+        <cc:async-mediation id="LogNoDocsRetrieved" routes-to="LogNoDocsRetrievedMessage">
+            <cc:steps>
+                <cc:log id="Log" level="warn">
+                    <cc:log-message>
+                        <cc:text>Retrieval service did not retrieve any documents.  Aborting file processing.</cc:text>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:route id="RouteDocuments">
+            <cc:doc-iterator/>
+            <cc:sub-route name="ProcessFile" routes-to="CallProcessFile"/>
+        </cc:route>
+        <cc:route id="CheckRetrievedDocuments">
+            <cc:mvel-strategy>
+                <cc:choose-route expression="da.size() > 0" route="DocumentsRetrieved"/>
+                <cc:choose-route expression="true" route="NoDocumentsRetrieved"/>
+            </cc:mvel-strategy>
+            <cc:sub-route name="DocumentsRetrieved" routes-to="CallCreateEmpIDHashMap"/>
+            <cc:sub-route name="NoDocumentsRetrieved" routes-to="LogNoDocsRetrieved"/>
+        </cc:route>
+        <cc:splitter id="SplitRecords">
+            <cc:sub-route name="Process" routes-to="CallProcessEmpl"/>
+            <cc:xml-stream-splitter xpath="/Deduction/Deduction_Data"/>
+        </cc:splitter>
+        <cc:local-out id="ErrorInTextToXMLStep" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'CRITICAL'"/>
+            <cc:set name="is.message.summary" value="'Error Occurred while converting the full file to XML'"/>
+            <cc:set name="is.message.detail" value="'Error Occurred while converting thefull file to XML' + 'Reason: ' +  context.getErrorMessage()"/>
+        </cc:local-out>
+        <cc:async-mediation id="ConvertCSV2XML" routes-to="SplitRecords" handle-downstream-errors="true">
+            <cc:steps>
+                <cc:csv-to-xml id="CsvToXml" input="variable" input-variable="wd.retrieve.variable" colNames="SSN,LastName,FirstName,ActionCode,EffectiveDate,Currency,MonthlyAmount" format="rfc4180" rootName="Deduction" rowName="Deduction_Data"/>
+                <cc:log id="LogOutput">
+                    <cc:log-message>
+                        <cc:text>Records in File:&#xD;
+</cc:text>
+                        <cc:message-content/>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+            <cc:send-error id="SendError" rethrow-error="false" routes-to="ErrorInTextToXMLStep"/>
+        </cc:async-mediation>
+        <cc:local-in id="ProcessFile" routes-to="ConvertCSV2XML"/>
+        <cc:local-out id="CallProcessFile" store-message="none" endpoint="vm://INT-MassMutual_Deduction_Inbound/ProcessFile"/>
+        <cc:local-out id="CallProcessEmpl" store-message="none" endpoint="vm://INT-MassMutual_Deduction_Inbound/ProcessEmpl"/>
+        <cc:local-in id="ProcessEmpl" routes-to="SetFileProps"/>
+        <cc:async-mediation id="SetFileProps" routes-to="CallGetIndvRate" handle-downstream-errors="true">
+            <cc:steps>
+                <cc:eval id="Eval">
+                <cc:expression>props['ssn'] = parts[0].xpath(&quot;Deduction_Data/SSN&quot;)</cc:expression>
+                <cc:expression>vars['empid_info_node'] = props['EmpID.hash.map'].get(props['ssn'])</cc:expression>
+                <cc:expression>props['empl_id'] = vars['empid_info_node'] != null ? vars['empid_info_node'].xpath('wd:Report_Entry/wd:Employee_ID', 'wd urn:com.workday.report/RPT_Mass_Mutual_-_Worker_IDs') :''</cc:expression>
+                <cc:expression>props['last_name'] = parts[0].xpath(&quot;Deduction_Data/LastName&quot;)</cc:expression>
+                <cc:expression>props['first_name'] = parts[0].xpath(&quot;Deduction_Data/FirstName&quot;)</cc:expression>
+                <cc:expression>props['action_code'] = parts[0].xpath(&quot;Deduction_Data/ActionCode&quot;)</cc:expression>
+                <cc:expression>props['effective_date'] = parts[0].xpath(&quot;Deduction_Data/EffectiveDate&quot;)</cc:expression>
+                <cc:expression>props['currency'] = parts[0].xpath(&quot;Deduction_Data/Currency&quot;)</cc:expression>
+                <cc:expression>props['monthly_amount'] = parts[0].xpath(&quot;Deduction_Data/MonthlyAmount&quot;)</cc:expression>
+                
+                
+                
+                
+                <cc:expression>props['ee_contrib'] = props['monthly_amount']</cc:expression></cc:eval>
+                <cc:validate-exp id="ValidateExp"><cc:expression failure-message="'Employee ID not on file'">props['empl_id'] != ''</cc:expression><cc:expression failure-message="'No effective date on file'">props['effective_date'] != ''</cc:expression></cc:validate-exp>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="ErrorInFileProps"/>
+        </cc:async-mediation>
+        <cc:local-out id="ErrorInFileProps" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'ERROR'"/>
+            <cc:set name="is.message.summary" value="'An error occured setting employee parameters from input file. ' + 'Employee ID: ' +  props['empl_id']"/>
+            <cc:set name="is.message.detail" value="context.errorMessage"/>
+        </cc:local-out>
+        <cc:async-mediation id="SetIndvRateProps" routes-to="RouteAction">
+            <cc:steps>
+                <cc:copy id="Copy" input="soapbody"/>
+                <cc:xslt id="SortResult" url="SortBenefitIndividualRate.xsl"/>
+                <cc:eval id="Eval"><cc:expression>props['current_indiv_rate_id'] = parts[0].xpath(&quot;/wd:root/wd:Benefit_Individual_Rate_ID[1]&quot;)</cc:expression><cc:expression>props['current_ee_contrib'] = parts[0].xpath(&quot;/wd:root/wd:Employee_PostTax_Amount[1]&quot;)</cc:expression></cc:eval>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="ErrorInIndivRateProps"/>
+        </cc:async-mediation>
+        <cc:route id="RouteAction">
+            <cc:mvel-strategy>
+                <cc:choose-route expression="props['action_code'] == 'A' " route="Add"/>
+                <cc:choose-route expression="props['action_code'] == 'D'" route="Cancel"/>
+                <cc:choose-route expression="props['action_code'] == 'C'" route="Update"/>
+                <cc:choose-route expression="true" route="NoChange"/>
+            </cc:mvel-strategy>
+            <cc:sub-route name="Add" routes-to="CallAdd"/>
+            <cc:sub-route name="Cancel" routes-to="CallCancel"/>
+            <cc:sub-route name="Update" routes-to="CallUpdate"/>
+            <cc:sub-route name="NoChange" routes-to="PutNoChangeMessage"/>
+        </cc:route>
+        <cc:local-out id="CallAdd" store-message="none" endpoint="vm://INT-MassMutual_Deduction_Inbound/Add"/>
+        <cc:local-out id="CallCancel" store-message="none" endpoint="vm://INT-MassMutual_Deduction_Inbound/Cancel"/>
+        <cc:local-out id="PutNoChangeMessage" endpoint="vm://wcc/PutIntegrationMessage"><cc:set name="is.message.severity" value="'INFO'"/><cc:set name="is.message.summary" value="'No change for employee ' + props['empl_id'] + ' - ' + props['first_name'] + ' ' + props['last_name']"/><cc:set name="is.message.detail" value="'No change for employee ' + props['empl_id'] + ' - ' + props['first_name'] + ' ' + props['last_name']"/></cc:local-out>
+        <cc:local-in id="Add" routes-to="CreatChgBenefits"/>
+        <cc:local-in id="Cancel" routes-to="CreateCxlBenefit"/>
+        <cc:async-mediation id="CreatChgBenefits" routes-to="ChangeBenefits" handle-downstream-errors="true">
+            <cc:steps>
+                <cc:xslt id="Xslt" url="Create_Change_Benefits.xsl"/>
+                <cc:log id="Log">
+                    <cc:log-message>
+                        <cc:message-content/>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="ErrorChgBenefits"/>
+        </cc:async-mediation>
+        <cc:local-out id="ErrorChgBenefits" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'ERROR'"/>
+            <cc:set name="is.message.summary" value="&quot;An error occured enrolling in the benefit plan. Employee ID: &quot; + props['empl_id']"/>
+            <cc:set name="is.message.detail" value="context.errorMessage"/>
+        </cc:local-out>
+        <cc:workday-out-soap id="ChangeBenefits" routes-response-to="CallGetIndvRate1" application="Benefits_Administration" version="26.2"/>
+        <cc:workday-out-soap id="GetIndvRates" application="Benefits_Administration" version="26.2"/>
+        <cc:async-mediation id="CreateGetIndvRates" routes-to="GetIndvRates" handle-downstream-errors="true">
+            <cc:steps>
+                <cc:write id="Write">
+                    <cc:message>
+                        <cc:text>&lt;env:Envelope&#xD;
+    xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot;&#xD;
+    xmlns:env=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;&#xD;
+    xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;>&#xD;
+    &lt;env:Body>&#xD;
+        &lt;wd:Get_Benefit_Individual_Rates_Request&#xD;
+            xmlns:wd=&quot;urn:com.workday/bsvc&quot;&#xD;
+            wd:version=&quot;v26.2&quot;>&#xD;
+            &lt;wd:Request_Criteria>&#xD;
+                &lt;wd:Worker_Reference>&#xD;
+                    &lt;wd:ID wd:type=&quot;Employee_ID&quot;>@{props['empl_id']}&lt;/wd:ID>&#xD;
+                &lt;/wd:Worker_Reference>&#xD;
+            &lt;/wd:Request_Criteria>&#xD;
+        &lt;/wd:Get_Benefit_Individual_Rates_Request>&#xD;
+    &lt;/env:Body>&#xD;
+ &lt;/env:Envelope></cc:text>
+                    </cc:message>
+                </cc:write>
+                <cc:log id="Log">
+                    <cc:log-message>
+                        <cc:message-content/>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="UpdateErrorMessage"/>
+        </cc:async-mediation>
+        <cc:local-in id="GetIndvRate" routes-to="CreateGetIndvRates"/>
+        <cc:local-out id="CallGetIndvRate" store-message="none" routes-response-to="SetIndvRateProps" endpoint="vm://INT-MassMutual_Deduction_Inbound/GetIndvRate"/>
+        <cc:local-out id="UpdateErrorMessage" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'ERROR'"/>
+            <cc:set name="is.message.summary" value="&quot;Problem getting individual rate for employee. Employee ID: &quot; +  props['empl_id']"/>
+            <cc:set name="is.message.detail" value="'Problem getting individual rate for employee ' + props['empl_id'] + '. Reason: ' + context.getErrorMessage()"/>
+        </cc:local-out>
+        <cc:local-out id="CallGetIndvRate1" store-message="none" routes-response-to="SetProps" endpoint="vm://INT-MassMutual_Deduction_Inbound/GetIndvRate"/>
+        <cc:async-mediation id="SetProps" routes-to="CreatePutIndvRate" handle-downstream-errors="true">
+            <cc:steps>
+                <cc:copy id="Copy" input="soapbody"/>
+                <cc:xslt id="SortResult" url="SortBenefitIndividualRate.xsl"/>
+                <cc:eval id="Eval"><cc:expression>props['current_indiv_rate_id'] = parts[0].xpath(&quot;/wd:root/wd:Benefit_Individual_Rate_ID[1]&quot;)</cc:expression></cc:eval>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="ErrorIndvRate"/>
+        </cc:async-mediation>
+        <cc:local-out id="ErrorIndvRate" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'ERROR'"/>
+            <cc:set name="is.message.summary" value="&quot;An error occured setting the individual rate. Employee ID: &quot; +  props['empl_id']"/>
+            <cc:set name="is.message.detail" value="context.errorMessage"/>
+        </cc:local-out>
+        <cc:workday-out-soap id="PutIndivRate" routes-response-to="PutUpdateSuccess" application="Benefits_Administration" version="26.2"/>
+        <cc:async-mediation id="CreateCxlBenefit" routes-to="CxlBenefits" handle-downstream-errors="true">
+            <cc:steps>
+                <cc:xslt id="Xslt" url="Create_Cancel_Benefit.xsl"/>
+                <cc:log id="Log">
+                    <cc:log-message>
+                        <cc:message-content/>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="ErrorCxBenefits"/>
+        </cc:async-mediation>
+        <cc:local-out id="ErrorCxBenefits" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'ERROR'"/>
+            <cc:set name="is.message.summary" value="&quot;An error occured cancelling the benefit plan. Employee ID: &quot; +  props['empl_id']"/>
+            <cc:set name="is.message.detail" value="context.errorMessage"/>
+        </cc:local-out>
+        <cc:async-mediation id="CreatePutIndvRate" routes-to="PutIndivRate">
+            <cc:steps>
+                <cc:xslt id="Xslt" url="Create_Put_Individual_Rate.xsl"/>
+                <cc:log id="Log">
+                    <cc:log-message>
+                        <cc:message-content/>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="ErrorCreatePutIndvRate"/>
+        </cc:async-mediation>
+        <cc:local-out id="CallUpdate" store-message="none" endpoint="vm://INT-MassMutual_Deduction_Inbound/Update"/>
+        <cc:local-in id="Update" routes-to="CreatePutIndvRate"/>
+        <cc:workday-out-soap id="CxlBenefits" routes-response-to="PutCancelMsg" application="Benefits_Administration" version="26.2"/>
+        <cc:local-out id="PutUpdateSuccess" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'INFO'"/>
+            <cc:set name="is.message.summary" value="'Updated rates for employee ' + props['empl_id'] + ' - ' + props['first_name'] + ' ' + props['last_name']"/>
+            <cc:set name="is.message.detail" value="'Updated rates for employee ' + props['empl_id'] + ' - ' + props['first_name'] + ' ' + props['last_name']"/>
+        </cc:local-out>
+        <cc:local-out id="PutCancelMsg" endpoint="vm://wcc/PutIntegrationMessage">
+            <cc:set name="is.message.severity" value="'INFO'"/>
+            <cc:set name="is.message.summary" value="'Cancelled benefit plan for employee ' + props['empl_id'] + ' - ' + props['first_name'] + ' ' + props['last_name']"/>
+            <cc:set name="is.message.detail" value="'Cancelled benefit plan for employee ' + props['empl_id'] + ' - ' + props['first_name'] + ' ' + props['last_name']"/>
+        </cc:local-out>
+        <cc:local-out id="ErrorInIndivRateProps" endpoint="vm://wcc/PutIntegrationMessage"><cc:set name="is.message.severity" value="'ERROR'"/><cc:set name="is.message.summary" value="'An error occured setting employee individual rate props. ' + 'Employee ID: ' +  props['empl_id']"/><cc:set name="is.message.detail" value="context.errorMessage"/></cc:local-out>
+        <cc:async-mediation id="StoreEmpIDHashMap">
+            <cc:steps>
+                <cc:eval id="Eval"><cc:expression>props['hash.key']=parts[0].xpath(&quot;wd:Report_Entry/wd:SSN&quot;, &quot;wd urn:com.workday.report/RPT_Mass_Mutual_-_Worker_IDs&quot;)</cc:expression><cc:expression>props['EmpID.hash.map'].put(props['hash.key'], parts[0].text)</cc:expression></cc:eval>
+                <cc:log id="Log">
+                    <cc:log-message>
+                        <cc:message-content/>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:splitter id="Splitter">
+            <cc:sub-route name="SubRoute" routes-to="StoreEmpIDHashMap"/>
+            <cc:xpath-splitter namespaces="wd urn:com.workday.report/RPT_Mass_Mutual_-_Worker_IDs" xpath="wd:Report_Data/wd:Report_Entry"/>
+        </cc:splitter>
+        <cc:workday-out-rest id="CallEmpIDsReport" routes-response-to="Splitter" extra-path="@{intsys.reportService.getExtrapath('RPT_EmpIDs')}"/>
+        <cc:async-mediation id="InitiateEmpIDHashMap" routes-to="CallEmpIDsReport">
+            <cc:steps>
+                <cc:eval id="Eval"><cc:expression>props['EmpID.hash.map'] = new java.util.HashMap(9999)</cc:expression></cc:eval>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="ErrorCallEmpIDsReport"/>
+        </cc:async-mediation>
+        <cc:local-in id="CreateEmpIDHashMap" routes-to="InitiateEmpIDHashMap"/>
+        <cc:local-out id="CallCreateEmpIDHashMap" store-message="none" routes-response-to="RouteDocuments" endpoint="vm://INT-MassMutual_Deduction_Inbound/CreateEmpIDHashMap"/>
+        <cc:local-out id="ErrorCallEmpIDsReport" endpoint="vm://wcc/PutIntegrationMessage"><cc:set name="is.message.severity" value="'ERROR'"/><cc:set name="is.message.summary" value="'An error occured calling Employee IDs Report. '"/><cc:set name="is.message.detail" value="context.errorMessage"/></cc:local-out>
+        <cc:local-out id="ErrorCreatePutIndvRate" endpoint="vm://wcc/PutIntegrationMessage"><cc:set name="is.message.severity" value="'ERROR'"/><cc:set name="is.message.summary" value="&quot;An error occured add/update the benefit plan. Employee ID: &quot; +  props['empl_id']"/><cc:set name="is.message.detail" value="context.errorMessage"/></cc:local-out>
+	</cc:assembly>
+
+</beans>

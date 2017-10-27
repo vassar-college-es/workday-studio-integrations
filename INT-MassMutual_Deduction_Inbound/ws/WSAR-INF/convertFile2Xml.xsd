@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+	xmlns:tns="http://meteorix.com/textschema/INT-ASPCA_Billing_Inbound/convertFile2Xml.xsd"
+	xmlns:ts="http://schemas.capeclear.com/2003/02/TextSchema"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://meteorix.com/textschema/INT-ASPCA_Billing_Inbound/convertFile2Xml.xsd"
+	ts:eofStrip="&amp;#10;"
+	ts:numberFormat="#,###.#"
+	ts:rootElement="tns:Data" ts:padding=" +" ts:caseSensitive="true">
+	<xsd:element name="Data" ts:align="left">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="Row" maxOccurs="unbounded" minOccurs="0" ts:align="left" ts:endTag="\n"><xsd:complexType>
+<xsd:sequence>
+<xsd:element name="Row_Type" type="xsd:string" ts:align="left" ts:fixedLength="2"></xsd:element>
+<xsd:element name="Last_Name" type="xsd:string" ts:fixedLength="50" minOccurs="0" ts:align="left"></xsd:element>
+<xsd:element name="First_Name" type="xsd:string" ts:fixedLength="50" minOccurs="0"></xsd:element>
+<xsd:element name="SSN" type="xsd:string" ts:fixedLength="11" minOccurs="0"></xsd:element>
+<xsd:element name="Department" type="xsd:string" ts:fixedLength="20" minOccurs="0"></xsd:element>
+<xsd:element name="Empl_ID" type="xsd:string" ts:fixedLength="25" minOccurs="0" ts:align="left"></xsd:element>
+<xsd:element name="Status" type="xsd:string" ts:fixedLength="1" minOccurs="0"></xsd:element>
+<xsd:element name="Code" type="xsd:string" minOccurs="0" ts:align="left" ts:fixedLength="20"></xsd:element>
+<xsd:element name="Period_End" type="tns:StringOrDate" ts:fixedLength="8" minOccurs="0"></xsd:element>
+<xsd:element name="Not_Used" type="xsd:string" ts:fixedLength="16" minOccurs="0"></xsd:element>
+<xsd:element name="Empl_Contribution" type="tns:StringOrDate" ts:fixedLength="13" minOccurs="0" ts:align="right"></xsd:element>
+<xsd:element name="Reserved" type="xsd:string" ts:fixedLength="10" minOccurs="0"></xsd:element>
+<xsd:element name="Employer_Contribution" type="tns:StringOrDecimal" ts:fixedLength="13" minOccurs="0"></xsd:element>
+<xsd:element name="Pre_Tax" type="xsd:string" ts:fixedLength="1" minOccurs="0"></xsd:element>
+<xsd:element name="Filler" type="xsd:string" ts:fixedLength="3" minOccurs="0"></xsd:element></xsd:sequence></xsd:complexType></xsd:element><xsd:element name="Unparsed" type="xsd:string"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:simpleType name="StringOrDate">
+    	<xsd:union memberTypes="xsd:string xsd:date" />
+	</xsd:simpleType>
+	<xsd:simpleType name="StringOrDecimal">
+    	<xsd:union memberTypes="xsd:string xsd:decimal" />
+	</xsd:simpleType>
+</xsd:schema>
