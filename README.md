@@ -1,6 +1,6 @@
 # workday-studio-integrations
 
-- INT-Vassar_Workstudy_Award_Limits_Inbound_Listener current version v1.0.0
+- INT-Vassar_Workstudy_Award_Limits_Inbound_Listener current version v1.0.1
 
 - INT-MassMutual_Deduction_Inbound current version v1.0.0
 

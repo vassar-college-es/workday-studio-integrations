@@ -386,9 +386,11 @@ Institution Input recent Pay Input ID: @{props['ins_ws_memo_recent_pay_input_id'
             <cc:mvel-strategy>
                 <cc:choose-route expression="props['fed_ws_memo_input_count'] != 0 &amp;&amp; props['fed_ws_memo_input_recent_end_date'] > props['current_date']" route="CloseFedMemo"/>
                 <cc:choose-route expression="props['ins_ws_memo_input_count'] != 0 &amp;&amp; props['ins_ws_memo_input_recent_end_date'] > props['current_date']" route="CloseIntMemo"/>
+                <cc:choose-route expression="true" route="none"/>
             </cc:mvel-strategy>
             <cc:sub-route name="CloseFedMemo" routes-to="CloseFedWSMemoRequest"/>
             <cc:sub-route name="CloseIntMemo" routes-to="CloseInsWSMemoRequest"/>
+            <cc:sub-route name="none" routes-to="AsyncMediation"/>
         </cc:route>
         <cc:async-mediation id="LogCloseFedWSMemo" routes-to="CloseFedWSMemoCall" execute-steps-when="props['log']">
             <cc:steps>
@@ -515,6 +517,9 @@ Institution Input recent Pay Input ID: @{props['ins_ws_memo_recent_pay_input_id'
                     <cc:expression>props['ws_effective_date'] = ''</cc:expression>
                 </cc:eval>
             </cc:steps>
+        </cc:async-mediation>
+        <cc:async-mediation id="AsyncMediation">
+            <cc:steps/>
         </cc:async-mediation>
 	</cc:assembly>
 
