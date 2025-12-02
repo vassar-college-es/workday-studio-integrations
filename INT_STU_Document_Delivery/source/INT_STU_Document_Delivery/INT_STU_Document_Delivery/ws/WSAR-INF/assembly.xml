@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+     xmlns="http://www.springframework.org/schema/beans"
+     xmlns:beans="http://www.springframework.org/schema/beans"
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:cc="http://www.capeclear.com/assembly/10"
+     xmlns:cloud="urn:com.workday/esb/cloud/10.0"
+     xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"
+     xmlns:pi="urn:com.workday/picof"
+     xmlns:wd="urn:com.workday/bsvc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ 
+	<cc:assembly id="WorkdayAssembly" version="2024.11">
+        <cc:workday-in id="StartHere" routes-to="GetEventDocuments">
+            <cc:integration-system name="INT STU Document Delivery"/>
+        </cc:workday-in>
+        <cc:local-out id="GetEventDocuments" routes-response-to="CheckFile" endpoint="vm://wcc/GetEventDocuments"><cc:set name="ie.event.wid" value="lp.isSet() ? lp.getIntegrationEventWID() : null"/></cc:local-out>
+        <cc:route id="Route">
+            <cc:doc-iterator/>
+            <cc:sub-route name="SubRoute" routes-to="AsyncMediation"/>
+        </cc:route>
+        <cc:async-mediation id="AsyncMediation" routes-to="StoreFileMessage">
+            <cc:steps>
+                <cc:eval id="Eval">
+                    <cc:expression>props['filename'] = vars['wd.retrieve.variable'].fileName</cc:expression>
+                </cc:eval>
+                <cc:store id="Store" output="variable" output-variable="store.variable" input="variable" input-variable="wd.retrieve.variable" createDocumentReference="true" expiresIn="P180D" title="@{props['filename']}"/>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:local-out id="StoreFileMessage" endpoint="vm://wcc/PutIntegrationMessage"><cc:set name="is.message.severity" value="'INFO'"/><cc:set name="is.message.summary" value="'File attached'"/><cc:set name="is.document.variable.name" value="'store.variable'"/><cc:set name="is.document.file.name" value="props['filename']"/><cc:set name="is.document.deliverable" value="'true'"/></cc:local-out>
+        <cc:route id="CheckFile">
+            <cc:mvel-strategy>
+                <cc:choose-route expression="da.size() > 0" route="YesFile"/>
+                <cc:choose-route expression="true" route="NoFile"/>
+            </cc:mvel-strategy>
+            <cc:sub-route name="YesFile" routes-to="Route"/>
+            <cc:sub-route name="NoFile" routes-to="NoFileMessage"/>
+        </cc:route>
+        <cc:local-out id="NoFileMessage" endpoint="vm://wcc/PutIntegrationMessage"><cc:set name="is.message.severity" value="'INFO'"/><cc:set name="is.message.summary" value="'No file'"/></cc:local-out>
+	</cc:assembly>
+
+</beans>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wdnm:Diagram xmlns:wdnm="http://workday.com/studio/editors/notation">
+  <element href="assembly.xml#WorkdayAssembly"/>
+  <visualProperties x="59" y="45">
+    <element href="assembly.xml#StartHere"/>
+  </visualProperties>
+  <visualProperties x="246" y="45">
+    <element href="assembly.xml#GetEventDocuments"/>
+  </visualProperties>
+  <visualProperties x="531" y="47">
+    <element href="assembly.xml#Route"/>
+  </visualProperties>
+  <visualProperties x="756" y="159">
+    <element href="assembly.xml#AsyncMediation"/>
+  </visualProperties>
+  <visualProperties x="983" y="166">
+    <element href="assembly.xml#StoreFileMessage"/>
+  </visualProperties>
+  <visualProperties x="346" y="164">
+    <element href="assembly.xml#CheckFile"/>
+  </visualProperties>
+  <visualProperties x="447" y="368">
+    <element href="assembly.xml#NoFileMessage"/>
+  </visualProperties>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.35135135135135137" targetAnchorX="0.06735751295336788" targetAnchorY="0.3783783783783784">
+    <source href="assembly.xml#StartHere"/>
+    <target href="assembly.xml#GetEventDocuments"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.5294117647058824" targetAnchorX="0.13986013986013987" targetAnchorY="0.25">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.0/@subRoute.0"/>
+    <target href="assembly.xml#AsyncMediation"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.22916666666666666" targetAnchorX="0.04390243902439024" targetAnchorY="0.43243243243243246">
+    <source href="assembly.xml#AsyncMediation"/>
+    <target href="assembly.xml#StoreFileMessage"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.6470588235294118" targetAnchorX="0.1452991452991453" targetAnchorY="0.49390243902439024">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.1/@subRoute.0"/>
+    <target href="assembly.xml#Route"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="1.0" sourceAnchorY="0.6216216216216216" targetAnchorX="0.08264462809917356" targetAnchorY="0.08518518518518518">
+    <source href="assembly.xml#GetEventDocuments"/>
+    <target href="assembly.xml#CheckFile"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.5277777777777778" sourceAnchorY="1.0" targetAnchorX="0.2863849765258216" targetAnchorY="0.24324324324324326">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.1/@subRoute.1"/>
+    <target href="assembly.xml#NoFileMessage"/>
+  </connections>
+  <swimlanes x="13" y="6" name="Main Swimlane">
+    <elements href="assembly.xml#StartHere"/>
+    <elements href="assembly.xml#GetEventDocuments"/>
+    <elements href="#//@swimlanes.1"/>
+    <elements href="assembly.xml#Route"/>
+    <elements href="assembly.xml#AsyncMediation"/>
+    <elements href="assembly.xml#StoreFileMessage"/>
+  </swimlanes>
+  <swimlanes x="389" y="174" name="Swimlane" orientation="VERTICAL">
+    <elements href="assembly.xml#CheckFile"/>
+    <elements href="assembly.xml#NoFileMessage"/>
+  </swimlanes>
+</wdnm:Diagram>
