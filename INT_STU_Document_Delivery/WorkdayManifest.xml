@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wm:manifest xmlns:wm="http://www.workday.com/solution/catalog/manifest/10"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.workday.com/solution/catalog/manifest/10 http://www.workday.com/solution/catalog/manifest/10">
+	<wm:clar version="3.0" />
+	<wm:descriptive>
+		<wm:title>No Name</wm:title>
+		<wm:description>CLAR</wm:description>
+		<wm:author>no.user</wm:author>
+		<wm:timestamp>2011-08-23T14:22:03.508+01:00</wm:timestamp>
+	</wm:descriptive>
+</wm:manifest>

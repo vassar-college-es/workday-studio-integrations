@@ -5,3 +5,5 @@
 - INT-MassMutual_Deduction_Inbound current version v1.0.0
 
 - Vassar_INT_Visa_Credit_Card_and_Transaction_Loader_Inbound_Collection current version v1.0.0
+
+- INT_STU_Document_Delivery current version v1.0.0

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cloud:cloud-collection xmlns:cloud="urn:com.workday/esb/cloud/10.0" name="INT_STU_Document_Delivery">
+  <cloud:integration name="INT_STU_Document_Delivery">
+    <cloud:in-connector id="StartHere">
+      <cloud:integration-system name="INT STU Document Delivery"/>
+    </cloud:in-connector>
+  </cloud:integration>
+  <cloud:deployed-by>mmohammad-svctr@vassar</cloud:deployed-by>
+</cloud:cloud-collection>
